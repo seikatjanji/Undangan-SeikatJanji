@@ -4,10 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light" />
-  <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="icon" href="assets/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
   <meta name="description" content="SeikatJanji — Undangan Digital Elegan untuk Hari Bahagiamu. Undangan pernikahan digital personal dengan RSVP, amplop digital, musik, dan video." />
   <title>SeikatJanji — Undangan Digital Elegan untuk Hari Bahagiamu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -173,6 +173,31 @@
     .prod-price .per { color: var(--muted); font-size: .76rem; }
     .prod-actions { display: flex; gap: 10px; margin-top: 16px; }
     .prod-actions .btn { flex: 1; min-height: 44px; padding: 10px 12px; font-size: .72rem; }
+    .btn-try { width: 100%; margin-top: 10px; min-height: 44px; padding: 10px 12px; font-size: .72rem; background: #fbf6ea; border: 1px dashed var(--gold); color: #7c5f1e; }
+    .btn-try:hover { background: var(--gold); border-color: var(--gold); border-style: solid; color: #17150f; }
+    /* ---------- Dialog Coba Demo ---------- */
+    .try-dialog { width: min(94vw, 500px); height: auto; max-height: 92dvh; margin: auto; border: 0; padding: 0; background: var(--paper); color: var(--ink); overflow-y: auto; box-shadow: 0 30px 80px rgba(0,0,0,.35); }
+    .try-dialog::backdrop { background: rgba(10, 9, 7, .72); }
+    .try-head { position: relative; padding: 26px 28px 0; }
+    .try-head .sec-kicker { margin-bottom: 8px; }
+    .try-head h3 { margin: 0 0 8px; font-size: 2rem; font-weight: 500; }
+    .try-head p { margin: 0; color: var(--muted); font-size: .9rem; line-height: 1.55; }
+    .try-close { position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border: 0; border-radius: 50%; background: rgba(15,14,12,.08); color: var(--ink); font-size: 1.25rem; cursor: pointer; }
+    .try-form { padding: 20px 28px 28px; display: flex; flex-direction: column; gap: 14px; }
+    .try-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .try-field { display: flex; flex-direction: column; gap: 6px; }
+    .try-field label { font-size: .68rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--char); }
+    .try-field input[type="text"], .try-field input[type="date"] { font: inherit; font-size: .95rem; width: 100%; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--soft); color: var(--ink); }
+    .try-field input:focus { outline: 2px solid var(--gold-soft); border-color: var(--gold); }
+    .try-photo { position: relative; display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px dashed var(--gold); border-radius: 12px; background: #fbf6ea; cursor: pointer; }
+    .try-photo img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: var(--soft); flex: none; }
+    .try-photo .tp-txt { flex: 1; min-width: 0; }
+    .try-photo .tp-txt b { display: block; font-size: .86rem; }
+    .try-photo .tp-txt span { display: block; font-size: .76rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .try-photo input[type="file"] { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+    .try-note { margin: 0; font-size: .78rem; color: var(--muted); line-height: 1.55; }
+    .try-form .btn { width: 100%; }
+    @media (max-width: 620px) { .try-row { grid-template-columns: 1fr; } .try-head, .try-form { padding-left: 20px; padding-right: 20px; } }
     /* ---------- Section foto gelap ---------- */
     .photo-sec { position: relative; color: #fff; overflow: hidden; }
     .photo-sec .bgimg { position: absolute; inset: 0; }
@@ -777,7 +802,7 @@
         <div class="sec-head rv">
           <p class="sec-kicker">Katalog Template</p>
           <h2>Pilih Tema Undangan Kalian</h2>
-          <p class="sec-sub">Delapan tema dengan karakter berbeda — klik Demo untuk membuka contoh undangan lengkapnya langsung di halaman ini.</p>
+          <p class="sec-sub">Delapan tema dengan karakter berbeda — klik Demo untuk melihat contohnya, atau Coba Demo untuk langsung membayangkan undangan kalian dengan nama, tanggal, dan foto kalian sendiri.</p>
         </div>
         <div class="cat-tabs" role="group" aria-label="Filter kategori template">
           <div class="cat-tabs-inner">
@@ -802,6 +827,7 @@
                 <button class="btn btn-solid pv-btn" type="button" data-preview="gold">Preview</button>
                 <button class="btn btn-outline demo-btn" type="button" data-theme="gold">Demo</button>
               </div>
+              <button class="btn btn-try try-btn" type="button" data-try="gold">Coba Demo — Pakai Nama &amp; Foto Kalian</button>
             </div>
           </article>
           <article class="prod rv" data-cat="rustic">
@@ -814,6 +840,7 @@
                 <button class="btn btn-solid pv-btn" type="button" data-preview="rustic">Preview</button>
                 <button class="btn btn-outline demo-btn" type="button" data-theme="rustic">Demo</button>
               </div>
+              <button class="btn btn-try try-btn" type="button" data-try="rustic">Coba Demo — Pakai Nama &amp; Foto Kalian</button>
             </div>
           </article>
           <article class="prod rv" data-cat="modern">
@@ -826,6 +853,7 @@
                 <button class="btn btn-solid pv-btn" type="button" data-preview="modern">Preview</button>
                 <button class="btn btn-outline demo-btn" type="button" data-theme="modern">Demo</button>
               </div>
+              <button class="btn btn-try try-btn" type="button" data-try="modern">Coba Demo — Pakai Nama &amp; Foto Kalian</button>
             </div>
           </article>
           <article class="prod rv" data-cat="floral">
@@ -838,6 +866,7 @@
                 <button class="btn btn-solid pv-btn" type="button" data-preview="sage">Preview</button>
                 <button class="btn btn-outline demo-btn" type="button" data-theme="sage">Demo</button>
               </div>
+              <button class="btn btn-try try-btn" type="button" data-try="sage">Coba Demo — Pakai Nama &amp; Foto Kalian</button>
             </div>
           </article>
           <article class="prod rv" data-cat="scrapbook">
@@ -850,6 +879,7 @@
                 <button class="btn btn-solid pv-btn" type="button" data-preview="paper">Preview</button>
                 <button class="btn btn-outline paper-demo-btn" type="button">Demo</button>
               </div>
+              <button class="btn btn-try try-btn" type="button" data-try="paper">Coba Demo — Pakai Nama &amp; Foto Kalian</button>
             </div>
           </article>
           <article class="prod rv" data-cat="heritage">
@@ -862,6 +892,7 @@
                 <button class="btn btn-solid pv-btn" type="button" data-preview="heritage">Preview</button>
                 <button class="btn btn-outline heritage-demo-btn" type="button">Demo</button>
               </div>
+              <button class="btn btn-try try-btn" type="button" data-try="heritage">Coba Demo — Pakai Nama &amp; Foto Kalian</button>
             </div>
           </article>
           <article class="prod rv" data-cat="etnik">
@@ -874,6 +905,7 @@
                 <button class="btn btn-solid pv-btn" type="button" data-preview="bali">Preview</button>
                 <button class="btn btn-outline bali-demo-btn" type="button">Demo</button>
               </div>
+              <button class="btn btn-try try-btn" type="button" data-try="bali">Coba Demo — Pakai Nama &amp; Foto Kalian</button>
             </div>
           </article>
           <article class="prod rv" data-cat="modern">
@@ -886,6 +918,7 @@
                 <button class="btn btn-solid pv-btn" type="button" data-preview="senja">Preview</button>
                 <button class="btn btn-outline senja-demo-btn" type="button">Demo</button>
               </div>
+              <button class="btn btn-try try-btn" type="button" data-try="senja">Coba Demo — Pakai Nama &amp; Foto Kalian</button>
             </div>
           </article>
         </div>
@@ -1043,6 +1076,7 @@
         </div>
         <div class="faq-list rv">
           <details open><summary>Apa saja data yang perlu disiapkan?</summary><p>Nama pasangan dan orang tua, tanggal dan lokasi acara, foto, cerita singkat, nomor rekening, serta kontak WhatsApp untuk RSVP. Musik dan video bersifat opsional.</p></details>
+          <details><summary>Bisa coba demonya dulu pakai nama dan foto kami?</summary><p>Bisa. Klik tombol “Coba Demo” pada template yang kalian suka, lalu isi nama panggilan, tanggal, tempat acara, dan foto — demonya langsung berubah memakai data kalian, lengkap dengan hitung mundur ke tanggal acara kalian. Sifatnya hanya pratinjau di perangkat kalian dan tidak tersimpan; undangan final tetap kami buatkan setelah pemesanan.</p></details>
           <details><summary>Apakah desain bisa disesuaikan?</summary><p>Bisa. Warna, foto, isi teks, urutan bagian, musik, dan beberapa detail visual dapat disesuaikan dengan tema pernikahan.</p></details>
           <details><summary>Apakah bisa memakai video prewedding?</summary><p>Bisa. Video dapat ditampilkan di dalam undangan web. Paket Lengkap juga mencakup video undangan vertikal terpisah untuk Story atau Reels.</p></details>
           <details><summary>Bagaimana tamu mengirim RSVP dan ucapan?</summary><p>Tamu mengisi nama, jumlah kehadiran, dan ucapan, lalu mengirimkannya langsung ke WhatsApp mempelai. Cara ini sederhana dan tidak membuat pesan tamu hilang.</p></details>
@@ -1093,6 +1127,7 @@
       <p class="preview-price"><strong id="pvNow">Rp59.000</strong> <s id="pvWas">Rp99.000</s> <span>Paket Dasar · aktif 1 tahun</span></p>
       <div class="preview-actions">
         <button class="btn btn-solid" id="pvDemo" type="button">Lihat Demo Lengkap</button>
+        <button class="btn btn-outline" id="pvTry" type="button">Coba Demo Pakai Nama &amp; Foto Sendiri</button>
         <a class="btn btn-outline" id="pvOrder" href="https://wa.me/6285705030650" target="_blank" rel="noopener">Pesan Tema Ini</a>
       </div>
     </div>
@@ -1125,7 +1160,7 @@
           <div class="invite-small">The wedding of</div>
           <div class="cover-frame"><img id="coverImgA" src="assets/pasangan-hero.jpg" alt="Foto model pasangan pengantin berpelukan di taman bunga"><span class="gold-orn orn-rings" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 3l4.5 5.5L24 14l-4.5-5.5L24 3z"/><circle cx="18" cy="29" r="11"/><circle cx="31" cy="29" r="11"/></svg></span><span class="gold-orn orn-sprig orn-sprig-l" aria-hidden="true"><svg viewBox="0 0 60 64"><path d="M10 60 C16 44 26 32 40 24"/><path d="M17 47 q-9-1-13-8 q9-1 13 8z"/><path d="M24 37 q-10-3-13-12 q10 2 13 12z"/><path d="M31 29 q-4-10-13-13 q1 10 13 13z"/><path d="M48 30 q6 4 5 11 q-7-2-5-11z"/><circle cx="45" cy="17" r="2.4"/><ellipse cx="45" cy="9.5" rx="2.8" ry="4.6"/><ellipse cx="45" cy="9.5" rx="2.8" ry="4.6" transform="rotate(72 45 17)"/><ellipse cx="45" cy="9.5" rx="2.8" ry="4.6" transform="rotate(144 45 17)"/><ellipse cx="45" cy="9.5" rx="2.8" ry="4.6" transform="rotate(216 45 17)"/><ellipse cx="45" cy="9.5" rx="2.8" ry="4.6" transform="rotate(288 45 17)"/></svg></span><span class="gold-orn orn-sprig orn-sprig-r" aria-hidden="true"><svg viewBox="0 0 60 64"><path d="M10 60 C16 44 26 32 40 24"/><path d="M17 47 q-9-1-13-8 q9-1 13 8z"/><path d="M24 37 q-10-3-13-12 q10 2 13 12z"/><path d="M31 29 q-4-10-13-13 q1 10 13 13z"/><path d="M48 30 q6 4 5 11 q-7-2-5-11z"/><circle cx="45" cy="17" r="2.4"/><ellipse cx="45" cy="9.5" rx="2.8" ry="4.6"/><ellipse cx="45" cy="9.5" rx="2.8" ry="4.6" transform="rotate(72 45 17)"/><ellipse cx="45" cy="9.5" rx="2.8" ry="4.6" transform="rotate(144 45 17)"/><ellipse cx="45" cy="9.5" rx="2.8" ry="4.6" transform="rotate(216 45 17)"/><ellipse cx="45" cy="9.5" rx="2.8" ry="4.6" transform="rotate(288 45 17)"/></svg></span></div>
           <h2 class="invite-names" id="demoCoverNames">Nadia<br>&amp; Fajar</h2>
-          <div class="invite-date">12 · 12 · 2026</div>
+          <div class="invite-date" id="demoCoverDate">12 · 12 · 2026</div>
           <div class="to-card"><span style="font:600 .65rem var(--sans);letter-spacing:.18em;text-transform:uppercase;color:#8a7a5f">Kepada Yth:</span><b id="demoGuest">Bapak/Ibu/Saudara/i</b></div>
           <button class="open-invite" type="button">Buka Undangan</button>
         </div>
@@ -1135,7 +1170,7 @@
           <div class="ribbon-dash rx">❦</div>
           <p class="invite-small rx" style="--d:.1s;color:var(--demo-accent)">The Wedding of</p>
           <h3 class="rx" id="demoHeadNames" style="--d:.2s;font-size:clamp(2.8rem,11vw,3.4rem)">Nadia<br>&amp; Fajar</h3>
-          <p class="rx" style="--d:.3s"><b>Sabtu, 12 Desember 2026</b><br>Gedung Serbaguna<br><span class="invite-small" style="color:var(--demo-muted)">Bandung</span></p>
+          <p class="rx" style="--d:.3s"><b class="js-dlong">Sabtu, 12 Desember 2026</b><br><span class="js-venue">Gedung Serbaguna</span><br><span class="invite-small js-city" style="color:var(--demo-muted)">Bandung</span></p>
           <span class="swipe-hint rx" style="--d:.45s">GESER KE BAWAH ⌄</span>
         </section>
         <section class="invite-section alt">
@@ -1182,14 +1217,14 @@
           <div class="sec-ico rx"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="10" width="34" height="31" rx="3"/><path d="M7 19.5h34M15.5 5v8M32.5 5v8M15 27h4M22.5 27h4M30 27h4M15 34h4M22.5 34h4"/></svg></div>
           <h3 class="rx">Rangkaian Acara</h3>
           <div class="ribbon-dash rx">❦</div>
-          <div class="lace-card rx-l"><div class="lace-ico" style="color:var(--demo-accent)"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l4.2 5.2L24 14.4 19.8 9.2 24 4z"/><circle cx="17.5" cy="30" r="10.5"/><circle cx="30.5" cy="30" r="10.5"/></svg></div><strong>Akad Nikah</strong><p><b>Sabtu, 12 Desember 2026</b><br>08.00 – 10.00 WIB</p><p><b>Gedung Serbaguna</b><br>Jl. Contoh No. 12, Bandung</p></div>
-          <div class="lace-card rx-r"><div class="lace-ico" style="color:var(--demo-accent)"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M21.8 17.2a2.4 2.4 0 1 1 4.4 0c0 1.7-2.2 2.9-2.2 2.9s-2.2-1.2-2.2-2.9z"/><path d="M24 20.1v3.4"/><path d="M17.5 31.5v-8h13v8"/><path d="M12.5 41.5v-10h23v10"/><path d="M8.5 41.5h31"/></svg></div><strong>Resepsi</strong><p><b>Sabtu, 12 Desember 2026</b><br>11.00 – 14.00 WIB</p><p><b>Gedung Serbaguna</b><br>Jl. Contoh No. 12, Bandung</p></div>
+          <div class="lace-card rx-l"><div class="lace-ico" style="color:var(--demo-accent)"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l4.2 5.2L24 14.4 19.8 9.2 24 4z"/><circle cx="17.5" cy="30" r="10.5"/><circle cx="30.5" cy="30" r="10.5"/></svg></div><strong>Akad Nikah</strong><p><b class="js-dlong">Sabtu, 12 Desember 2026</b><br>08.00 – 10.00 WIB</p><p><b class="js-venue">Gedung Serbaguna</b><br>Jl. Contoh No. 12, <span class="js-city">Bandung</span></p></div>
+          <div class="lace-card rx-r"><div class="lace-ico" style="color:var(--demo-accent)"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M21.8 17.2a2.4 2.4 0 1 1 4.4 0c0 1.7-2.2 2.9-2.2 2.9s-2.2-1.2-2.2-2.9z"/><path d="M24 20.1v3.4"/><path d="M17.5 31.5v-8h13v8"/><path d="M12.5 41.5v-10h23v10"/><path d="M8.5 41.5h31"/></svg></div><strong>Resepsi</strong><p><b class="js-dlong">Sabtu, 12 Desember 2026</b><br>11.00 – 14.00 WIB</p><p><b class="js-venue">Gedung Serbaguna</b><br>Jl. Contoh No. 12, <span class="js-city">Bandung</span></p></div>
         </section>
         <section class="invite-section">
           <div class="sec-ico rx"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 43.5S10.5 30 10.5 19.8A13.5 13.5 0 0 1 37.5 19.8C37.5 30 24 43.5 24 43.5z"/><circle cx="24" cy="19.8" r="4.8"/></svg></div>
           <h3 class="rx">Lokasi Acara</h3>
           <div class="ribbon-dash rx">❦</div>
-          <div class="lace-card rx-z"><div class="lace-ico" style="color:var(--demo-accent)"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 43.5S10.5 30 10.5 19.8A13.5 13.5 0 0 1 37.5 19.8C37.5 30 24 43.5 24 43.5z"/><circle cx="24" cy="19.8" r="4.8"/></svg></div><strong>Gedung Serbaguna</strong><p>Jl. Contoh No. 12, Bandung<br>Lokasi contoh untuk keperluan demo</p><a class="invite-btn" style="background:var(--demo-ink);color:var(--demo-bg);border-color:var(--demo-ink)" target="_blank" rel="noopener" href="https://maps.google.com/?q=Gedung+Serbaguna+Bandung">Lihat Lokasi</a></div>
+          <div class="lace-card rx-z"><div class="lace-ico" style="color:var(--demo-accent)"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 43.5S10.5 30 10.5 19.8A13.5 13.5 0 0 1 37.5 19.8C37.5 30 24 43.5 24 43.5z"/><circle cx="24" cy="19.8" r="4.8"/></svg></div><strong class="js-venue">Gedung Serbaguna</strong><p>Jl. Contoh No. 12, <span class="js-city">Bandung</span><br>Lokasi contoh untuk keperluan demo</p><a class="invite-btn" id="demoMap" style="background:var(--demo-ink);color:var(--demo-bg);border-color:var(--demo-ink)" target="_blank" rel="noopener" href="https://maps.google.com/?q=Gedung+Serbaguna+Bandung">Lihat Lokasi</a></div>
           <div class="busana-ico rx"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M16.8 7.5L6.5 13l3.2 7.2 4.3-2v22.3h20V18.2l4.3 2L41.5 13 31.2 7.5a7.2 7.2 0 0 1-14.4 0z"/></svg></div>
           <h3 class="rx" style="font-size:2rem;margin-top:10px">Busana Acara</h3>
           <p class="rx">Kami akan berbahagia bila Bapak/Ibu berkenan mengenakan busana bernuansa warna tema.</p>
@@ -1263,7 +1298,7 @@
           <p class="rx">Atas kehadiran dan doa restu Bapak/Ibu/Saudara/i, kami sekeluarga mengucapkan terima kasih yang sebesar-besarnya.</p>
           <p class="rx" id="demoCloseNames" style="font:600 2rem var(--demo-font)">Nadia <span class="amp">&amp;</span> Fajar</p>
           <p class="rx"><strong id="demoHashtag">#NadiaMenemukanFajar</strong></p>
-          <p class="invite-small rx" style="color:var(--demo-muted)">12 Desember 2026</p>
+          <p class="invite-small rx js-dplain" style="color:var(--demo-muted)">12 Desember 2026</p>
           <a id="demoOrder" class="invite-order" href="https://wa.me/6285705030650?text=Halo%2C%20saya%20tertarik%20dengan%20template%20Elegan%20Gold." target="_blank" rel="noopener">Pesan tema ini</a>
         </section>
         <div class="demo-credit">
@@ -1293,6 +1328,64 @@
   <dialog id="senjaDialog" class="senja-dialog" aria-label="Demo lengkap Sinema Senja">
     <button class="demo-close senja-close" type="button" aria-label="Tutup demo Sinema Senja">×</button>
     <iframe class="senja-demo-frame" data-src="assets/sinema-senja.html?v=5" title="Demo undangan Sinema Senja"></iframe>
+  </dialog>
+
+  <dialog id="tryDialog" class="try-dialog" aria-label="Coba demo dengan data sendiri">
+    <div class="try-head">
+      <button class="try-close" id="tryClose" type="button" aria-label="Tutup coba demo">×</button>
+      <p class="sec-kicker">Coba Demo</p>
+      <h3 id="tryTitle">Coba Tema Ini</h3>
+      <p>Isi nama kalian dan tanggal acara, lalu lihat demonya berubah jadi undangan versi kalian. Boleh diisi sebagian saja — sisanya memakai contoh.</p>
+    </div>
+    <form class="try-form" id="tryForm">
+      <div class="try-row">
+        <div class="try-field">
+          <label for="tryBride">Nama panggilan mempelai wanita</label>
+          <input type="text" id="tryBride" maxlength="40" placeholder="cth: Sari" autocomplete="off">
+        </div>
+        <div class="try-field">
+          <label for="tryGroom">Nama panggilan mempelai pria</label>
+          <input type="text" id="tryGroom" maxlength="40" placeholder="cth: Rian" autocomplete="off">
+        </div>
+      </div>
+      <div class="try-row">
+        <div class="try-field">
+          <label for="tryDate">Tanggal acara</label>
+          <input type="date" id="tryDate">
+        </div>
+        <div class="try-field">
+          <label for="tryGuest">Nama tamu di kartu “Kepada Yth”</label>
+          <input type="text" id="tryGuest" maxlength="80" placeholder="cth: Keluarga Besar Hartono" autocomplete="off">
+        </div>
+      </div>
+      <div class="try-row">
+        <div class="try-field">
+          <label for="tryVenue">Tempat acara</label>
+          <input type="text" id="tryVenue" maxlength="60" placeholder="cth: Gedung Graha Samudra" autocomplete="off">
+        </div>
+        <div class="try-field">
+          <label for="tryCity">Kota</label>
+          <input type="text" id="tryCity" maxlength="40" placeholder="cth: Surabaya" autocomplete="off">
+        </div>
+      </div>
+      <label class="try-photo">
+        <img id="tryCouplePrev" src="assets/pasangan-hero.jpg" alt="">
+        <span class="tp-txt"><b>Foto berdua</b><span id="tryCoupleName">Tampil di sampul &amp; galeri demo</span></span>
+        <input type="file" id="tryCouple" accept="image/*">
+      </label>
+      <label class="try-photo">
+        <img id="tryBridePrev" src="assets/mempelai-wanita.jpg" alt="">
+        <span class="tp-txt"><b>Foto mempelai wanita</b><span id="tryBrideName">Tampil di profil mempelai wanita</span></span>
+        <input type="file" id="tryBridePhoto" accept="image/*">
+      </label>
+      <label class="try-photo">
+        <img id="tryGroomPrev" src="assets/mempelai-pria.jpg" alt="">
+        <span class="tp-txt"><b>Foto mempelai pria</b><span id="tryGroomName">Tampil di profil mempelai pria</span></span>
+        <input type="file" id="tryGroomPhoto" accept="image/*">
+      </label>
+      <button class="btn btn-solid" id="tryGo" type="submit">Lihat Demo Versi Kami</button>
+      <p class="try-note">Ini hanya pratinjau untuk mencoba tema — nama dan foto tampil di perangkat ini saja, tidak tersimpan dan tidak terkirim ke mana pun. Undangan final tetap dibuatkan oleh tim kami setelah pemesanan.</p>
+    </form>
   </dialog>
 
 <script>
@@ -1333,8 +1426,11 @@
       function stopFrameMusic(sel) { var f = document.querySelector(sel); if (f && f.contentWindow) { try { f.contentWindow.postMessage('kb-stop-music', '*'); } catch (e) {} } }
       var FRAME_URLS = { '.paper-demo-frame': 'assets/paper-promise.html', '.heritage-demo-frame': 'assets/heritage.html', '.bali-demo-frame': 'assets/etnik-bali.html', '.senja-demo-frame': 'assets/sinema-senja.html?v=5' };
       function loadFrame(sel) { var f = document.querySelector(sel); if (f && !f.getAttribute('src')) { var u = f.getAttribute('data-src') || f.getAttribute('data-data-hatch-src') || FRAME_URLS[sel]; if (u) f.src = u; } }
-      function openFrameDialog(dlg, sel) {
-        loadFrame(sel);
+      function openFrameDialog(dlg, sel, urlOverride) {
+        var f = document.querySelector(sel);
+        if (urlOverride) { if (f) { f.src = urlOverride; f.setAttribute('data-try', '1'); } }
+        else if (f && f.getAttribute('data-try')) { f.removeAttribute('data-try'); f.src = FRAME_URLS[sel]; try { pendingPhotos[sel] = null; } catch (e) {} }
+        else loadFrame(sel);
         if (!dlg.open) {
           try { dlg.showModal(); } catch (e) {}
           if (!dlg.open) { try { dlg.setAttribute('open', ''); } catch (e2) {} }
@@ -1350,10 +1446,26 @@
         sage: { cls: 'theme-sage', name: 'Floral Sage', image: 'assets/floral-sage.jpg', orn: '❧', orn2: '❀', bride: 'Wulan', groom: 'Rizky', tag: '#WulanMenemukanRizky' }
       };
       var calText = 'Pernikahan Nadia & Fajar';
+      var calDates = '20261212T010000Z/20261212T070000Z';
+      var calLoc = 'Gedung Serbaguna, Bandung';
+      var urlGuest = '';
       try {
         var g = new URLSearchParams(location.search).get('to');
-        if (g) document.getElementById('demoGuest').textContent = g.slice(0, 80);
+        if (g) { urlGuest = g.slice(0, 80); document.getElementById('demoGuest').textContent = urlGuest; }
       } catch (e) {}
+      var ID_MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+      var ID_DAYS = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      function pad2(n) { return (n < 10 ? '0' : '') + n; }
+      function fmtPlain(d) { return d.getDate() + ' ' + ID_MONTHS[d.getMonth()] + ' ' + d.getFullYear(); }
+      function fmtLong(d) { return ID_DAYS[d.getDay()] + ', ' + fmtPlain(d); }
+      function fmtDot(d) { return pad2(d.getDate()) + ' · ' + pad2(d.getMonth() + 1) + ' · ' + d.getFullYear(); }
+      function fmtCalDates(d) { var s = '' + d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate()); return s + 'T010000Z/' + s + 'T070000Z'; }
+      function parseISODate(v) {
+        if (!v || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return null;
+        var q = v.split('-');
+        var d = new Date(+q[0], +q[1] - 1, +q[2]);
+        return isNaN(d.getTime()) ? null : d;
+      }
       var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function (entries) {
         entries.forEach(function (en) {
           if (en.isIntersecting) { en.target.classList.add('on'); io.unobserve(en.target); }
@@ -1380,25 +1492,45 @@
           if (el && el.textContent != v[i]) el.textContent = v[i];
         });
       }
-      function openDemo(key) {
+      function openDemo(key, custom) {
         var selected = config[key];
+        var bride = (custom && custom.bride) ? custom.bride : selected.bride;
+        var groom = (custom && custom.groom) ? custom.groom : selected.groom;
         shell.className = 'demo-shell ' + selected.cls;
-        var pairHtml = selected.bride + '<br>&amp; ' + selected.groom;
+        var pairHtml = bride + '<br>&amp; ' + groom;
         document.getElementById('demoCoverNames').innerHTML = pairHtml;
         document.getElementById('demoHeadNames').innerHTML = pairHtml;
-        document.getElementById('demoCloseNames').innerHTML = selected.bride + ' <span class="amp">&amp;</span> ' + selected.groom;
-        shell.querySelectorAll('.nm-bride').forEach(function (el) { el.textContent = selected.bride; });
-        shell.querySelectorAll('.nm-groom').forEach(function (el) { el.textContent = selected.groom; });
-        document.getElementById('bridePhoto').alt = 'Foto model mempelai wanita bergaun putih — profil ' + selected.bride;
-        document.getElementById('groomPhoto').alt = 'Foto model mempelai pria berjas hitam — profil ' + selected.groom;
-        document.getElementById('demoHashtag').textContent = selected.tag;
-        calText = 'Pernikahan ' + selected.bride + ' & ' + selected.groom;
+        document.getElementById('demoCloseNames').innerHTML = bride + ' <span class="amp">&amp;</span> ' + groom;
+        shell.querySelectorAll('.nm-bride').forEach(function (el) { el.textContent = bride; });
+        shell.querySelectorAll('.nm-groom').forEach(function (el) { el.textContent = groom; });
+        document.getElementById('bridePhoto').alt = 'Foto mempelai wanita — profil ' + bride;
+        document.getElementById('groomPhoto').alt = 'Foto mempelai pria — profil ' + groom;
+        document.getElementById('demoHashtag').textContent = custom ? ('#' + bride + 'Menemukan' + groom) : selected.tag;
+        calText = 'Pernikahan ' + bride + ' & ' + groom;
+        /* Tanggal, tempat, dan hitung mundur mengikuti isian Coba Demo; tanpa isian memakai contoh tema */
+        var dObj = (custom && parseISODate(custom.dateISO)) || new Date(2026, 11, 12);
+        target = new Date(dObj.getFullYear(), dObj.getMonth(), dObj.getDate(), 8, 0, 0).getTime();
+        calDates = fmtCalDates(dObj);
+        shell.querySelectorAll('.js-dlong').forEach(function (el) { el.textContent = fmtLong(dObj); });
+        shell.querySelectorAll('.js-dplain').forEach(function (el) { el.textContent = fmtPlain(dObj); });
+        document.getElementById('demoCoverDate').textContent = fmtDot(dObj);
+        var venue = (custom && custom.venue) ? custom.venue : 'Gedung Serbaguna';
+        var city = (custom && custom.city) ? custom.city : 'Bandung';
+        shell.querySelectorAll('.js-venue').forEach(function (el) { el.textContent = venue; });
+        shell.querySelectorAll('.js-city').forEach(function (el) { el.textContent = city; });
+        calLoc = venue + ', ' + city;
+        document.getElementById('demoMap').href = 'https://maps.google.com/?q=' + encodeURIComponent(venue + ' ' + city);
+        document.getElementById('demoGuest').textContent = (custom && custom.guest) ? custom.guest : (urlGuest || 'Bapak/Ibu/Saudara/i');
         shell.querySelectorAll('.invite-ornament, .ribbon-dash').forEach(function (el) { el.textContent = selected.orn; });
         shell.querySelectorAll('.float-ico').forEach(function (el, i) { el.textContent = (i % 2) ? selected.orn2 : selected.orn; });
-        hero.src = 'assets/pasangan-hero.jpg';
+        var photos = (custom && custom.photos) || {};
+        hero.src = photos.couple || 'assets/pasangan-hero.jpg';
+        document.getElementById('coverImgA').src = photos.couple || 'assets/pasangan-hero.jpg';
+        document.getElementById('bridePhoto').src = photos.bride || 'assets/mempelai-wanita.jpg';
+        document.getElementById('groomPhoto').src = photos.groom || 'assets/mempelai-pria.jpg';
         document.getElementById('videoThumb').src = 'assets/pasangan-akad.jpg';
-        document.getElementById('closeImg').src = 'assets/pasangan-candid.jpg';
-        galleryOne.src = 'assets/pasangan-hero.jpg';
+        document.getElementById('closeImg').src = photos.couple || 'assets/pasangan-candid.jpg';
+        galleryOne.src = photos.couple || 'assets/pasangan-hero.jpg';
         content.classList.remove('open');
         cover.classList.remove('gone');
         cover.style.display = 'grid';
@@ -1407,7 +1539,11 @@
         if (bgmDemo) { try { bgmDemo.load(); } catch (e) {} }
         clearInterval(cdTimer);
         shell.scrollTop = 0;
-        order.href = 'https://wa.me/6285705030650?text=' + encodeURIComponent('Halo, saya tertarik dengan template ' + selected.name + '.');
+        var orderMsg = 'Halo, saya tertarik dengan template ' + selected.name + '.';
+        if (custom && (custom.bride || custom.groom)) {
+          orderMsg = 'Halo, saya baru coba demo template ' + selected.name + ' dengan nama ' + bride + ' & ' + groom + (custom.dateISO ? ', tanggal acara ' + fmtPlain(dObj) : '') + '. Saya ingin pesan tema ini.';
+        }
+        order.href = 'https://wa.me/6285705030650?text=' + encodeURIComponent(orderMsg);
         dialog.showModal();
         document.body.style.overflow = 'hidden';
       }
@@ -1436,7 +1572,7 @@
       });
       mus.addEventListener('click', function () { if (demoMusOn) { stopDemoMusic(); } else { startDemoMusic(); } });
       document.getElementById('calBtn').addEventListener('click', function () {
-        window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(calText) + '&dates=20261212T010000Z/20261212T070000Z&location=Gedung+Serbaguna,+Bandung', '_blank');
+        window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(calText) + '&dates=' + calDates + '&location=' + encodeURIComponent(calLoc), '_blank');
       });
       document.querySelectorAll('.cp-btn').forEach(function (b) {
         b.addEventListener('click', function () {
@@ -1505,6 +1641,120 @@
       senjaDialog.addEventListener('close', function () { document.body.style.overflow = ''; stopFrameMusic('.senja-demo-frame'); });
       senjaDialog.addEventListener('click', function (event) {
         if (event.target === senjaDialog) senjaDialog.close();
+      });
+      /* ---------- Coba Demo: calon pelanggan mencoba tema dengan nama, tanggal & foto sendiri.
+         Semua data hanya dipakai untuk pratinjau di perangkat ini — tidak disimpan, tidak dikirim. ---------- */
+      var tryDialog = document.getElementById('tryDialog');
+      var tryKey = 'gold';
+      var TRY_NAMES = { gold: 'Elegan Gold', rustic: 'Rustic Scrapbook', modern: 'Minimalis Modern', sage: 'Floral Sage', paper: 'Surat Cinta', heritage: 'Heritage', bali: 'Etnik Bali', senja: 'Sinema Senja' };
+      var TRY_FRAMES = {
+        paper: { dlg: paperDialog, sel: '.paper-demo-frame' },
+        heritage: { dlg: heritageDialog, sel: '.heritage-demo-frame' },
+        bali: { dlg: baliDialog, sel: '.bali-demo-frame' },
+        senja: { dlg: senjaDialog, sel: '.senja-demo-frame' }
+      };
+      var pendingPhotos = {};
+      function sendTryPhotos(sel) {
+        var f = document.querySelector(sel);
+        var ph = pendingPhotos[sel];
+        if (f && f.contentWindow && ph && (ph.couple || ph.bride || ph.groom)) {
+          try { f.contentWindow.postMessage({ type: 'kb-try-photos', couple: ph.couple || null, bride: ph.bride || null, groom: ph.groom || null }, '*'); } catch (e) {}
+        }
+      }
+      Object.keys(TRY_FRAMES).forEach(function (k) {
+        var sel = TRY_FRAMES[k].sel;
+        var f = document.querySelector(sel);
+        if (f) f.addEventListener('load', function () {
+          sendTryPhotos(sel);
+          setTimeout(function () { sendTryPhotos(sel); }, 700);
+          setTimeout(function () { sendTryPhotos(sel); }, 1800);
+        });
+      });
+      function fileToPreview(file) {
+        return new Promise(function (resolve) {
+          if (!file) { resolve(null); return; }
+          var url = URL.createObjectURL(file);
+          var img = new Image();
+          img.onload = function () {
+            try {
+              var max = 1000, w = img.naturalWidth || 1, h = img.naturalHeight || 1;
+              var sc = Math.min(1, max / Math.max(w, h));
+              var c = document.createElement('canvas');
+              c.width = Math.max(1, Math.round(w * sc));
+              c.height = Math.max(1, Math.round(h * sc));
+              c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+              URL.revokeObjectURL(url);
+              resolve(c.toDataURL('image/jpeg', .85));
+            } catch (e) { resolve(null); }
+          };
+          img.onerror = function () { URL.revokeObjectURL(url); resolve(null); };
+          img.src = url;
+        });
+      }
+      function bindPhotoPreview(inputId, prevId, nameId, fallbackText) {
+        var inp = document.getElementById(inputId);
+        inp.addEventListener('change', function () {
+          var file = inp.files && inp.files[0];
+          document.getElementById(nameId).textContent = file ? file.name : fallbackText;
+          if (file) fileToPreview(file).then(function (d) { if (d) document.getElementById(prevId).src = d; });
+        });
+      }
+      bindPhotoPreview('tryCouple', 'tryCouplePrev', 'tryCoupleName', 'Tampil di sampul & galeri demo');
+      bindPhotoPreview('tryBridePhoto', 'tryBridePrev', 'tryBrideName', 'Tampil di profil mempelai wanita');
+      bindPhotoPreview('tryGroomPhoto', 'tryGroomPrev', 'tryGroomName', 'Tampil di profil mempelai pria');
+      function openTry(key) {
+        tryKey = key;
+        document.getElementById('tryTitle').textContent = 'Coba ' + (TRY_NAMES[key] || 'Tema Ini');
+        if (!tryDialog.open) { try { tryDialog.showModal(); } catch (e) {} }
+        document.body.style.overflow = 'hidden';
+      }
+      window.__openTry = openTry;
+      document.querySelectorAll('.try-btn').forEach(function (b) {
+        b.addEventListener('click', function () { openTry(b.getAttribute('data-try')); });
+      });
+      document.getElementById('tryClose').addEventListener('click', function () { tryDialog.close(); });
+      tryDialog.addEventListener('click', function (e) { if (e.target === tryDialog) tryDialog.close(); });
+      tryDialog.addEventListener('close', function () {
+        if (!document.querySelector('dialog[open]:not(#tryDialog)')) document.body.style.overflow = '';
+      });
+      document.getElementById('tryForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var go = document.getElementById('tryGo');
+        go.disabled = true;
+        go.textContent = 'Menyiapkan demo…';
+        var clean = function (id) { return document.getElementById(id).value.replace(/[<>&"]/g, '').trim(); };
+        var data = {
+          bride: clean('tryBride'),
+          groom: clean('tryGroom'),
+          dateISO: document.getElementById('tryDate').value,
+          venue: clean('tryVenue'),
+          city: clean('tryCity'),
+          guest: clean('tryGuest')
+        };
+        Promise.all([
+          fileToPreview(document.getElementById('tryCouple').files[0]),
+          fileToPreview(document.getElementById('tryBridePhoto').files[0]),
+          fileToPreview(document.getElementById('tryGroomPhoto').files[0])
+        ]).then(function (res) {
+          data.photos = { couple: res[0], bride: res[1], groom: res[2] };
+          go.disabled = false;
+          go.textContent = 'Lihat Demo Versi Kami';
+          tryDialog.close();
+          if (TRY_FRAMES[tryKey]) {
+            var fr = TRY_FRAMES[tryKey];
+            var q = new URLSearchParams();
+            if (data.bride) q.set('w', data.bride);
+            if (data.groom) q.set('p', data.groom);
+            if (data.dateISO) q.set('t', data.dateISO);
+            if (data.venue) q.set('v', data.venue);
+            if (data.guest) q.set('to', data.guest);
+            pendingPhotos[fr.sel] = data.photos;
+            var base = FRAME_URLS[fr.sel];
+            openFrameDialog(fr.dlg, fr.sel, base + (base.indexOf('?') > -1 ? '&' : '?') + q.toString());
+          } else {
+            openDemo(tryKey, data);
+          }
+        });
       });
     }());
   </script>
@@ -1576,6 +1826,10 @@
       document.getElementById('pvClose').addEventListener('click', closePv);
       pv.addEventListener('click', function (e) { if (e.target === pv) closePv(); });
       pv.addEventListener('close', function () { document.body.style.overflow = ''; stopFrameMusic('#pvFrame'); });
+      document.getElementById('pvTry').addEventListener('click', function () {
+        closePv();
+        if (window.__openTry) setTimeout(function () { window.__openTry(pvKey); }, 60);
+      });
       document.getElementById('pvDemo').addEventListener('click', function () {
         closePv();
         var trigger = null;
