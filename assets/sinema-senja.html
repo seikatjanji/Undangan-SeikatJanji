@@ -583,7 +583,7 @@ bgm.addEventListener('pause',function(){musOn=false;musBtn()});
 $('#mus').onclick=()=>{if(musOn)stopMusic();else startMusic()};
 window.addEventListener('message',function(e){if(e.data==='kb-stop-music')stopMusic()});
 /* countdown berdetak tiap detik; angka detik berdenyut saat berganti */
-const T=new Date('2027-08-14T08:00:00+07:00').getTime();
+const T=new Date((new URLSearchParams(location.search).get('t')||'2027-08-14')+'T08:00:00+07:00').getTime();
 function tick(){let x=Math.max(0,T-Date.now());const v=[Math.floor(x/864e5),Math.floor(x/36e5)%24,Math.floor(x/6e4)%60,Math.floor(x/1e3)%60];
 ['cdD','cdH','cdM','cdS'].forEach((k,i)=>{const el=document.getElementById(k);if(el&&el.textContent!=v[i]){el.textContent=v[i];if(k==='cdS'){el.classList.remove('pulse');void el.offsetWidth;el.classList.add('pulse')}}})}
 tick();setInterval(tick,1000);
@@ -596,6 +596,33 @@ let n=1;$('#pl').onclick=()=>{if(n<10)$('#n').textContent=++n};$('#mn').onclick=
 $('#f').onsubmit=e=>{e.preventDefault();const d=document.createElement('div');d.className='w';
 const b=document.createElement('b'),p=document.createElement('p');b.textContent=$('#nm').value;p.textContent=$('#ms').value;d.append(b,p);
 $('#wishes').prepend(d);$('#f').reset();n=1;$('#n').textContent=1;toast('Pratinjau ucapan ditambahkan')};
+</script>
+<script>
+/* Personalisasi "Coba Demo" dari katalog SeikatJanji — parameter URL: w (panggilan mempelai wanita),
+   p (pria), t (tanggal ISO), v (tempat acara). Hanya untuk pratinjau di perangkat pengunjung; tidak disimpan. */
+(function(){try{
+var P=new URLSearchParams(location.search);
+var W=(P.get('w')||'').slice(0,40),G=(P.get('p')||'').slice(0,40),D=P.get('t')||'',V=(P.get('v')||'').slice(0,60);
+var SW='Wening',SG='Pandu',SDL='Sabtu, 14 Agustus 2027',SDP='14 Agustus 2027',SDD='14 \u00B7 08 \u00B7 2027',VEN=['Pendopo Senja'],SLOC='Pendopo Senja, Sleman, Yogyakarta',TZS='T08:00:00+07:00';
+if(W||G||D||V){
+var MN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],DN=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+var dl='',dp='',dd='';
+if(/^\d{4}-\d{2}-\d{2}$/.test(D)){var q=D.split('-'),dt=new Date(+q[0],+q[1]-1,+q[2]);if(!isNaN(dt.getTime())){dp=dt.getDate()+' '+MN[dt.getMonth()]+' '+dt.getFullYear();dl=DN[dt.getDay()]+', '+dp;dd=('0'+dt.getDate()).slice(-2)+' \u00B7 '+('0'+(dt.getMonth()+1)).slice(-2)+' \u00B7 '+dt.getFullYear();}}
+var reps=[];
+if(dl)reps.push([SDL,dl]);if(dp)reps.push([SDP,dp]);if(dd&&SDD)reps.push([SDD,dd]);
+if(V)VEN.forEach(function(x){reps.push([x,V])});
+if(W)reps.push([SW,W]);if(G)reps.push([SG,G]);
+function rep(s){if(!s)return s;for(var i=0;i<reps.length;i++){if(reps[i][0])s=s.split(reps[i][0]).join(reps[i][1])}return s}
+var tw=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){var t=n.parentNode&&n.parentNode.tagName;return(t==='SCRIPT'||t==='STYLE')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT}});
+var nodes=[];while(tw.nextNode())nodes.push(tw.currentNode);
+nodes.forEach(function(n){var nv=rep(n.nodeValue);if(nv!==n.nodeValue)n.nodeValue=nv});
+document.querySelectorAll('img').forEach(function(im){if(im.alt)im.alt=rep(im.alt)});
+if(document.title)document.title=rep(document.title);
+var cal=document.getElementById('cal');
+if(cal&&(W||G||D||V)){cal.onclick=function(){var s=D?new Date(D+TZS):new Date();if(isNaN(s.getTime()))s=new Date();var e=new Date(s.getTime()+5*36e5);function f(x){return x.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z'}window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Pernikahan '+(W||SW)+' & '+(G||SG))+'&dates='+f(s)+'/'+f(e)+'&location='+encodeURIComponent(V||SLOC),'_blank')}}
+}
+window.addEventListener('message',function(e){var d=e.data;if(!d||d.type!=='kb-try-photos')return;function swap(file,url){if(!url)return;document.querySelectorAll('img').forEach(function(im){var s=(im.getAttribute('src')||'').split('?')[0];if(s.substring(s.length-file.length)===file)im.src=url})}swap('pasangan-hero.jpg',d.couple);swap('mempelai-wanita.jpg',d.bride);swap('mempelai-pria.jpg',d.groom)});
+}catch(e){}})();
 </script>
 </body>
 </html>
