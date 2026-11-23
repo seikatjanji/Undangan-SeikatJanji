@@ -469,13 +469,6 @@
     .mus-demo i:nth-child(2) { animation-delay: .2s; }
     .mus-demo i:nth-child(3) { animation-delay: .4s; }
     .mus-demo.off i { animation: none; height: 6px !important; }
-    /* ---------- Musik latar situs ---------- */
-    .mus-site { position: fixed; right: 22px; bottom: max(22px, env(safe-area-inset-bottom)); z-index: 90; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(200,162,78,.65); background: rgba(20,20,18,.82); box-shadow: 0 10px 26px rgba(0,0,0,.28); display: flex; align-items: center; justify-content: center; gap: 3px; cursor: pointer; }
-    .mus-site i { width: 4px; background: #f4e8cf; border-radius: 2px; animation: eqd 1s infinite ease-in-out; }
-    .mus-site i:nth-child(2) { animation-delay: .2s; }
-    .mus-site i:nth-child(3) { animation-delay: .4s; }
-    .mus-site.off i { animation: none; height: 6px !important; }
-    @media (prefers-reduced-motion: reduce) { .mus-site i { animation: none; height: 12px; } .mus-site.off i { height: 6px !important; } }
     @keyframes eqd { 0%,100% { height: 8px; } 50% { height: 20px; } }
     .demo-toast { position: fixed; right: 22px; bottom: 24px; z-index: 40; background: var(--demo-ink, #312820); color: var(--demo-bg, #fff); padding: 10px 20px; border-radius: 30px; font-size: .88rem; opacity: 0; transform: translateY(70px); transition: .4s ease; pointer-events: none; max-width: min(82vw, 340px); }
     .demo-toast.on { opacity: 1; transform: none; }
@@ -1197,9 +1190,6 @@
       <div class="foot-small">© 2026 SeikatJanji · Undangan digital untuk hari bahagia kalian</div>
     </div>
   </footer>
-
-  <button class="mus-site off" id="musSite" type="button" aria-label="Musik latar: putar atau jeda" aria-pressed="false" title="Musik latar"><i></i><i></i><i></i></button>
-  <audio id="bgmSite" src="assets/musik-latar.mp3" loop preload="auto"></audio>
 
   <dialog id="previewDialog" class="preview-dialog" aria-label="Pratinjau template undangan">
     <button class="preview-close" id="pvClose" type="button" aria-label="Tutup pratinjau">×</button>
@@ -2022,88 +2012,6 @@
       } else {
         rvEls.forEach(function (el) { el.classList.add('on'); });
       }
-    }());
-  </script>
-  <script>
-    (function () {
-      /* Musik latar situs: lagu yang sama dengan demo undangan (assets/musik-latar.mp3).
-         Browser melarang autoplay bersuara, jadi musik mulai pada interaksi pertama.
-         Anti dobel GENERIK: musik situs wajib jeda selama ADA elemen <dialog> apa pun
-         yang terbuka di halaman — tanpa daftar ID satu-satu, jadi dialog demo tema apa pun
-         (termasuk yang ditambahkan di masa depan) otomatis ikut terjaga dan lagu situs
-         tidak bocor ke dalam demo. Musik hanya lanjut lagi bila sebelumnya memang
-         menyala dan dijeda karena dialog itu. */
-      var audio = document.getElementById('bgmSite');
-      var btn = document.getElementById('musSite');
-      if (!audio || !btn) return;
-      var want = true;            /* pengunjung belum mematikan musik secara manual */
-      var pausedByDialog = false; /* musik sedang menyala lalu dijeda karena ada dialog terbuka */
-      var resumeTimer = null;     /* jeda singkat sebelum lanjut lagi, berjaga bila dialog berganti berantai */
-      function anyDialogOpen() { return !!document.querySelector('dialog[open]'); }
-      function syncBtn() {
-        var on = !audio.paused;
-        btn.classList.toggle('off', !on);
-        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-      }
-      function tryPlay() {
-        if (!want || !audio.paused || anyDialogOpen()) return;
-        var p = null;
-        try { p = audio.play(); } catch (e) {}
-        if (p && p.catch) p.catch(function () { /* ditolak browser: coba lagi di interaksi berikutnya */ });
-      }
-      function pauseForDialog() {
-        if (resumeTimer) { clearTimeout(resumeTimer); resumeTimer = null; }
-        if (!audio.paused) { try { audio.pause(); } catch (e) {} pausedByDialog = true; }
-      }
-      function syncDialog() {
-        if (anyDialogOpen()) { pauseForDialog(); return; }
-        if (pausedByDialog && !resumeTimer) {
-          /* Tunggu sebentar sebelum lanjut: bila dialog lain menyusul terbuka berantai
-             (mis. Pratinjau → Demo, Coba Demo → Demo), timer ini dibatalkan oleh
-             pauseForDialog sehingga tidak ada selipan lagu di sela pergantian dialog. */
-          resumeTimer = setTimeout(function () {
-            resumeTimer = null;
-            if (!anyDialogOpen() && pausedByDialog) {
-              pausedByDialog = false;
-              if (want) tryPlay();
-            }
-          }, 350);
-        }
-      }
-      audio.addEventListener('playing', function () {
-        syncBtn();
-        /* Jaring pengaman terakhir: putaran yang telanjur mulai saat ada dialog
-           terbuka langsung dijeda lagi dan ditandai agar lanjut sesudah dialog tutup. */
-        if (anyDialogOpen()) pauseForDialog();
-      });
-      audio.addEventListener('pause', syncBtn);
-      /* Tombol melayang: putar / jeda manual kapan pun */
-      btn.addEventListener('click', function () {
-        if (resumeTimer) { clearTimeout(resumeTimer); resumeTimer = null; }
-        if (audio.paused) { want = true; pausedByDialog = false; tryPlay(); }
-        else { want = false; pausedByDialog = false; try { audio.pause(); } catch (e) {} }
-        syncBtn();
-      });
-      /* Interaksi pertama di mana pun menyalakan musik (kecuali klik pada tombol musik itu sendiri).
-         Pemeriksaan ditunda sebentar supaya klik yang membuka dialog tidak menyalakan musik situs. */
-      ['pointerdown', 'touchend', 'click', 'keydown'].forEach(function (ev) {
-        document.addEventListener(ev, function (e) {
-          if (e.target === btn || (e.target.closest && e.target.closest('#musSite'))) return;
-          if (!audio.paused) return;
-          setTimeout(tryPlay, 80);
-        }, { passive: true });
-      });
-      /* Anti dobel generik: amati SELURUH dokumen — perubahan atribut open pada dialog
-         mana pun memicu pemeriksaan, termasuk dialog yang baru ditambahkan ke halaman
-         setelah skrip ini jalan. Ditambah cek berkala sebagai lapisan cadangan. */
-      if ('MutationObserver' in window) {
-        var mo = new MutationObserver(function () { syncDialog(); });
-        mo.observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: ['open'] });
-      }
-      document.querySelectorAll('dialog').forEach(function (d) { d.addEventListener('close', function () { setTimeout(syncDialog, 60); }); });
-      setInterval(syncDialog, 250);
-      syncDialog();
-      syncBtn();
     }());
   </script>
 </body>
