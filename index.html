@@ -2028,13 +2028,17 @@
     (function () {
       /* Musik latar situs: lagu yang sama dengan demo undangan (assets/musik-latar.mp3).
          Browser melarang autoplay bersuara, jadi musik mulai pada interaksi pertama.
-         Saat jendela Preview/Demo/Coba Demo terbuka, musik situs dijeda agar tidak dobel
-         dengan musik demo di dalamnya; lanjut lagi hanya bila sebelumnya sedang menyala. */
+         Anti dobel GENERIK: musik situs wajib jeda selama ADA elemen <dialog> apa pun
+         yang terbuka di halaman — tanpa daftar ID satu-satu, jadi dialog demo tema apa pun
+         (termasuk yang ditambahkan di masa depan) otomatis ikut terjaga dan lagu situs
+         tidak bocor ke dalam demo. Musik hanya lanjut lagi bila sebelumnya memang
+         menyala dan dijeda karena dialog itu. */
       var audio = document.getElementById('bgmSite');
       var btn = document.getElementById('musSite');
       if (!audio || !btn) return;
       var want = true;            /* pengunjung belum mematikan musik secara manual */
-      var pausedByDialog = false; /* musik sedang menyala lalu dijeda karena dialog terbuka */
+      var pausedByDialog = false; /* musik sedang menyala lalu dijeda karena ada dialog terbuka */
+      var resumeTimer = null;     /* jeda singkat sebelum lanjut lagi, berjaga bila dialog berganti berantai */
       function anyDialogOpen() { return !!document.querySelector('dialog[open]'); }
       function syncBtn() {
         var on = !audio.paused;
@@ -2047,18 +2051,35 @@
         try { p = audio.play(); } catch (e) {}
         if (p && p.catch) p.catch(function () { /* ditolak browser: coba lagi di interaksi berikutnya */ });
       }
+      function pauseForDialog() {
+        if (resumeTimer) { clearTimeout(resumeTimer); resumeTimer = null; }
+        if (!audio.paused) { try { audio.pause(); } catch (e) {} pausedByDialog = true; }
+      }
       function syncDialog() {
-        if (anyDialogOpen()) {
-          if (!audio.paused) { try { audio.pause(); } catch (e) {} pausedByDialog = true; }
-        } else if (pausedByDialog) {
-          pausedByDialog = false;
-          if (want) tryPlay();
+        if (anyDialogOpen()) { pauseForDialog(); return; }
+        if (pausedByDialog && !resumeTimer) {
+          /* Tunggu sebentar sebelum lanjut: bila dialog lain menyusul terbuka berantai
+             (mis. Pratinjau → Demo, Coba Demo → Demo), timer ini dibatalkan oleh
+             pauseForDialog sehingga tidak ada selipan lagu di sela pergantian dialog. */
+          resumeTimer = setTimeout(function () {
+            resumeTimer = null;
+            if (!anyDialogOpen() && pausedByDialog) {
+              pausedByDialog = false;
+              if (want) tryPlay();
+            }
+          }, 350);
         }
       }
-      audio.addEventListener('playing', syncBtn);
+      audio.addEventListener('playing', function () {
+        syncBtn();
+        /* Jaring pengaman terakhir: putaran yang telanjur mulai saat ada dialog
+           terbuka langsung dijeda lagi dan ditandai agar lanjut sesudah dialog tutup. */
+        if (anyDialogOpen()) pauseForDialog();
+      });
       audio.addEventListener('pause', syncBtn);
       /* Tombol melayang: putar / jeda manual kapan pun */
       btn.addEventListener('click', function () {
+        if (resumeTimer) { clearTimeout(resumeTimer); resumeTimer = null; }
         if (audio.paused) { want = true; pausedByDialog = false; tryPlay(); }
         else { want = false; pausedByDialog = false; try { audio.pause(); } catch (e) {} }
         syncBtn();
@@ -2072,14 +2093,16 @@
           setTimeout(tryPlay, 80);
         }, { passive: true });
       });
-      /* Anti dobel: awasi semua dialog (dibuka via showModal maupun atribut open) */
-      var dialogs = document.querySelectorAll('dialog');
+      /* Anti dobel generik: amati SELURUH dokumen — perubahan atribut open pada dialog
+         mana pun memicu pemeriksaan, termasuk dialog yang baru ditambahkan ke halaman
+         setelah skrip ini jalan. Ditambah cek berkala sebagai lapisan cadangan. */
       if ('MutationObserver' in window) {
         var mo = new MutationObserver(function () { syncDialog(); });
-        dialogs.forEach(function (d) { mo.observe(d, { attributes: true, attributeFilter: ['open'] }); });
+        mo.observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: ['open'] });
       }
-      dialogs.forEach(function (d) { d.addEventListener('close', function () { setTimeout(syncDialog, 60); }); });
-      setInterval(syncDialog, 600);
+      document.querySelectorAll('dialog').forEach(function (d) { d.addEventListener('close', function () { setTimeout(syncDialog, 60); }); });
+      setInterval(syncDialog, 250);
+      syncDialog();
       syncBtn();
     }());
   </script>
