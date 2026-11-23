@@ -882,6 +882,7 @@
     </main>
 
     <button id="musicBtn" type="button" aria-label="Putar atau hentikan musik latar" aria-pressed="false"><span class="disc" aria-hidden="true"></span></button>
+    <audio id="bgm" src="assets/musik-latar.mp3" loop preload="auto"></audio>
 
     <div id="lightbox" role="dialog" aria-modal="true" aria-label="Foto galeri ukuran penuh">
       <button type="button" id="lbClose" aria-label="Tutup foto">&#10005;</button>
@@ -910,66 +911,46 @@
           toastTimer = setTimeout(function(){ toast.classList.remove("show"); }, 2600);
         }
 
-        /* ---------- musik lembut (WebAudio, piano generatif) ---------- */
-        var actx = null, master = null, musicOn = false, schedTimer = null, nextNote = 0, step = 0;
-        var CHORDS = [
-          [261.63, 329.63, 392.00, 523.25],
-          [220.00, 261.63, 329.63, 440.00],
-          [174.61, 220.00, 261.63, 349.23],
-          [196.00, 246.94, 293.66, 392.00]
-        ];
-        function note(freq, t, vol){
-          var o1 = actx.createOscillator(), o2 = actx.createOscillator(), g = actx.createGain();
-          o1.type = "sine"; o1.frequency.value = freq;
-          o2.type = "triangle"; o2.frequency.value = freq * 2;
-          var g2 = actx.createGain(); g2.gain.value = 0.25;
-          g.gain.setValueAtTime(0, t);
-          g.gain.linearRampToValueAtTime(vol, t + 0.02);
-          g.gain.exponentialRampToValueAtTime(0.0001, t + 1.9);
-          o1.connect(g); o2.connect(g2); g2.connect(g); g.connect(master);
-          o1.start(t); o2.start(t); o1.stop(t + 2); o2.stop(t + 2);
-        }
-        function scheduler(){
-          while (nextNote < actx.currentTime + 1.6){
-            var chord = CHORDS[Math.floor(step / 4) % CHORDS.length];
-            var idx = [0, 1, 2, 3, 2, 1][step % 6];
-            note(chord[idx % chord.length], nextNote, idx === 3 ? 0.16 : 0.12);
-            if (step % 8 === 0) { note(chord[0] / 2, nextNote, 0.10); }
-            nextNote += 0.92; step++;
-          }
-        }
+        /* ---------- musik latar: instrumen "Perfect" (assets/musik-latar.mp3) ---------- */
+        var bgm = document.getElementById("bgm");
+        var musicOn = false, musicWant = false, musicRetryArmed = false;
         function startMusic(){
-          try {
-            if (!actx){
-              actx = new (window.AudioContext || window.webkitAudioContext)();
-              master = actx.createGain(); master.gain.value = 0; master.connect(actx.destination);
-            }
-            if (actx.state === "suspended") { actx.resume(); }
-            master.gain.cancelScheduledValues(actx.currentTime);
-            master.gain.linearRampToValueAtTime(0.85, actx.currentTime + 1.2);
-            nextNote = actx.currentTime + 0.1; step = 0;
-            scheduler();
-            clearInterval(schedTimer);
-            schedTimer = setInterval(scheduler, 700);
-            musicOn = true;
-          } catch(e){ musicOn = false; }
+          /* lagu unggahan pengguna dari Generator (#kbAudio) selalu didahulukan */
+          if (document.getElementById("kbAudio")) return;
+          if (!bgm) return;
+          musicWant = true;
+          var p = null;
+          try { p = bgm.play(); } catch(e){}
+          if (p && p.then) {
+            p.then(function(){ musicOn = true; syncMusicBtn(); })
+             .catch(function(){ musicOn = false; syncMusicBtn(); armMusicRetry(); });
+          } else { musicOn = !bgm.paused; }
           syncMusicBtn();
         }
         function stopMusic(){
-          if (actx && master){
-            master.gain.cancelScheduledValues(actx.currentTime);
-            master.gain.linearRampToValueAtTime(0, actx.currentTime + 0.5);
-          }
-          clearInterval(schedTimer);
+          musicWant = false;
+          try { bgm.pause(); } catch(e){}
           musicOn = false;
           syncMusicBtn();
         }
+        function armMusicRetry(){
+          if (musicRetryArmed) return; musicRetryArmed = true;
+          ["pointerdown", "touchend", "click", "keydown"].forEach(function(ev){
+            document.addEventListener(ev, musicRetry, { passive: true });
+          });
+        }
+        function musicRetry(){ if (musicWant && bgm && bgm.paused) startMusic(); }
         var musicBtn = $("#musicBtn");
         function syncMusicBtn(){
           musicBtn.classList.toggle("playing", musicOn);
           musicBtn.setAttribute("aria-pressed", musicOn ? "true" : "false");
         }
+        if (bgm) {
+          bgm.addEventListener("playing", function(){ musicOn = true; syncMusicBtn(); });
+          bgm.addEventListener("pause", function(){ musicOn = false; syncMusicBtn(); });
+        }
         musicBtn.addEventListener("click", function(){ musicOn ? stopMusic() : startMusic(); });
+        window.addEventListener("message", function(e){ if (e.data === "kb-stop-music") stopMusic(); });
 
         /* ---------- buka undangan ---------- */
         var gate = $("#gate"), content = $("#content"), opened = false;
