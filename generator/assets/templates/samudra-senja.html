@@ -454,6 +454,21 @@
       .nav-bawah a svg{width:19px;height:19px}
       .nav-bawah a.aktif{background:linear-gradient(90deg,var(--gold),var(--coral));color:#fff}
 
+      /* ---------- Tombol musik ---------- */
+      #musicBtn{
+        position:fixed;right:14px;bottom:calc(96px + env(safe-area-inset-bottom));z-index:75;
+        width:52px;height:52px;border-radius:50%;cursor:pointer;
+        border:1px solid rgba(255,233,210,.35);background:rgba(16,10,28,.82);
+        backdrop-filter:blur(12px);box-shadow:0 14px 30px rgba(0,0,0,.4);
+        display:none;align-items:center;justify-content:center;
+      }
+      #musicBtn.show{display:flex}
+      #musicBtn .disc{width:30px;height:30px;border-radius:50%;border:2px solid var(--gold);position:relative;flex:none}
+      #musicBtn .disc::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--coral)}
+      #musicBtn.playing .disc{animation:putarDisc 3.4s linear infinite}
+      @keyframes putarDisc{to{transform:rotate(360deg)}}
+      @media (prefers-reduced-motion: reduce){ #musicBtn.playing .disc{animation:none} }
+
       .toast{
         position:fixed;left:50%;bottom:96px;transform:translate(-50%,20px);z-index:90;
         background:#141433;color:#fff;padding:12px 20px;border-radius:99px;
@@ -799,6 +814,9 @@
       </a>
     </nav>
 
+    <button id="musicBtn" type="button" aria-label="Putar atau hentikan musik latar" aria-pressed="false"><span class="disc" aria-hidden="true"></span></button>
+    <audio id="bgm" src="assets/musik-latar.mp3" loop preload="auto"></audio>
+
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script>
@@ -821,9 +839,50 @@
           sampul.classList.add("terangkat");
           document.body.classList.remove("terkunci");
           document.body.classList.add("terbuka");
+          musicBtn.classList.add("show");
+          startMusic();
           window.scrollTo(0,0);
           setTimeout(function(){ sampul.style.display = "none"; }, 1300);
         });
+
+        /* Musik latar: instrumen "Perfect" (assets/musik-latar.mp3) */
+        var bgm = document.getElementById("bgm");
+        var musicBtn = document.getElementById("musicBtn");
+        var musicOn = false, musicWant = false, musicRetryArmed = false;
+        function syncMusicBtn(){
+          musicBtn.classList.toggle("playing", musicOn);
+          musicBtn.setAttribute("aria-pressed", musicOn ? "true" : "false");
+        }
+        function startMusic(){
+          /* lagu unggahan pengguna dari Generator (#kbAudio) selalu didahulukan */
+          if (document.getElementById("kbAudio")) return;
+          if (!bgm) return;
+          musicWant = true;
+          var p = null;
+          try { p = bgm.play(); } catch(e){}
+          if (p && p.then) {
+            p.then(function(){ musicOn = true; syncMusicBtn(); })
+             .catch(function(){ musicOn = false; syncMusicBtn(); armMusicRetry(); });
+          } else { musicOn = !bgm.paused; syncMusicBtn(); }
+        }
+        function stopMusic(){
+          musicWant = false;
+          try { bgm.pause(); } catch(e){}
+          musicOn = false; syncMusicBtn();
+        }
+        function armMusicRetry(){
+          if (musicRetryArmed) return; musicRetryArmed = true;
+          ["pointerdown", "touchend", "click", "keydown"].forEach(function(ev){
+            document.addEventListener(ev, musicRetry, { passive: true });
+          });
+        }
+        function musicRetry(){ if (musicWant && bgm && bgm.paused) startMusic(); }
+        if (bgm) {
+          bgm.addEventListener("playing", function(){ musicOn = true; syncMusicBtn(); });
+          bgm.addEventListener("pause", function(){ musicOn = false; syncMusicBtn(); });
+        }
+        musicBtn.addEventListener("click", function(){ musicOn ? stopMusic() : startMusic(); });
+        window.addEventListener("message", function(e){ if (e.data === "kb-stop-music") stopMusic(); });
 
         /* Animasi muncul saat digulir */
         var io = new IntersectionObserver(function(entries){
