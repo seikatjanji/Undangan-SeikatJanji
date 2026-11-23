@@ -502,6 +502,7 @@ footer.space{height:6.5rem;background:rgba(0,0,0,.8);position:relative;z-index:1
 <div id="lightbox" role="dialog" aria-label="Foto ukuran penuh"><img id="lbImg" alt="Foto galeri ukuran penuh" /><button type="button" id="lbClose" aria-label="Tutup foto">✕</button></div>
 
 <button id="musicBtn" type="button" aria-label="Putar atau hentikan musik"><span class="disc"></span></button>
+<audio id="bgm" src="assets/musik-latar.mp3" loop preload="auto"></audio>
 
 <nav id="bottomnav" aria-label="Navigasi undangan">
   <a href="#beranda" data-nav="beranda" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg>Beranda</a>
@@ -552,30 +553,33 @@ $$('[data-stagger]').forEach(function(box){
 /* tiap slide kisah pop saat pertama kali tampil */
 $$('.slide').forEach(function(s){ s.classList.add('pop-item'); io.observe(s); });
 
-/* gate open + gentle ambient pad (WebAudio, user-gesture started) */
-var actx=null,master=null,musicOn=false;
-function startMusic(){
-  try{
-    if(!actx){
-      actx=new (window.AudioContext||window.webkitAudioContext)();
-      master=actx.createGain(); master.gain.value=0; master.connect(actx.destination);
-      [261.63,329.63,392.0].forEach(function(f,i){
-        var o=actx.createOscillator(),g=actx.createGain();
-        o.type='sine'; o.frequency.value=f; g.gain.value=.05/(i+1);
-        var lfo=actx.createOscillator(),lg=actx.createGain();
-        lfo.frequency.value=.07+i*.03; lg.gain.value=.02; lfo.connect(lg); lg.connect(g.gain);
-        o.connect(g); g.connect(master); o.start(); lfo.start();
-      });
-    }
-    actx.resume();
-    master.gain.linearRampToValueAtTime(.5,actx.currentTime+1.6);
-    musicOn=true;
-  }catch(e){ musicOn=false; }
-}
-function stopMusic(){ if(actx&&master){ master.gain.linearRampToValueAtTime(0,actx.currentTime+.6);} musicOn=false; }
+/* musik latar: instrumen "Perfect" (assets/musik-latar.mp3) — mulai saat undangan dibuka */
+var bgm=document.getElementById('bgm');
+var musicOn=false,musicWant=false,musicRetryArmed=false;
 var musicBtn=$('#musicBtn');
 function syncMusicBtn(){ musicBtn.classList.toggle('playing',musicOn); }
+function startMusic(){
+  /* lagu unggahan pengguna dari Generator (#kbAudio) selalu didahulukan */
+  if(document.getElementById('kbAudio'))return;
+  if(!bgm)return;
+  musicWant=true;
+  var p=null;
+  try{ p=bgm.play(); }catch(e){}
+  if(p&&p.then){ p.then(function(){ musicOn=true; syncMusicBtn(); }).catch(function(){ musicOn=false; syncMusicBtn(); armMusicRetry(); }); }
+  else{ musicOn=!bgm.paused; syncMusicBtn(); }
+}
+function stopMusic(){ musicWant=false; try{ bgm.pause(); }catch(e){} musicOn=false; syncMusicBtn(); }
+function armMusicRetry(){
+  if(musicRetryArmed)return; musicRetryArmed=true;
+  ['pointerdown','touchend','click','keydown'].forEach(function(ev){ document.addEventListener(ev,musicRetry,{passive:true}); });
+}
+function musicRetry(){ if(musicWant&&bgm&&bgm.paused) startMusic(); }
+if(bgm){
+  bgm.addEventListener('playing',function(){ musicOn=true; syncMusicBtn(); });
+  bgm.addEventListener('pause',function(){ musicOn=false; syncMusicBtn(); });
+}
 musicBtn.addEventListener('click',function(){ if(musicOn){stopMusic()}else{startMusic()} syncMusicBtn(); });
+window.addEventListener('message',function(e){ if(e.data==='kb-stop-music') stopMusic(); });
 
 /* fixed background video: the one and only video on the page.
    Reduced motion -> keep the poster frame, never play. */
