@@ -4,11 +4,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
-  <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
-  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <title>Undangan Digital</title>
+  <link rel="icon" href="assets/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <meta name="theme-color" content="#4a0e18" />
+  <meta name="description" content="SeikatJanji — Undangan Digital Elegan untuk Hari Bahagiamu. Undangan pernikahan digital personal dengan RSVP, amplop digital, musik, dan video." />
+  <meta property="og:title" content="SeikatJanji — Undangan Digital Elegan untuk Hari Bahagiamu" />
+  <meta property="og:description" content="Undangan pernikahan digital personal dengan RSVP, amplop digital, musik, dan video." />
+  <meta property="og:image" content="assets/icon-512.png" />
+  <title>SeikatJanji — Undangan Digital</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;600;700&family=Gelasio:ital,wght@0,400;0,500;1,400&family=Great+Vibes&family=Manrope:wght@400;600;700;800&family=Marcellus&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
@@ -33,6 +39,9 @@
     .app{min-height:100vh;display:grid;grid-template-columns:minmax(330px,450px) minmax(0,1fr)}
     .editor{background:var(--surface);border-right:1px solid var(--line);padding:30px 28px 110px;min-height:100vh;position:relative;z-index:2}
     .editor-inner{max-width:410px;margin:auto}
+    .brand{display:flex;margin-bottom:22px}
+    .brand-badge{display:inline-flex;align-items:center;background:linear-gradient(150deg,#5c1622,#4a0e18 62%,#3c0b14);border:1px solid rgba(198,164,92,.45);border-radius:14px;padding:11px 18px 12px;box-shadow:0 10px 26px rgba(74,14,24,.22)}
+    .brand-badge img{display:block;height:36px;width:auto}
     .intro{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:24px}.intro-actions{display:flex;flex-direction:column;gap:8px;align-items:stretch}.intro-actions .ghost-btn{margin:0}
     h1{font-family:"Newsreader",serif;font-weight:500;font-size:clamp(29px,3vw,39px);line-height:1.02;margin:0 0 8px;letter-spacing:-.025em}
     .intro p{font-size:14px;line-height:1.5;color:var(--muted);margin:0;max-width:32ch}
@@ -376,6 +385,7 @@
   <main class="app" id="app">
     <section class="editor" aria-label="Editor undangan">
       <div class="editor-inner">
+        <div class="brand"><span class="brand-badge"><img src="assets/kabarbahagia-logo.png" alt="SeikatJanji" width="131" height="36" /></span></div>
         <div class="intro">
           <div><h1>Rangkai undanganmu</h1><p>Isi detail, lihat hasilnya langsung, lalu unduh sebagai halaman web siap dibagikan.</p></div>
           <div class="intro-actions"><button class="ghost-btn" id="guestLinksBtn" type="button">Link tamu</button><button class="ghost-btn" id="resetBtn" type="button">Mulai ulang</button></div>
@@ -468,6 +478,11 @@
               <button type="button" class="swatch" data-theme="heritage" style="--dot:#7d97ad;--dot2:#c9a24d"><span class="dot"></span>Heritage</button>
               <button type="button" class="swatch" data-theme="bali" style="--dot:#5e0b1b;--dot2:#c9a227"><span class="dot"></span>Etnik Bali</button>
               <button type="button" class="swatch" data-theme="sinema" style="--dot:#2b1e3e;--dot2:#d9b26a"><span class="dot"></span>Sinema Senja</button>
+              <button type="button" class="swatch" data-theme="samudra" style="--dot:#e8503a;--dot2:#083f4d"><span class="dot"></span>Samudra Senja</button>
+              <button type="button" class="swatch" data-theme="lentera" style="--dot:#0a0a0a;--dot2:#f4a950"><span class="dot"></span>Lentera Malam</button>
+              <button type="button" class="swatch" data-theme="duatinta" style="--dot:#31559f;--dot2:#b3402f"><span class="dot"></span>Dua Tinta</button>
+              <button type="button" class="swatch" data-theme="monokrom" style="--dot:#111111;--dot2:#f5f0e6"><span class="dot"></span>Monokrom Editorial</button>
+              <button type="button" class="swatch" data-theme="kertas" style="--dot:#e8a87c;--dot2:#a8c3a0"><span class="dot"></span>Kertas Lipat</button>
             </div></div>
             <p class="hint" id="themeOrnNote" style="display:block;margin:-4px 0 16px"></p><div class="field"><label>Musik latar <span class="hint">opsional</span></label>
               <div class="upload"><div class="upload-thumb" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M9 18V6l10-2v12M9 9l10-2M6.5 20A2.5 2.5 0 1 0 6.5 15a2.5 2.5 0 0 0 0 5ZM16.5 18A2.5 2.5 0 1 0 16.5 13a2.5 2.5 0 0 0 0 5Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="upload-text"><strong id="audioLabel">Pilih lagu</strong><span>MP3, M4A, atau OGG, maksimal 12 MB. Tamu menekan tombol untuk memutar.</span><input class="file-input" id="audioInput" type="file" accept="audio/mpeg,audio/mp4,audio/ogg" /></div></div>
@@ -556,7 +571,7 @@
         annisa1:{source:'QS. An-Nisa: 1',text:'Wahai manusia! Bertakwalah kepada Tuhanmu yang telah menciptakan kamu dari diri yang satu, dan menciptakan pasangannya dari dirinya; dan dari keduanya Allah memperkembangbiakkan laki-laki dan perempuan yang banyak.'},
         alfurqan74:{source:'QS. Al-Furqan: 74',text:'Ya Tuhan kami, anugerahkanlah kepada kami pasangan kami dan keturunan kami sebagai penyenang hati, dan jadikanlah kami pemimpin bagi orang-orang yang bertakwa.'}
       };
-      var themeOrnNotes={gold:'Tema ini memakai file demo Elegan Gold asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',terracotta:'Tema ini memakai file demo Rustic Scrapbook asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',midnight:'Tema ini memakai file demo Minimalis Modern asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',sage:'Tema ini memakai file demo Floral Sage asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',paper:'Tema ini memakai file demo Surat Cinta asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',heritage:'Tema ini memakai file demo Heritage asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',bali:'Tema ini memakai file demo Etnik Bali asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',sinema:'Tema ini memakai file demo Sinema Senja asli sebagai cetakan — hasil generate identik dengan demo di web jualan.'};
+      var themeOrnNotes={gold:'Tema ini memakai file demo Elegan Gold asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',terracotta:'Tema ini memakai file demo Rustic Scrapbook asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',midnight:'Tema ini memakai file demo Minimalis Modern asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',sage:'Tema ini memakai file demo Floral Sage asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',paper:'Tema ini memakai file demo Surat Cinta asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',heritage:'Tema ini memakai file demo Heritage asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',bali:'Tema ini memakai file demo Etnik Bali asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',sinema:'Tema ini memakai file demo Sinema Senja asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',samudra:'Tema modern ACC #1 — memakai file demo final Samudra Senja sebagai cetakan: laut senja HD di sampul/hero, langit yang berubah mengikuti guliran, dan data dari formulir mengisi nama, tanggal, acara, kisah, galeri, serta amplopnya.',lentera:'Tema modern ACC #2 — memakai file demo final Lentera Malam sebagai cetakan: malam pekat berlentera, kisah bergeser otomatis, amplop terbuka menjadi kartu ATM, dan data dari formulir mengisi seluruh isinya.',duatinta:'Tema modern ACC #3 — memakai file demo final Dua Tinta sebagai cetakan: jurnal kertas bergaris dengan goresan tinta biru–merah, dan data dari formulir mengisi seluruh isinya.',monokrom:'Tema modern ACC #4 — memakai file demo final Monokrom Editorial sebagai cetakan: majalah hitam-putih bertipografi besar tanpa ornamen hias, dan data dari formulir mengisi seluruh isinya.',kertas:'Tema modern ACC #5 — memakai file demo final Kertas Lipat sebagai cetakan: bangau origami ber-facet, panel lipatan pastel, gerbang yang disobek saat dibuka, dan data dari formulir mengisi seluruh isinya.'};
 
       /* ============ CETAKAN DEMO: file demo asli web jualan ============ */
       var TPL={
@@ -727,6 +742,111 @@
           ],
           events:{date:'Sabtu, 20 Februari 2027',range1:'09.00 – 11.00 WITA',range2:'12.00 – 15.00 WITA',venue:'Taman Bhagawan',addr:'Jl. Pratama No. 70, Tanjung Benoa, Bali'},
           banks:[{name:'BCA',no:'1234567890'},{name:'Mandiri',no:'0987654321'}]
+        },
+        samudra:{file:'samudra-senja.html',label:'Samudra Senja',modern:true,assetKey:'samudra',tz:'+08:00',tzLabel:'WITA',iso:'2027-06-12T08:00:00+08:00',storyStyle:'full',
+          assets:['laut-senja-hd2.jpg','laut-senja-hd2-mobile.jpg','mempelai-wanita-hd.jpg','mempelai-pria-hd.jpg','galeri-jalan.webp','tebing-siang-hd.jpg','tebing-senja-hd.jpg','tebing-hd.jpg','galeri-peluk2-hd.jpg','peluk-hd.jpg','malam-hd.jpg'],
+          photoMap:{'laut-senja-hd2.jpg':'cover','laut-senja-hd2-mobile.jpg':'cover','mempelai-wanita-hd.jpg':'one','mempelai-pria-hd.jpg':'two'},
+          storySel:'.kisah .bab',storyDate:'.waktu',storyText:'p:not(.waktu)',eventSel:'.kartu-acara',bankSel:'.kartu-gelap',gallerySel:'#galeri img',
+          pairs:[
+            ['Senja Ayu Lestari, S.Pd.','full1'],['Senja Ayu Lestari','full1'],
+            ['Samudra Aditya Pratama, S.T.','full2'],['Samudra Aditya Pratama','full2'],
+            ['Putri kedua dari','label1'],['Bapak H. Bambang Lestari','father1'],['& Ibu Hj. Ratna Lestari','motherAmp1'],
+            ['Putra pertama dari','label2'],['Bapak Ir. Hadi Pratama','father2'],['& Ibu Dewi Anggraini','motherAmp2'],
+            ['Sabtu, 12 Juni 2027','dateLong'],['12 Juni 2027','dateShort'],
+            ['Samudra Cliff House','venue'],['Uluwatu, Bali','cityLine'],
+            ['Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.','verseText'],
+            ['QS. Ar-Rum : 21','verseSource'],
+            ['Dengan memohon rahmat dan ridha Allah SWT, kami bermaksud menyempurnakan separuh agama dalam ikatan pernikahan. Seperti pagi yang membuka hari, inilah awal dari perjalanan kami — dan dengan penuh syukur, kami mengundang Bapak/Ibu/Saudara/i untuk menjadi saksinya.','opening'],
+            ['Merupakan suatu kehormatan dan kebahagiaan bagi kami beserta keluarga apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu. Atas kehadiran serta doa yang tulus, kami mengucapkan terima kasih.','closing'],
+            ['Senja','short1'],['Samudra','short2']
+          ],
+          events:{date:'Sabtu, 12 Juni 2027',range1:'Pukul 08.00 – 10.00 WITA',range2:'Pukul 16.00 – 19.00 WITA',venue:'Samudra Cliff House',addr:'Jl. Pantai Suluban No. 88, Uluwatu, Kec. Kuta Selatan, Kab. Badung, Bali'},
+          banks:[{name:'BCA',no:'8210 4567 90'},{name:'DANA',no:'0812 3456 7890'}]
+        },
+        lentera:{file:'lentera-malam.html',label:'Lentera Malam',modern:true,assetKey:'lentera',tz:'+07:00',tzLabel:'WIB',iso:'2027-09-18T15:30:00+07:00',ics:'20270918T083000Z',icsNames:'Kirana & Damar',storyStyle:'full',
+          assets:['profil-wanita.jpg','profil-pria.jpg','venue.jpg','pasangan-berdua.jpg','kisah-2.jpg','kisah-3.jpg','galeri-gunung.jpg','galeri-teh.jpg','galeri-bali.jpg','prewedding-poster-v3.jpg','prewedding-v4.mp4'],
+          photoMap:{'prewedding-poster-v3.jpg':'cover','pasangan-berdua.jpg':'cover','profil-wanita.jpg':'one','profil-pria.jpg':'two'},
+          storySel:'#storyTrack .slide',storyDate:'.txt small',storyText:'.txt p',eventSel:'.acara-card',bankSel:'.atm',gallerySel:'#galeri img',
+          pairs:[
+            ['Kirana Ayu Larasati, S.E.','full1'],['Kirana Ayu Larasati','full1'],
+            ['Damar Prasetyo Nugraha, S.T.','full2'],['Damar Prasetyo Nugraha','full2'],
+            ['Putri kedua dari Bapak H. Bambang Laras Prayitno & Ibu Hj. Ratna Larasati','profile1'],
+            ['Putra pertama dari Bapak Ir. H. Agus Nugraha & Ibu Hj. Sri Wahyuni','profile2'],
+            ['Sabtu, 18 September 2027','dateLong'],['18 September 2027','dateShort'],['Sabtu','weekday'],
+            ['Pendopo Cahaya Purnama','venue'],['Jl. Kenanga No. 18, Yogyakarta','addr'],['Yogyakarta','city'],
+            ['Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.','verseText'],
+            ['QS. Ar-Rūm · 21','verseSource'],
+            ['Dengan memohon rahmat dan ridha Allah SWT, kami bermaksud menyempurnakan separuh agama dalam ikatan pernikahan:','opening'],
+            ['Merupakan suatu kehormatan dan kebahagiaan bagi kami sekeluarga apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kedua mempelai.','closing'],
+            ['Kirana & Damar','namesPair'],['K·D','mono'],
+            ['Kirana','short1'],['Damar','short2']
+          ],
+          events:{date:'Sabtu, 18 September 2027',range1:'Pukul 15.30 – 17.00 WIB',range2:'Pukul 19.00 – 22.00 WIB',venue:'Pendopo Cahaya Purnama',addr:'Jl. Kenanga No. 18, Yogyakarta'},
+          banks:[{name:'BCA',no:'1234 5678 90'},{name:'MANDIRI',no:'0987 6543 21'}]
+        },
+        duatinta:{file:'dua-tinta.html',label:'Dua Tinta',modern:true,assetKey:'duatinta',tz:'+07:00',tzLabel:'WIB',iso:'2027-05-08T08:00:00+07:00',ics:'20270508T010000Z',icsNames:'Galih & Ratna',storyStyle:'full',
+          assets:['cover.webp','groom.webp','bride.webp','peta.png','kisah-1.webp','kisah-2.webp','kisah-3.webp'],
+          photoMap:{'cover.webp':'cover','groom.webp':'one','bride.webp':'two'},
+          storySel:'#kisah .chapter',storyDate:'.ch-date',storyText:'p:not(.ch-num):not(.ch-date)',eventSel:'.events .event',bankSel:'.bank',gallerySel:'#galeri img',
+          pairs:[
+            ['Galih Prasetyo, S.T.','full1'],['Galih Prasetyo','full1'],
+            ['Ratna Ayu Lestari, S.E.','full2'],['Ratna Ayu Lestari','full2'],
+            ['Putra pertama dari pasangan','labelPasangan1'],['Bapak H. Prasetyo Wijaya','father1'],['Ibu Hj. Sri Wahyuni','mother1'],
+            ['Putri kedua dari pasangan','labelPasangan2'],['Bapak H. Bambang Lestari','father2'],['Ibu Hj. Dewi Anggraini','mother2'],
+            ['Sabtu, 8 Mei 2027','dateLong'],['8 Mei 2027','dateShort'],['Sabtu','weekday'],
+            ['Balai Kartini, Jakarta Selatan','venueCity'],['Balai Kartini','venue'],
+            ['Jl. Jenderal Gatot Subroto Kav. 37, Kuningan Timur,','addrNoCity'],['Setiabudi, Jakarta Selatan 12950','cityLine'],
+            ['Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda kebesaran Allah bagi kaum yang berpikir.','verseText'],
+            ['QS. Ar-Rum ayat 21','verseSource'],
+            ['Dengan memohon rahmat dan ridha Allah SWT, kami mengundang Bapak, Ibu, dan Saudara/i untuk hadir di hari bahagia kami.','opening'],
+            ['Merupakan kehormatan dan kebahagiaan bagi kami beserta keluarga apabila Bapak, Ibu, dan Saudara/i berkenan hadir dan memberikan doa restu. Atas perhatian dan kehadirannya, kami mengucapkan terima kasih yang sebesar-besarnya.','closing'],
+            ['Galih & Ratna','namesPair'],['Galih','short1'],['Ratna','short2']
+          ],
+          events:{date:'Sabtu, 8 Mei 2027',range1:'Pukul 08.00 s.d. 10.00 WIB',range2:'Pukul 11.00 s.d. 13.00 WIB',venue:'Balai Kartini',addr:'Jl. Jenderal Gatot Subroto Kav. 37, Kuningan Timur, Setiabudi, Jakarta Selatan 12950'},
+          banks:[{name:'BCA',no:'123 456 7890'},{name:'Mandiri',no:'098 765 4321'}]
+        },
+        monokrom:{file:'monokrom-editorial.html',label:'Monokrom Editorial',modern:true,assetKey:'monokrom',tz:'+07:00',tzLabel:'WIB',iso:'2027-10-09T08:00:00+07:00',ics:'20271009T010000Z',icsNames:'Adit & Ayu',storyStyle:'full',
+          assets:['cover-ai.webp','hero-ai.webp','groom-ai.webp','bride-ai.webp','peta.webp','kisah-1-ai.webp','kisah-2-ai.webp','kisah-3-ai.webp','galeri-lapangan-ai.webp'],
+          photoMap:{'cover-ai.webp':'cover','hero-ai.webp':'cover','groom-ai.webp':'one','bride-ai.webp':'two'},
+          storySel:'#kisah .chapter',storyDate:'.yr',storyText:'.news-cols p',eventSel:'.ev-card',bankSel:'.bank',gallerySel:'#galeri img',
+          pairs:[
+            ['Aditya Pramudya','full1'],['Prameswari Ayu Lestari','full2'],
+            ['Putra dari Bapak','labelBapak1'],['Pramudya Hartawan','fatherBare1'],['Ratih Pramudya','motherBare1'],
+            ['Putri dari Bapak','labelBapak2'],['Lestari Wibowo','fatherBare2'],['Ayu Wibowo','motherBare2'],
+            ['Sabtu, 9 Oktober 2027','dateLong'],['9 Oktober 2027','dateShort'],
+            ['The Dharmawangsa, Jakarta','venueCity'],['The Dharmawangsa','venue'],
+            ['Jl. Brawijaya Raya No. 26, Kebayoran Baru, Jakarta Selatan','addr'],
+            ['Jl. Brawijaya Raya No. 26, Kebayoran Baru,','addrNoCity'],['Jakarta Selatan 12160','city'],
+            ['· Jakarta','cityDot'],[', Jakarta','cityComma'],
+            ['Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda kebesaran Allah bagi kaum yang berpikir.','verseText'],
+            ['QS. Ar-Rum · Ayat 21','verseSource'],
+            ['Dengan memohon rahmat dan ridha Allah SWT, kami yang berbahagia:','opening'],
+            ['Merupakan suatu kehormatan dan kebahagiaan bagi kami beserta keluarga apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kedua mempelai. Atas kehadiran serta doa yang tulus, kami mengucapkan terima kasih.','closing'],
+            ['Adit & Ayu','namesPair'],['Adit','short1'],['Ayu','short2']
+          ],
+          events:{date:'Sabtu, 9 Oktober 2027',range1:'Pukul 08.00 — 10.00 WIB',range2:'Pukul 11.00 — 13.00 WIB',venue:'The Dharmawangsa',addr:'Jl. Brawijaya Raya No. 26, Kebayoran Baru, Jakarta Selatan'},
+          banks:[{name:'BCA',no:'123 456 7890'},{name:'Mandiri',no:'098 765 4321'}]
+        },
+        kertas:{file:'kertas-lipat.html',label:'Kertas Lipat',modern:true,assetKey:'kertas',tz:'+07:00',tzLabel:'WIB',iso:'2027-11-20T08:00:00+07:00',ics:'20271120T010000Z',icsNames:'Raka & Melati',storyStyle:'full',
+          assets:['cover-ai.webp','hero-ai.webp','groom-ai.webp','bride-ai.webp','peta.webp','kisah-1-ai.webp','kisah-2-ai.webp','kisah-3-ai.webp','galeri-taman-ai.webp'],
+          photoMap:{'cover-ai.webp':'cover','hero-ai.webp':'cover','groom-ai.webp':'one','bride-ai.webp':'two'},
+          storySel:'#kisah .chapter',storyDate:'.yr',storyText:'p.body-txt',eventSel:'.ev-card',bankSel:'.bank',gallerySel:'#galeri img',
+          pairs:[
+            ['Raka Pradana','full1'],['Melati Ayu Ningrum','full2'],
+            ['Putra dari Bapak','labelBapak1'],['Pradana Wijaya','fatherBare1'],['Sari Wijaya','motherBare1'],
+            ['Putri dari Bapak','labelBapak2'],['Ningrat Saputra','fatherBare2'],['Dewi Saputra','motherBare2'],
+            ['Sabtu, 20 November 2027','dateLong'],['20 November 2027','dateShort'],['20 · 11 · 2027','dots'],
+            ['The Lodge Maribaya, Lembang','heroVenue'],['The Lodge Maribaya','venue'],
+            ['Jl. Cibodas–Bukit Tunggul, Cibodas, Lembang, Kabupaten Bandung Barat 40791','addr'],
+            ['Jl. Cibodas–Bukit Tunggul, Cibodas, Lembang,','addrNoCity'],['Kabupaten Bandung Barat 40791','city'],
+            ['Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda kebesaran Allah bagi kaum yang berpikir.','verseText'],
+            ['QS. Ar-Rum · Ayat 21','verseSource'],
+            ['Dengan memohon rahmat dan ridha Allah SWT, kami yang berbahagia:','opening'],
+            ['Merupakan suatu kehormatan dan kebahagiaan bagi kami beserta keluarga apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kedua mempelai. Atas kehadiran serta doa yang tulus, kami mengucapkan terima kasih.','closing'],
+            ['Raka & Melati','namesPair'],['Raka','short1'],['Melati','short2']
+          ],
+          events:{date:'Sabtu, 20 November 2027',range1:'Pukul 08.00 — 10.00 WIB',range2:'Pukul 11.00 — 13.00 WIB',venue:'The Lodge Maribaya',addr:'Jl. Cibodas–Bukit Tunggul, Cibodas, Lembang, Kabupaten Bandung Barat 40791'},
+          banks:[{name:'BCA',no:'234 567 8901'},{name:'Mandiri',no:'137 000 9876 543'}]
         }
       };
       var MONTH_ID=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
@@ -747,10 +867,25 @@
         var city=segs.length?segs[segs.length-1]:'';
         var sp1=splitProfile(value('profileOne')),sp2=splitProfile(value('profileTwo'));
         var hashtag=value('eventHashtag');if(hashtag&&hashtag.charAt(0)!=='#')hashtag='#'+hashtag.replace(/\s+/g,'');
+        function splitParents(names){if(!names)return{f:'',m:''};var ix=names.indexOf('&');if(ix>=0)return{f:names.slice(0,ix).trim(),m:names.slice(ix+1).trim()};var mm=names.match(/^(.*?)\s+dan\s+((?:Ibu|Bapak)\b.*)$/i);if(mm)return{f:mm[1].trim(),m:mm[2].trim()};return{f:names,m:''}}
+        function bareName(n){return String(n||'').replace(/^(Bapak|Ibu|Bpk\.?)\s+/i,'')}
+        var par1=splitParents(sp1.names),par2=splitParents(sp2.names);
+        var weekday='',monthYear='';
+        if(akad){var ad=new Date(akad+'T12:00:00');weekday=new Intl.DateTimeFormat('id-ID',{weekday:'long'}).format(ad);monthYear=new Intl.DateTimeFormat('id-ID',{month:'long',year:'numeric'}).format(ad)}
         return {
           short1:short1,short2:short2,full1:n1,full2:n2,
           mono:(short1.charAt(0)||'').toUpperCase()+'·'+(short2.charAt(0)||'').toUpperCase(),
+          namesPair:(short1&&short2)?(short1+' & '+short2):'',
           label1:sp1.label,parents1:sp1.names,label2:sp2.label,parents2:sp2.names,
+          profile1:sp1.names?((sp1.label?sp1.label+' ':'')+sp1.names):'',profile2:sp2.names?((sp2.label?sp2.label+' ':'')+sp2.names):'',
+          father1:par1.f,mother1:par1.m,father2:par2.f,mother2:par2.m,
+          fatherBare1:bareName(par1.f),motherBare1:bareName(par1.m),fatherBare2:bareName(par2.f),motherBare2:bareName(par2.m),
+          motherAmp1:par1.m?('& '+par1.m):'',motherAmp2:par2.m?('& '+par2.m):'',
+          labelBapak1:sp1.label?(sp1.label+' Bapak'):'',labelBapak2:sp2.label?(sp2.label+' Bapak'):'',
+          labelPasangan1:sp1.label?(sp1.label+' pasangan'):'',labelPasangan2:sp2.label?(sp2.label+' pasangan'):'',
+          weekday:weekday,monthYear:monthYear,
+          cityComma:city?(', '+city):'',cityDot:city?('· '+city):'',
+          venueCity:value('venue')?(value('venue')+(city?', '+city:'')):'',
           dateLong:fmtLong(akad),dateShort:fmtShort(akad),dots:fmtDots(akad),dotsTight:fmtDotsTight(akad),
           venue:value('venue'),addr:addr,
           addrNoCity:segs.length>1?segs.slice(0,-1).join(', '):addr,
@@ -766,8 +901,11 @@
         var date=isR?(value('receptionDate')||value('eventDate')):value('eventDate');
         var time=isR?(value('receptionTime')||value('eventTime')):value('eventTime');
         var cfg=TPL[selectedTheme];
+        var dp=dateParts(date);
         return {
-          dateLong:fmtLong(date),
+          dateLong:fmtLong(date),dateShort:fmtShort(date),
+          weekday:date?(new Intl.DateTimeFormat('id-ID',{weekday:'long'}).format(new Date(date+'T12:00:00'))):'',
+          dayNum:dp?String(dp.d):'',monthYear:date?(new Intl.DateTimeFormat('id-ID',{month:'long',year:'numeric'}).format(new Date(date+'T12:00:00'))):'',
           range:time?fmtTime(time)+' '+cfg.tzLabel:'',
           venue:isR?(value('receptionVenue')||value('venue')):value('venue'),
           addr:isR?(value('receptionAddress')||value('address')):value('address')
@@ -857,6 +995,89 @@
           var img=item.querySelector('img');if(img&&e.photo)img.setAttribute('src',e.photo);
         });
       }
+      /* ---- substitusi khusus tema modern (markup demo final masing-masing) ---- */
+      function scopedModernEvents(doc,cfg){
+        if(!cfg.eventSel)return;
+        var cards=[].slice.call(doc.querySelectorAll(cfg.eventSel));
+        cards.forEach(function(card,i){
+          if(i>1)return;
+          var ev=eventValues(i);
+          function set(sel,txt){if(!txt)return;var el=card.querySelector(sel);if(el)el.textContent=txt}
+          set('.hari',ev.weekday);set('.day',ev.weekday);
+          set('.tgl-besar',ev.dayNum);set('.bulan',ev.monthYear);
+          set('.ev-date',ev.dateLong);set('.when',ev.dateLong);
+          var dEl=card.querySelector('.date');if(dEl&&ev.dateShort&&dEl.textContent.trim().length<20)dEl.textContent=ev.dateShort;
+          if(ev.range)set('.jam','Pukul '+ev.range);
+          if(ev.range)set('.ev-time','Pukul '+ev.range);
+          if(ev.range)set('.time','Pukul '+ev.range);
+          var pukulP=null;
+          [].slice.call(card.querySelectorAll('p')).forEach(function(p){if(!pukulP&&p.textContent.indexOf('Pukul')>=0)pukulP=p});
+          if(pukulP&&ev.range){
+            var vals=[ev.range.indexOf('Pukul')===0?ev.range:('Pukul '+ev.range),ev.venue,ev.addr];
+            var ti=0;
+            [].slice.call(pukulP.childNodes).forEach(function(n){if(n.nodeType===3&&n.nodeValue.trim()&&ti<3){n.nodeValue=vals[ti];ti++}});
+          }
+          var evVenue=card.querySelector('.ev-venue');
+          if(evVenue){
+            if(ev.venue){[].slice.call(evVenue.childNodes).forEach(function(n){if(n.nodeType===3&&n.nodeValue.trim())n.nodeValue=ev.venue})}
+            var sm=evVenue.querySelector('small');if(sm&&ev.addr)sm.textContent=ev.addr;
+          }
+          var tempat=card.querySelector('.tempat');
+          if(tempat){
+            var st=tempat.querySelector('strong');if(st&&ev.venue)st.textContent=ev.venue;
+            if(ev.addr){var done=false;[].slice.call(tempat.childNodes).forEach(function(n){if(n.nodeType===3){if(!done&&n.nodeValue.trim()){n.nodeValue=ev.addr;done=true}else if(done)n.nodeValue=''}})}
+          }
+          var venueEl=card.querySelector('.venue');
+          if(venueEl&&ev.venue){var sl=computeSlots();venueEl.textContent=sl.venueCity||ev.venue}
+          if(cfg.events&&(ev.venue||ev.addr)){
+            var prs=[];
+            if(ev.venue)prs.push([cfg.events.venue,ev.venue]);
+            if(ev.addr)prs.push([cfg.events.addr,ev.addr]);
+            applyPairs(card,prs);
+          }
+        });
+      }
+      function scopedModernBanks(doc,cfg){
+        var no=value('accountNumber'),bank=value('bankName'),an=value('accountName');
+        if(!no&&!bank)return;
+        if(!cfg.bankSel)return;
+        var cards=[].slice.call(doc.querySelectorAll(cfg.bankSel));
+        cards.forEach(function(card,i){
+          if(i>0){card.remove();return}
+          var numEl=card.querySelector('#rek1,.norek,.bnum,.num');if(numEl&&no)numEl.textContent=no;
+          var anEl=card.querySelector('.an,.bown,.ban');if(anEl&&an)anEl.textContent='a.n. '+an;
+          if(bank&&cfg.banks&&cfg.banks[0]){
+            [].slice.call(card.querySelectorAll('.bank,.bname,.bname b')).forEach(function(el){
+              if(el.children.length===0||el.classList.contains('bname')){
+                [].slice.call(el.childNodes).forEach(function(n){if(n.nodeType===3&&n.nodeValue.indexOf(cfg.banks[0].name)>=0)n.nodeValue=n.nodeValue.split(cfg.banks[0].name).join(bank)});
+              }
+            });
+          }
+          if(no)card.querySelectorAll('[data-salin],[data-copy]').forEach(function(b){
+            var v=b.getAttribute('data-salin')||b.getAttribute('data-copy')||'';
+            if(/^\d{8,}$/.test(v.replace(/\s/g,''))){if(b.hasAttribute('data-salin'))b.setAttribute('data-salin',no.replace(/\D/g,''));if(b.hasAttribute('data-copy'))b.setAttribute('data-copy',no.replace(/\D/g,''))}
+          });
+        });
+      }
+      function scopedModernStory(doc,cfg){
+        if(!cfg.storySel)return;
+        var items=[].slice.call(doc.querySelectorAll(cfg.storySel));
+        if(!items.length)return;
+        var entries=timelineItems().filter(function(x){return x.date||x.title||x.text||x.photo});
+        if(!entries.length){
+          var story=value('story');
+          if(story){entries=[{date:'',title:'Cerita Kami',text:story,photo:''}]}
+        }
+        if(!entries.length)return;
+        items.forEach(function(item,i){
+          if(i>=entries.length){item.remove();return}
+          var e=entries[i];
+          if(cfg.storyDate&&e.date){var lab=item.querySelector(cfg.storyDate);if(lab)lab.textContent=storyLabel(e.date,cfg.storyStyle)}
+          if(e.title){var h=item.querySelector('h3');if(h)h.textContent=e.title}
+          if(e.text&&cfg.storyText){var note=item.querySelector(cfg.storyText);if(note)note.textContent=e.text}
+          if(e.photo){var img=item.querySelector('img');if(img)img.setAttribute('src',e.photo)}
+        });
+      }
       function cleanDemoBits(doc){
         doc.querySelectorAll('#wishes .w').forEach(function(el){el.remove()});
         doc.querySelectorAll('small').forEach(function(el){if(el.textContent.indexOf('Mode demo')>=0)el.remove()});
@@ -920,14 +1141,38 @@
           doc.querySelectorAll('[style]').forEach(function(el){
             var s=el.getAttribute('style');if(!s)return;var out=cssPhotoSwap(s);if(out!==s)el.setAttribute('style',out);
           });
+          if(cfg.modern&&cfg.photoMap){
+            var roleSrc={cover:coverData,one:photoOneData,two:photoTwoData};
+            var base=function(s){return String(s||'').split('/').pop()};
+            doc.querySelectorAll('img').forEach(function(img){
+              var role=cfg.photoMap[base(img.getAttribute('src'))];
+              if(role&&roleSrc[role])img.setAttribute('src',roleSrc[role]);
+            });
+            doc.querySelectorAll('source[srcset]').forEach(function(so){
+              var role=cfg.photoMap[base(so.getAttribute('srcset'))];
+              if(role&&roleSrc[role])so.setAttribute('srcset',roleSrc[role]);
+            });
+            var swapCssModern=function(css){
+              Object.keys(cfg.photoMap).forEach(function(fn){
+                var role=cfg.photoMap[fn],v=roleSrc[role];if(!v)return;
+                var full='assets/modern/'+cfg.assetKey+'/'+fn;
+                css=css.split('url("'+full+'")').join('url("'+v+'")').split("url('"+full+"')").join('url("'+v+'")').split('url('+full+')').join('url("'+v+'")');
+              });
+              return css;
+            };
+            doc.querySelectorAll('style').forEach(function(st){var t=st.textContent;if(!t)return;var out=swapCssModern(t);if(out!==t)st.textContent=out});
+            doc.querySelectorAll('[style]').forEach(function(el){var s=el.getAttribute('style');if(!s)return;var out=swapCssModern(s);if(out!==s)el.setAttribute('style',out)});
+            var vidPoster=doc.querySelector('video[poster]');
+            if(vidPoster&&cfg.photoMap[base(vidPoster.getAttribute('poster'))]){var pr=cfg.photoMap[base(vidPoster.getAttribute('poster'))];if(roleSrc[pr])vidPoster.setAttribute('poster',roleSrc[pr])}
+            if(videoData){var bgv=doc.querySelector('#bgVid');if(bgv){var srcEl=bgv.querySelector('source');if(srcEl)srcEl.setAttribute('src',videoData);bgv.removeAttribute('poster')}}
+          }
           if(galleryData.length){
-            var gimgs=[].slice.call(doc.querySelectorAll('.gal img,.gal-stage img'));
+            var gimgs=[].slice.call(doc.querySelectorAll(cfg.modern?(cfg.gallerySel||'#galeri img'):'.gal img,.gal-stage img'));
             gimgs.forEach(function(img,i){img.setAttribute('src',galleryData[i%galleryData.length])});
           }
           cleanDemoBits(doc);
-          scopedEvents(doc,cfg);
-          scopedBanks(doc,cfg);
-          scopedStory(doc,cfg);
+          if(cfg.modern){scopedModernEvents(doc,cfg);scopedModernBanks(doc,cfg);scopedModernStory(doc,cfg)}
+          else{scopedEvents(doc,cfg);scopedBanks(doc,cfg);scopedStory(doc,cfg)}
           applyPairs(doc,resolvePairs(cfg,slots));
           /* script demo: target countdown + file musik */
           var musicTarget=audioData||fb('musik-latar.mp3');
@@ -936,12 +1181,18 @@
             if(cfg.iso&&slots.dateLong){
               var akad=value('eventDate'),tm=value('eventTime')||'08:00';
               out=out.split(cfg.iso).join(akad+'T'+tm+':00'+cfg.tz);
+              if(cfg.ics){
+                var off2=parseInt(cfg.tz,10),pp=dateParts(akad);
+                if(pp){var sms=Date.UTC(Number(pp.y),pp.m-1,pp.d,Number(tm.split(':')[0]),Number(tm.split(':')[1]||0))-off2*3600000;var sd=new Date(sms);var icsNew=sd.getUTCFullYear()+pad2(sd.getUTCMonth()+1)+pad2(sd.getUTCDate())+'T'+pad2(sd.getUTCHours())+pad2(sd.getUTCMinutes())+pad2(sd.getUTCSeconds())+'Z';out=out.split(cfg.ics).join(icsNew)}
+              }
             }
+            if(cfg.modern&&cfg.icsNames&&slots.namesPair)out=out.split(cfg.icsNames).join(slots.namesPair);
+            if(cfg.modern&&audioData){out=out.split('window.AudioContext').join('window.__kbOffAudioContext').split('webkitAudioContext').join('__kbOffWebkitAudioContext')}
             if(musicTarget)out=out.split('musik-latar.mp3').join(musicTarget);
             if(out!==t)sc.textContent=out;
           });
           /* peta: tautan peta akad & resepsi */
-          var mapLinks=[].slice.call(doc.querySelectorAll('a[href*="maps.google.com"]'));
+          var mapLinks=[].slice.call(doc.querySelectorAll('a[href*="maps.google.com"],a[href*="google.com/maps"]'));
           if(mapLinks.length){
             var q=function(v,a){return 'https://maps.google.com/?q='+encodeURIComponent([v,a].filter(Boolean).join(' '))};
             var akadMap=validUrl(value('mapLink'))||q(value('venue'),value('address'));
@@ -959,7 +1210,7 @@
           if(slots.short1&&slots.short2)doc.title=slots.short1+' & '+slots.short2+' — '+cfg.label;
           /* nama tamu untuk pratinjau (di file unduhan, script demo membaca ?to= sendiri) */
           if(mode==='preview'){
-            var g=doc.querySelector('#guest')||doc.querySelector('.to b');
+            var g=doc.querySelector('#guest')||doc.querySelector('#guestName')||doc.querySelector('#namaTamu')||doc.querySelector('.to b');
             if(g)g.textContent=guestNameFromUrl();
           }
           var waNum=cleanPhone(value('whatsappNumber'));
@@ -971,9 +1222,27 @@
           var html='<!DOCTYPE html>\n'+doc.documentElement.outerHTML;
           var cal=buildCalUrl(slots);
           if(cal)html=html.replace(/https:\/\/calendar\.google\.com\/calendar\/render\?[^"'\s<]+/g,cal);
+          if(cfg.modern){
+            var waNumEarly=cleanPhone(value('whatsappNumber'));
+            if(waNumEarly)html=html.split('6281234567890').join(waNumEarly);
+            if(mode==='download'&&cfg.assets){
+              cfg.assets.forEach(function(f){
+                var dataUrl=assetCache['modern/'+cfg.assetKey+'/'+f];
+                if(dataUrl)html=html.split('assets/modern/'+cfg.assetKey+'/'+f).join(dataUrl);
+              });
+            }
+          }
           /* injeksi di akhir body */
           var inject='';
           if(cfg.small)inject+='<script>try{var g=new URLSearchParams(location.search).get("to");if(g){var b=document.querySelector(".to b");if(b)b.textContent=g.slice(0,80)}}catch(e){}<\/script>';
+          if(cfg.modern&&audioData){
+            inject+='<style>#musicBtn{display:none!important}#kbAudioBtn{position:fixed;right:16px;bottom:96px;z-index:97;width:50px;height:50px;border-radius:50%;border:0;background:#222;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.35);font-size:19px}#kbAudioBtn.off{opacity:.55}</style>'
+              +'<audio id="kbAudio" loop preload="auto" src="'+audioData+'"></audio><button id="kbAudioBtn" type="button" aria-label="Musik latar">♪</button>'
+              +'<script>(function(){var a=document.getElementById("kbAudio"),b=document.getElementById("kbAudioBtn");if(!a||!b)return;var started=false;function play(){a.play().then(function(){b.classList.remove("off")}).catch(function(){b.classList.add("off")})}function toggle(){if(a.paused)play();else{a.pause();b.classList.add("off")}}b.addEventListener("click",toggle);["openBtn","btnBuka"].forEach(function(id){var o=document.getElementById(id);if(o)o.addEventListener("click",function(){if(!started){started=true;play()}})})})()<\/script>';
+          }
+          if(cfg.modern&&mode==='preview'){
+            inject+='<script>(function(){function arm(){var o=document.getElementById("openBtn")||document.getElementById("btnBuka");if(!o)return;o.addEventListener("click",function(){setTimeout(function(){["gate","sampul"].forEach(function(id){var g=document.getElementById(id);if(g){g.style.pointerEvents="none"}})},1700)})}if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",arm);else arm()})()<\/script>';
+          }
           /* tema berpola #openBtn (Elegan Gold, Rustic, Minimalis, Floral Sage): skrip demo melepas
              kunci scroll DAN menyembunyikan #cover lewat satu timer ±1 detik. Di HP asli timer di
              dalam iframe srcdoc bisa tertahan: gerbang terlihat terbuka (class .gone, opacity 0) dan
@@ -1083,7 +1352,10 @@
       function downloadInvitation(){
         if(!value('nameOne')||!value('nameTwo')||!value('eventDate')){showToast('Lengkapi dua nama dan tanggal acara.');showStep(0);switchView('edit');return}
         showToast('Menyiapkan file undangan…');
-        Promise.all(ASSET_FILES.map(loadAssetDataUrl)).then(function(){
+        var dlCfg=TPL[selectedTheme];
+        var dlFiles=ASSET_FILES.slice();
+        if(dlCfg&&dlCfg.modern&&dlCfg.assets)dlCfg.assets.forEach(function(f){dlFiles.push('modern/'+dlCfg.assetKey+'/'+f)});
+        Promise.all(dlFiles.map(loadAssetDataUrl)).then(function(){
           return buildInvitation('download');
         }).then(function(html){
           var file=(value('fileName')||'undangan-kami').toLowerCase().replace(/[^a-z0-9-_]+/g,'-').replace(/^-+|-+$/g,'')||'undangan-kami';
