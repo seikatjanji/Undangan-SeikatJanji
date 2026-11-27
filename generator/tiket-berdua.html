@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="data:," />
+    <title>Tiket Berdua — Undangan Pernikahan Arka &amp; Lintang</title>
+    <style>
+      @font-face{font-family:"Madina";src:url("assets/modern/tiket/fonts/madina.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+      @font-face{font-family:"Cormorant Garamond";src:url("assets/modern/tiket/fonts/cormorant-garamond.woff2") format("woff2");font-weight:500 700;font-style:normal;font-display:swap}
+      @font-face{font-family:"Cormorant Garamond";src:url("assets/modern/tiket/fonts/cormorant-garamond-italic.woff2") format("woff2");font-weight:500 700;font-style:italic;font-display:swap}
+      @font-face{font-family:"Plus Jakarta Sans";src:url("assets/modern/tiket/fonts/plus-jakarta-sans.woff2") format("woff2");font-weight:400 800;font-style:normal;font-display:swap}
+
+      :root{
+        --kertas:#faf5ea; --kertas-2:#f3ead6; --putih:#fffdf7;
+        --navy:#16294d; --navy-2:#1f3a68; --tinta:#2a3350; --tinta-lembut:#5c6478;
+        --emas:#c19a3f; --emas-terang:#e6c87a; --merah:#b3402e;
+        --garis:#ddd0b4;
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{margin:0;background:#e9e1cd;font-family:"Plus Jakarta Sans",system-ui,sans-serif;color:var(--tinta);
+        -webkit-font-smoothing:antialiased}
+      body.terkunci{overflow:hidden;height:100svh}
+      button,[role="button"],select,input,textarea{font-family:inherit}
+      button,select,input:not([type="checkbox"]){min-height:44px}
+      img{display:block;max-width:100%}
+      .bungkus{max-width:480px;margin:0 auto;background:var(--kertas);position:relative;
+        box-shadow:0 0 60px rgba(22,41,77,.18);overflow:hidden}
+
+      /* ---------- util ---------- */
+      .kicker{font-size:.68rem;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--emas);text-align:center;margin:0 0 10px}
+      h2.judul{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:2.15rem;line-height:1.12;
+        color:var(--navy);text-align:center;margin:0 0 14px}
+      .pembuka{text-align:center;font-size:.92rem;line-height:1.8;color:var(--tinta-lembut);max-width:34ch;margin:0 auto}
+      section{padding:72px 24px;position:relative}
+      .rute-mini{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto 18px;max-width:300px}
+      .rute-mini .kode{font-weight:800;letter-spacing:.14em;font-size:.78rem;color:var(--navy)}
+      .rute-mini .jejak{flex:1;border-top:2px dashed var(--emas);position:relative;height:0}
+      .rute-mini .jejak svg{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:inherit}
+
+      /* stempel paspor */
+      .stempel{position:absolute;width:92px;height:92px;border:2.5px solid var(--merah);border-radius:50%;
+        color:var(--merah);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+        font-size:.5rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;line-height:1.5;
+        opacity:.55;transform:rotate(-12deg);pointer-events:none;background:transparent}
+      .stempel::after{content:"";position:absolute;inset:5px;border:1px solid var(--merah);border-radius:50%}
+      .stempel b{font-size:.72rem;letter-spacing:.1em}
+      .stempel.navy{border-color:var(--navy-2);color:var(--navy-2)} .stempel.navy::after{border-color:var(--navy-2)}
+
+      /* ---------- animasi muncul ---------- */
+      .muncul{opacity:0;transform:translateY(28px) scale(.92);transition:opacity .65s cubic-bezier(.2,.9,.25,1.15),transform .65s cubic-bezier(.2,.9,.25,1.15)}
+      .muncul.tampak{opacity:1;transform:translateY(0) scale(1)}
+      @media (prefers-reduced-motion: reduce){
+        .muncul{opacity:1;transform:none;transition:none}
+        html{scroll-behavior:auto}
+      }
+
+      /* ---------- SAMPUL / BOARDING PASS ---------- */
+      #sampul{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;
+        background:radial-gradient(120% 90% at 50% 0%,#24406e 0%,var(--navy) 55%,#0e1c38 100%);padding:14px;
+        transition:opacity .7s ease,visibility .7s}
+      #sampul.pergi{opacity:0;visibility:hidden;pointer-events:none}
+      #sampul.hilang{display:none}
+      /* --- transisi terbang: pesawat naik LURUS di tengah, sampul terobek vertikal --- */
+      #sampul .pass{position:relative;z-index:2}
+      #sampul.membelah{background:transparent;transition:none}
+      #sampul.membelah .pass{visibility:hidden}
+      /* Dua belahan statis: lapisan seukuran sampul dengan konteks layout yang sama
+         persis (flex center + padding sama), klip kiri/kanan TETAP bergerigi halus.
+         Yang bergerak hanya transform, digerakkan progresif dari posisi pesawat —
+         tidak ada potongan bebas yang bisa bergeser tak sejajar. */
+      .belah{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:14px;
+        pointer-events:none;will-change:transform;
+        background:radial-gradient(120% 90% at 50% 0%,#24406e 0%,var(--navy) 55%,#0e1c38 100%)}
+      .belah-kiri{z-index:2;clip-path:polygon(0 0,50.9% 0,49.7% 12%,50.7% 25%,49.5% 38%,50.8% 50%,49.6% 62%,50.7% 75%,49.7% 88%,50.5% 100%,0 100%)}
+      .belah-kanan{z-index:3;clip-path:polygon(100% 0,49.1% 0,50.3% 12%,49.3% 25%,50.5% 38%,49.2% 50%,50.4% 62%,49.3% 75%,50.3% 88%,49.5% 100%,100% 100%)}
+      .belah.lepas{transition:transform .32s cubic-bezier(.55,0,.85,.4)}
+      .belah-kiri.lepas{transform:translateX(-112%) rotate(-2.4deg)!important}
+      .belah-kanan.lepas{transform:translateX(112%) rotate(2.4deg)!important}
+      .lapis-terbang{position:absolute;inset:0;z-index:4;opacity:0;pointer-events:none;transition:opacity .3s ease}
+      .lapis-terbang.aktif{opacity:1}
+      .lapis-terbang.memudar{opacity:0;transition:opacity .35s ease}
+      .jejak-lurus{position:absolute;width:0;border-left:2.4px dashed #e6c87a;transform:translateX(-50%);opacity:.9}
+      .pesawat{position:absolute;left:0;top:0;width:34px;height:34px;will-change:transform;
+        filter:drop-shadow(0 6px 12px rgba(0,0,0,.4))}
+      @media (prefers-reduced-motion: reduce){
+        .lapis-terbang,.belah{display:none!important}
+        #sampul{transition:opacity .35s ease,visibility .35s}
+      }
+      .pass{width:min(430px,100%);max-height:calc(100svh - 28px);overflow-y:auto;overflow-x:hidden;background:var(--putih);
+        border-radius:18px;box-shadow:0 30px 70px rgba(0,0,0,.45);scrollbar-width:none}
+      .pass::-webkit-scrollbar{display:none}
+      .pass-head{background:var(--navy);color:#f5eeda;padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+      .pass-head .merek{font-size:.66rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase}
+      .pass-head .kelas{font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--emas-terang);
+        border:1px solid rgba(230,200,122,.55);padding:4px 8px;border-radius:99px}
+      .pass-rute{display:flex;align-items:center;gap:8px;padding:13px 20px 2px}
+      .pass-rute .kota{flex:1}
+      .pass-rute .kota.kanan{text-align:right}
+      .pass-rute .kode-besar{font-family:"Cormorant Garamond",serif;font-size:2rem;font-weight:700;color:var(--navy);line-height:1}
+      .pass-rute .nama-kota{font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--tinta-lembut);margin-top:3px}
+      .pass-rute .jejak{flex:1.2;border-top:2px dashed var(--emas);position:relative}
+      .pass-rute .jejak svg{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--putih);padding:0 3px}
+      .pass-foto{margin:10px 20px 0;border-radius:12px;overflow:hidden;border:1px solid var(--garis)}
+      .pass-foto img{width:100%;height:31svh;min-height:225px;object-fit:cover;object-position:50% 46%}
+      .pass-nama{text-align:center;padding:10px 16px 0}
+      .pass-nama .undangan{font-size:.64rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--emas);margin:0}
+      .nama-script{font-family:"Madina",cursive;font-weight:400;color:var(--navy);line-height:1.15;margin:2px 0 0}
+      .pass-nama .nama-script{font-size:3rem}
+      .pass-nama .tanggal{font-size:.8rem;font-weight:700;letter-spacing:.14em;color:var(--tinta);margin:4px 0 0;text-transform:uppercase}
+      .sobek{position:relative;border-top:2px dashed var(--garis);margin:12px 0 0}
+      .sobek::before,.sobek::after{content:"";position:absolute;top:-11px;width:22px;height:22px;border-radius:50%;background:var(--navy)}
+      .sobek::before{left:-11px}.sobek::after{right:-11px}
+      .pass-stub{padding:12px 20px 14px;background:var(--kertas)}
+      .stub-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;margin-bottom:12px}
+      .stub-grid .sel .lab{font-size:.54rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-lembut)}
+      .stub-grid .sel .val{font-family:"Cormorant Garamond",serif;font-size:1.06rem;font-weight:700;color:var(--navy);margin-top:2px}
+      .kepada{background:var(--putih);border:1px solid var(--garis);border-radius:10px;padding:10px 14px;text-align:center;margin-bottom:14px}
+      .kepada p{margin:0;font-size:.78rem;color:var(--tinta-lembut);line-height:1.6}
+      .kepada .nama-tamu{font-weight:800;color:var(--navy);font-size:.95rem}
+      .kepada .catatan{font-size:.66rem}
+      .btn-buka{width:100%;border:0;border-radius:12px;background:var(--navy);color:#f7efdb;cursor:pointer;
+        font-size:.86rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;padding:14px 16px;min-height:52px;
+        display:flex;align-items:center;justify-content:center;gap:10px;transition:background .25s}
+      .btn-buka:hover{background:var(--navy-2)}
+
+      /* ---------- HERO ---------- */
+      .hero{padding:64px 24px 56px;text-align:center;background:
+        linear-gradient(180deg,var(--putih),var(--kertas))}
+      .hero .foto-hero{width:min(300px,80%);margin:6px auto 4px;border-radius:14px;overflow:hidden;
+        border:1px solid var(--garis);box-shadow:0 18px 40px rgba(22,41,77,.16);transform:rotate(-1.2deg)}
+      .hero .foto-hero img{width:100%;aspect-ratio:4/5;object-fit:cover}
+      .hero .nama-script{font-size:3.6rem}
+      .hero .dan{font-family:"Cormorant Garamond",serif;font-style:italic;color:var(--emas);font-size:1.4rem}
+      .hero .tanggal-hero{font-weight:800;letter-spacing:.22em;text-transform:uppercase;font-size:.8rem;color:var(--navy);margin-top:8px}
+      .hero .tempat-hero{font-size:.85rem;color:var(--tinta-lembut);margin-top:4px}
+
+      /* ---------- AYAT ---------- */
+      .ayat{background:var(--putih);border:1px solid var(--garis);border-radius:14px;padding:28px 24px;text-align:center;position:relative}
+      .ayat .arab{font-size:1.25rem;line-height:2.1;direction:rtl;font-family:"Cormorant Garamond",serif;color:var(--navy)}
+      .ayat .arti{font-size:.88rem;line-height:1.8;color:var(--tinta-lembut);margin:12px 0 8px;font-style:italic}
+      .ayat .sumber{font-size:.7rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--emas)}
+
+      /* ---------- MEMPELAI ---------- */
+      .kartu-penumpang{background:var(--putih);border:1px solid var(--garis);border-radius:16px;overflow:hidden;margin:0 auto 26px;max-width:360px;
+        box-shadow:0 14px 34px rgba(22,41,77,.08)}
+      .kartu-penumpang .kepala{display:flex;justify-content:space-between;align-items:center;background:var(--kertas-2);
+        padding:9px 16px;border-bottom:2px dashed var(--garis)}
+      .kartu-penumpang .kepala span{font-size:.6rem;font-weight:800;letter-spacing:.24em;text-transform:uppercase;color:var(--navy)}
+      .kartu-penumpang .kepala .kursi{color:var(--merah)}
+      .kartu-penumpang img{width:100%;aspect-ratio:4/4.4;object-fit:cover;object-position:50% 22%}
+      .kartu-penumpang .isi{padding:20px 20px 24px;text-align:center}
+      .kartu-penumpang .nama-script{font-size:2.5rem}
+      .kartu-penumpang .nama-lengkap{font-family:"Cormorant Garamond",serif;font-size:1.12rem;font-weight:700;color:var(--navy);margin-top:2px}
+      .kartu-penumpang .ortu{font-size:.82rem;line-height:1.7;color:var(--tinta-lembut);margin-top:8px}
+      .pemisah-dan{text-align:center;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:1.8rem;color:var(--emas);margin:-6px 0 20px}
+
+      /* ---------- HITUNG MUNDUR ---------- */
+      #hitung{background:var(--navy);color:#f3ecd9}
+      #hitung h2.judul{color:#f7efdb}
+      #hitung .pembuka{color:#c9d2e6}
+      .stub-hitung{display:flex;gap:10px;justify-content:center;margin:26px auto 8px;max-width:360px}
+      .stub-hitung .sel{flex:1;background:var(--putih);border-radius:12px;padding:14px 4px 10px;text-align:center;position:relative}
+      .stub-hitung .sel::before,.stub-hitung .sel::after{content:"";position:absolute;top:50%;width:12px;height:12px;border-radius:50%;background:var(--navy)}
+      .stub-hitung .sel::before{left:-6px}.stub-hitung .sel::after{right:-6px}
+      .stub-hitung .angka{font-family:"Cormorant Garamond",serif;font-size:1.9rem;font-weight:700;color:var(--navy);line-height:1}
+      .stub-hitung .satuan{font-size:.58rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--emas);margin-top:5px}
+      .btn-kalender{display:inline-flex;align-items:center;gap:8px;margin:22px auto 0;background:transparent;color:var(--emas-terang);
+        border:1.5px solid var(--emas);border-radius:99px;padding:12px 22px;font-size:.78rem;font-weight:800;
+        letter-spacing:.16em;text-transform:uppercase;text-decoration:none;min-height:48px}
+      .pusat{text-align:center}
+
+      /* ---------- ACARA ---------- */
+      /* frame kartu acara = frame pass sampul: radius 18px, tanpa border, bayangan tiket dalam */
+      .kartu-acara{background:var(--putih);border-radius:18px;overflow:hidden;max-width:380px;margin:0 auto 26px;
+        box-shadow:0 26px 56px rgba(22,41,77,.20)}
+      .kartu-acara .kepala{background:var(--navy);color:#f5eeda;padding:12px 20px;display:flex;justify-content:space-between;align-items:center}
+      .kartu-acara .kepala .jenis{font-size:.66rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase}
+      .kartu-acara .kepala .kode-terbang{font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--emas-terang);
+        border:1px solid rgba(230,200,122,.55);padding:4px 8px;border-radius:99px}
+      .kartu-acara .isi{padding:20px;text-align:center}
+      .kartu-acara .hari{font-size:.7rem;font-weight:800;letter-spacing:.26em;text-transform:uppercase;color:var(--emas)}
+      .kartu-acara .tgl-besar-x{font-family:"Cormorant Garamond",serif;font-size:2.6rem;font-weight:700;color:var(--navy);line-height:1.05;margin:4px 0}
+      .kartu-acara .jam{font-size:.9rem;font-weight:700;color:var(--tinta)}
+      .kartu-acara .tempat{font-size:.86rem;line-height:1.7;color:var(--tinta-lembut);margin-top:8px}
+      .kartu-acara .stub{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;padding:14px 20px 16px;background:var(--kertas);position:relative}
+      /* garis pembatas polos (tanpa ikon di tengah) */
+      .pemisah-terbang{display:flex;align-items:center;margin:13px auto 3px;max-width:250px}
+      .pemisah-terbang::before,.pemisah-terbang::after{content:"";flex:1;border-top:1.5px solid var(--garis)}
+      .pemisah-terbang.putus{max-width:none;margin:0 0 -10px;position:relative;z-index:1}
+      .pemisah-terbang.putus::before,.pemisah-terbang.putus::after{border-top:2px dashed var(--garis)}
+      .pemisah-antar{margin:-14px auto 12px;max-width:300px}
+      .kartu-acara .stub .lab{font-size:.52rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-lembut)}
+      .kartu-acara .stub .val{font-family:"Cormorant Garamond",serif;font-weight:700;color:var(--navy);font-size:1rem;margin-top:2px}
+      .btn-peta{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#f7efdb;text-decoration:none;
+        border-radius:99px;padding:12px 24px;font-size:.78rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;min-height:48px;margin-top:16px}
+      /* ikon besar terpusat di atas kartu acara (pola Monokrom Editorial) */
+      .kartu-acara .ikon-besar{display:flex;justify-content:center;color:var(--emas);margin:4px 0 16px}
+      .kartu-acara .stub .lab{display:inline-flex;align-items:center;gap:4px}
+      .kartu-acara .stub .lab svg{color:var(--emas);flex:none}
+
+      /* ---------- KISAH ---------- */
+      #kisah{background:var(--putih)}
+      .bab{max-width:360px;margin:0 auto 38px;position:relative}
+      .bab .bingkai{border-radius:14px;overflow:hidden;border:1px solid var(--garis)}
+      .bab img{width:100%;aspect-ratio:4/3.4;object-fit:cover}
+      .bab .cap-stempel{display:inline-block;margin-top:16px;border:2px solid var(--merah);color:var(--merah);border-radius:6px;
+        padding:5px 12px;font-size:.62rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;transform:rotate(-2deg);opacity:.8}
+      .bab h3{font-family:"Cormorant Garamond",serif;font-size:1.45rem;font-weight:700;color:var(--navy);margin:12px 0 6px}
+      .bab p{font-size:.9rem;line-height:1.85;color:var(--tinta-lembut);margin:0}
+
+      /* ---------- GALERI ---------- */
+      .galeri-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:400px;margin:24px auto 0}
+      .galeri-grid figure{margin:0;border-radius:12px;overflow:hidden;border:1px solid var(--garis);background:var(--putih);padding:6px 6px 0}
+      .galeri-grid img{width:100%;aspect-ratio:3/3.6;object-fit:cover;border-radius:8px}
+      .galeri-grid figcaption{font-size:.6rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-lembut);text-align:center;padding:8px 0}
+
+      /* ---------- TANDA KASIH ---------- */
+      #kasih{background:var(--kertas-2)}
+      .kartu-bank{max-width:360px;margin:0 auto 20px;border-radius:16px;padding:22px;color:#eef1f8;position:relative;overflow:hidden;
+        background:linear-gradient(135deg,var(--navy-2),var(--navy) 60%,#0e1c38);box-shadow:0 16px 36px rgba(22,41,77,.25)}
+      .kartu-bank .bank{font-size:.66rem;font-weight:800;letter-spacing:.3em;text-transform:uppercase;color:var(--emas-terang)}
+      .kartu-bank .norek{font-family:"Cormorant Garamond",serif;font-size:1.65rem;font-weight:700;letter-spacing:.12em;margin:14px 0 4px}
+      .kartu-bank .an{font-size:.8rem;color:#c9d2e6}
+      .kartu-bank .rute-bank{position:absolute;right:-14px;top:38px;opacity:.16;transform:rotate(90deg);transform-origin:center}
+      .btn-salin{margin-top:16px;background:var(--emas);color:var(--navy);border:0;border-radius:99px;padding:11px 20px;
+        font-size:.74rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;min-height:44px}
+      .btn-salin.tercopy{background:#7fb069;color:#fff}
+
+      /* ---------- RSVP ---------- */
+      .form-rsvp{background:var(--putih);border:1px solid var(--garis);border-radius:16px;padding:24px 20px;max-width:380px;margin:24px auto 0;text-align:left}
+      .form-rsvp label{display:block;font-size:.68rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--navy);margin:0 0 6px}
+      .form-rsvp input,.form-rsvp select,.form-rsvp textarea{width:100%;border:1.5px solid var(--garis);border-radius:10px;
+        padding:11px 12px;font-size:.92rem;color:var(--tinta);background:var(--kertas);margin-bottom:16px}
+      .form-rsvp textarea{min-height:84px;resize:vertical}
+      .form-rsvp input:focus,.form-rsvp select:focus,.form-rsvp textarea:focus{outline:2px solid var(--emas);outline-offset:1px}
+      .btn-kirim{width:100%;background:var(--navy);color:#f7efdb;border:0;border-radius:12px;padding:13px;font-size:.82rem;
+        font-weight:800;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;min-height:50px}
+      .daftar-ucapan{max-width:380px;margin:26px auto 0;text-align:left}
+      .ucapan{background:var(--putih);border:1px solid var(--garis);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+      .ucapan .dari{font-weight:800;color:var(--navy);font-size:.86rem}
+      .ucapan .status{font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--emas);margin-left:6px}
+      .ucapan .isi-ucapan{font-size:.86rem;line-height:1.7;color:var(--tinta-lembut);margin-top:4px}
+
+      /* ---------- PENUTUP ---------- */
+      .penutup{background:var(--navy);color:#e8ecf5;text-align:center}
+      .penutup h2.judul{color:#f7efdb}
+      .penutup p{font-size:.9rem;line-height:1.9;color:#c9d2e6;max-width:36ch;margin:0 auto 14px}
+      .penutup .nama-script{color:#f7efdb;font-size:3rem;margin-top:10px}
+      .penutup .turut{font-size:.8rem;color:#9fb0d0;line-height:1.8}
+      .kredit{margin-top:38px;padding-top:20px;border-top:1px dashed rgba(230,200,122,.35);font-size:.68rem;letter-spacing:.14em;color:#8fa1c4;text-transform:uppercase}
+      .kredit b{color:var(--emas-terang)}
+
+      /* ---------- ornamen latar perjalanan (tipis, di belakang konten) ---------- */
+      section.ada-orn{overflow:clip}
+      section.ada-orn>*:not(.orn){position:relative;z-index:1}
+      section.ada-orn>.stempel{z-index:1}
+      .orn{position:absolute;pointer-events:none;z-index:0;user-select:none}
+      /* (1) garis rute putus-putus melengkung */
+      .orn-rute{opacity:.66}
+      .orn-rute svg{display:block;overflow:visible}
+      .orn-rute path.lintasan{fill:none;stroke:var(--emas);stroke-width:1.3;stroke-dasharray:2 7;stroke-linecap:round;opacity:.7}
+      .orn-rute.gelap path.lintasan{stroke:#e6c87a;opacity:.58}
+      /* (2) stempel paspor watermark sangat samar */
+      .orn-stempel{width:118px;height:118px;border:2px solid var(--navy);border-radius:50%;color:var(--navy);
+        display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+        font-size:.5rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;line-height:1.6;opacity:.105}
+      .orn-stempel::after{content:"";position:absolute;inset:6px;border:1px solid currentColor;border-radius:50%}
+      .orn-stempel b{font-size:.78rem;letter-spacing:.08em}
+      .orn-stempel.merah{border-color:var(--merah);color:var(--merah)}
+      .orn-stempel.terang{border-color:#f7efdb;color:#f7efdb;opacity:.13}
+      /* (3) pola titik grid ala kertas peta */
+      .orn-titik{width:190px;height:170px;opacity:.68;
+        background-image:radial-gradient(circle,rgba(22,41,77,.17) 1.1px,transparent 1.5px);background-size:18px 18px;
+        -webkit-mask-image:radial-gradient(120% 120% at 50% 50%,#000 30%,transparent 78%);mask-image:radial-gradient(120% 120% at 50% 50%,#000 30%,transparent 78%)}
+      .orn-titik.terang{background-image:radial-gradient(circle,rgba(247,239,219,.26) 1.1px,transparent 1.5px)}
+      /* (4) perforasi tiket di tepi atas section */
+      .orn-perf{top:0;left:0;right:0;height:14px;opacity:.62;
+        background-image:radial-gradient(circle at 50% 0,rgba(22,41,77,.14) 4.5px,transparent 5px);background-size:22px 14px;background-repeat:repeat-x}
+      .orn-perf.terang{background-image:radial-gradient(circle at 50% 0,rgba(247,239,219,.20) 4.5px,transparent 5px)}
+      /* (5) kompas angin samar */
+      .orn-kompas{opacity:.12}
+      .orn-kompas.terang{opacity:.16}
+      /* (6) pesawat kertas kecil */
+      .orn-kertas{opacity:.38}
+      .orn-kertas.terang{opacity:.45}
+
+      /* ---------- tombol musik ---------- */
+      #musicBtn{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:55;width:52px;height:52px;border-radius:50%;
+        border:1.5px solid var(--emas);background:var(--navy);color:var(--emas-terang);cursor:pointer;display:none;
+        align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(22,41,77,.35)}
+      #musicBtn.show{display:flex}
+      #musicBtn .berputar{animation:putar 5s linear infinite}
+      @keyframes putar{to{transform:rotate(360deg)}}
+      @media (prefers-reduced-motion: reduce){#musicBtn .berputar{animation:none}}
+    </style>
+  </head>
+  <body class="terkunci">
+    <audio id="bgm" src="assets/modern/tiket/musik-latar.mp3" loop preload="auto"></audio>
+
+    <!-- ============ SAMPUL: BOARDING PASS ============ -->
+    <div id="sampul" role="dialog" aria-label="Sampul undangan">
+      <div class="pass">
+        <div class="pass-head">
+          <span class="merek">Seikat Air</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 15.5v-2l-8.5-5V3.2a1.2 1.2 0 0 0-2.4 0v5.3l-8.5 5v2l8.6-2.6v5l-2.2 1.6v1.5l3.3-1 3.3 1v-1.5L13 17.9v-5l8.5 2.6Z" fill="#e6c87a"/></svg>
+          <span class="kelas">Kelas Selamanya</span>
+        </div>
+        <div class="pass-rute">
+          <div class="kota">
+            <div class="kode-besar">JKT</div>
+            <div class="nama-kota">Masa Lajang</div>
+          </div>
+          <div class="jejak">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 15.5v-2l-8.5-5V3.2a1.2 1.2 0 0 0-2.4 0v5.3l-8.5 5v2l8.6-2.6v5l-2.2 1.6v1.5l3.3-1 3.3 1v-1.5L13 17.9v-5l8.5 2.6Z" fill="#c19a3f"/></svg>
+          </div>
+          <div class="kota kanan">
+            <div class="kode-besar">SLM</div>
+            <div class="nama-kota">Selamanya</div>
+          </div>
+        </div>
+        <div class="pass-foto">
+          <img src="assets/modern/tiket/cover-ai.webp" alt="Arka dan Lintang memegang tiket di terminal bandara" />
+        </div>
+        <div class="pass-nama">
+          <p class="undangan">Undangan Pernikahan</p>
+          <h1 class="nama-script">Arka &amp; Lintang</h1>
+          <p class="tanggal">Sabtu · 24 Juli 2027</p>
+        </div>
+        <div class="sobek"></div>
+        <div class="pass-stub">
+          <div class="stub-grid">
+            <div class="sel"><div class="lab">Flight</div><div class="val">AL 2407</div></div>
+            <div class="sel"><div class="lab">Gate</div><div class="val">CINTA</div></div>
+            <div class="sel"><div class="lab">Seat</div><div class="val">1A · 1B</div></div>
+            <div class="sel"><div class="lab">Boarding</div><div class="val">08.00</div></div>
+          </div>
+          <div class="kepada">
+            <p>Kepada Yth.<br />Bapak/Ibu/Saudara/i<br /><span class="nama-tamu" id="namaTamu">Tamu Undangan</span></p>
+            <p class="catatan">*Mohon maaf apabila terdapat kesalahan penulisan nama &amp; gelar</p>
+          </div>
+          <button class="btn-buka" id="btnBuka" type="button">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a3 3 0 0 0 0 6v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a3 3 0 0 0 0-6Z" stroke="#e6c87a" stroke-width="1.8"/><path d="M13 5v2m0 4v2m0 4v2" stroke="#e6c87a" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="1 3"/></svg>
+            Buka Undangan
+          </button>
+        </div>
+      </div>
+      <div class="lapis-terbang" id="lapisTerbang" aria-hidden="true">
+        <div class="jejak-lurus" id="jejakLurus"></div>
+        <div class="pesawat" id="pesawat">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 15.5v-2l-8.5-5V3.2a1.2 1.2 0 0 0-2.4 0v5.3l-8.5 5v2l8.6-2.6v5l-2.2 1.6v1.5l3.3-1 3.3 1v-1.5L13 17.9v-5l8.5 2.6Z" fill="#e6c87a" stroke="#16294d" stroke-width=".7"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="bungkus">
+      <!-- ============ HERO ============ -->
+      <section class="hero ada-orn" id="beranda">
+        <div class="orn orn-kompas" style="right:-36px;top:12px" aria-hidden="true"><svg width="108" height="108" viewBox="0 0 108 108" fill="none"><circle cx="54" cy="54" r="50" stroke="#c19a3f" stroke-width="1.2"/><circle cx="54" cy="54" r="38" stroke="#c19a3f" stroke-width="1" stroke-dasharray="3 5"/><path d="M54 16 L60 54 L54 92 L48 54 Z" fill="#c19a3f" opacity=".5"/><path d="M16 54 L54 48 L92 54 L54 60 Z" fill="#c19a3f" opacity=".28"/><circle cx="54" cy="54" r="4" fill="#c19a3f"/><text x="54" y="12" text-anchor="middle" font-size="10" font-weight="800" fill="#c19a3f">N</text></svg></div>
+        <div class="orn orn-kertas" style="left:12px;bottom:34px;transform:rotate(-16deg)" aria-hidden="true"><svg width="44" height="44" viewBox="0 0 24 24" fill="none"><path d="M22 2 11 13" stroke="#c19a3f" stroke-width="1.3" stroke-linecap="round"/><path d="M22 2 15 22l-4-9-9-4 20-7Z" stroke="#c19a3f" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+        <p class="kicker muncul">Penerbangan Satu Arah · Tanpa Transit</p>
+        <div class="rute-mini muncul" style="background:transparent">
+          <span class="kode">JKT</span>
+          <span class="jejak"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 15.5v-2l-8.5-5V3.2a1.2 1.2 0 0 0-2.4 0v5.3l-8.5 5v2l8.6-2.6v5l-2.2 1.6v1.5l3.3-1 3.3 1v-1.5L13 17.9v-5l8.5 2.6Z" fill="#c19a3f"/></svg></span>
+          <span class="kode">SLM</span>
+        </div>
+        <div class="foto-hero muncul">
+          <img src="assets/modern/tiket/galeri-jalan-ai.webp" alt="Arka dan Lintang berjalan bergandengan tangan membawa koper di terminal bandara" />
+        </div>
+        <p class="pembuka muncul" style="margin-top:18px">The Wedding of</p>
+        <h2 class="nama-script muncul">Arka</h2>
+        <div class="dan muncul">&amp;</div>
+        <h2 class="nama-script muncul">Lintang</h2>
+        <p class="tanggal-hero muncul">Sabtu, 24 Juli 2027</p>
+        <p class="tempat-hero muncul">Balai Sarbini · Jakarta Selatan</p>
+      </section>
+
+      <!-- ============ PEMBUKA & AYAT SUCI ============ -->
+      <section id="pembuka" class="ada-orn">
+        <div class="orn orn-titik" style="left:-46px;bottom:6px" aria-hidden="true"></div>
+        <div class="orn orn-rute" style="right:-58px;bottom:10px;transform:rotate(8deg)" aria-hidden="true"><svg width="190" height="86" viewBox="0 0 190 86" fill="none"><path class="lintasan" d="M4 78 C 52 20, 118 92, 168 26"/><g transform="translate(168 26) rotate(38)"><path d="M8 0 L-6 6 L-2.5 0 L-6 -6 Z" fill="#c19a3f" opacity=".65"/></g><circle cx="4" cy="78" r="3" fill="none" stroke="#c19a3f" stroke-width="1.2" opacity=".55"/></svg></div>
+        <div class="orn orn-kertas" style="left:10px;top:150px;transform:rotate(-12deg)" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M22 2 11 13" stroke="#c19a3f" stroke-width="1.3" stroke-linecap="round"/><path d="M22 2 15 22l-4-9-9-4 20-7Z" stroke="#c19a3f" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+        <h2 class="judul muncul">Assalamu&rsquo;alaikum<br />Warahmatullahi Wabarakatuh</h2>
+        <p class="pembuka muncul">Dengan memohon rahmat dan ridha Allah SWT, kami bermaksud menyelenggarakan pernikahan kami. Seperti dua penumpang yang akhirnya duduk bersebelahan, kami percaya perjalanan terbaik adalah yang ditempuh berdua.</p>
+        <div style="height:26px"></div>
+        <div class="ayat muncul">
+          <p class="arab">وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً</p>
+          <p class="arti">&ldquo;Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.&rdquo;</p>
+          <p class="sumber">QS. Ar-Rum : 21</p>
+        </div>
+      </section>
+
+      <!-- ============ MEMPELAI ============ -->
+      <section id="mempelai" class="ada-orn" style="padding-top:20px">
+        <div class="orn orn-perf" aria-hidden="true"></div>
+        <div class="orn orn-rute" style="left:-64px;top:118px;transform:scaleX(-1) rotate(6deg)" aria-hidden="true"><svg width="180" height="90" viewBox="0 0 190 86" fill="none"><path class="lintasan" d="M4 78 C 52 20, 118 92, 168 26"/><g transform="translate(168 26) rotate(38)"><path d="M8 0 L-6 6 L-2.5 0 L-6 -6 Z" fill="#c19a3f" opacity=".65"/></g><circle cx="4" cy="78" r="3" fill="none" stroke="#c19a3f" stroke-width="1.2" opacity=".55"/></svg></div>
+        <p class="kicker muncul">Manifest Penumpang</p>
+        <h2 class="judul muncul">Dua Penumpang,<br />Satu Tujuan</h2>
+        <p class="pembuka muncul">Maha Suci Allah yang telah menciptakan makhluk-Nya berpasang-pasangan. Ya Allah, perkenankanlah kami merangkaikan kasih sayang yang Kau ciptakan di antara kami.</p>
+        <div style="height:30px"></div>
+
+        <article class="kartu-penumpang muncul">
+          <div class="kepala"><span>Penumpang 01</span><span class="kursi">Seat 1A</span></div>
+          <img src="assets/modern/tiket/groom-ai.webp" alt="Potret Arka, mempelai pria, di peron stasiun memegang tiket dan koper" />
+          <div class="isi">
+            <h3 class="nama-script">Arka</h3>
+            <p class="nama-lengkap">Arka Pradana, S.T.</p>
+            <p class="ortu">Putra pertama dari<br />Bapak H. Bambang Pradana<br />&amp; Ibu Hj. Sari Pradana</p>
+          </div>
+        </article>
+
+        <div class="pemisah-dan muncul">&amp;</div>
+
+        <article class="kartu-penumpang muncul">
+          <div class="kepala"><span>Penumpang 02</span><span class="kursi">Seat 1B</span></div>
+          <img src="assets/modern/tiket/bride-ai.webp" alt="Potret Lintang, mempelai wanita, di lounge bandara memegang boarding pass" />
+          <div class="isi">
+            <h3 class="nama-script">Lintang</h3>
+            <p class="nama-lengkap">Lintang Maharani, S.E.</p>
+            <p class="ortu">Putri kedua dari<br />Bapak Agus Mahardika<br />&amp; Ibu Dewi Mahardika</p>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============ HITUNG MUNDUR ============ -->
+      <section id="hitung" class="ada-orn">
+        <div class="orn orn-perf terang" aria-hidden="true"></div>
+        <div class="orn orn-kompas terang" style="left:-36px;top:20px" aria-hidden="true"><svg width="104" height="104" viewBox="0 0 108 108" fill="none"><circle cx="54" cy="54" r="50" stroke="#e6c87a" stroke-width="1.2"/><circle cx="54" cy="54" r="38" stroke="#e6c87a" stroke-width="1" stroke-dasharray="3 5"/><path d="M54 16 L60 54 L54 92 L48 54 Z" fill="#e6c87a" opacity=".5"/><path d="M16 54 L54 48 L92 54 L54 60 Z" fill="#e6c87a" opacity=".28"/><circle cx="54" cy="54" r="4" fill="#e6c87a"/><text x="54" y="12" text-anchor="middle" font-size="10" font-weight="800" fill="#e6c87a">N</text></svg></div>
+        <div class="orn orn-titik terang" style="right:-52px;top:10px" aria-hidden="true"></div>
+        <div class="orn orn-rute gelap" style="left:-56px;bottom:8px" aria-hidden="true"><svg width="190" height="86" viewBox="0 0 190 86" fill="none"><path class="lintasan" d="M4 78 C 52 20, 118 92, 168 26"/><g transform="translate(168 26) rotate(38)"><path d="M8 0 L-6 6 L-2.5 0 L-6 -6 Z" fill="#e6c87a" opacity=".6"/></g><circle cx="4" cy="78" r="3" fill="none" stroke="#e6c87a" stroke-width="1.2" opacity=".5"/></svg></div>
+        <p class="kicker muncul">Menuju Keberangkatan</p>
+        <h2 class="judul muncul">Hitung Mundur</h2>
+        <p class="pembuka muncul">Penerbangan AL 2407 menuju Selamanya akan berangkat dalam:</p>
+        <div class="stub-hitung muncul" role="timer" aria-label="Hitung mundur menuju hari pernikahan">
+          <div class="sel"><div class="angka" id="cd-hari">–</div><div class="satuan">Hari</div></div>
+          <div class="sel"><div class="angka" id="cd-jam">–</div><div class="satuan">Jam</div></div>
+          <div class="sel"><div class="angka" id="cd-menit">–</div><div class="satuan">Menit</div></div>
+          <div class="sel"><div class="angka" id="cd-detik">–</div><div class="satuan">Detik</div></div>
+        </div>
+        <div class="pusat muncul">
+          <a class="btn-kalender" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Pernikahan%20Arka%20%26%20Lintang&amp;dates=20270724T010000Z/20270724T030000Z&amp;details=Akad%20Nikah%20Arka%20Pradana%20%26%20Lintang%20Maharani&amp;location=Balai%20Sarbini%2C%20Jakarta%20Selatan" target="_blank" rel="noopener">Simpan ke Kalender</a>
+        </div>
+      </section>
+
+      <!-- ============ ACARA ============ -->
+      <section id="acara" class="ada-orn">
+        <div class="orn orn-titik" style="left:-58px;bottom:22px" aria-hidden="true"></div>
+        <div class="orn orn-rute" style="right:-60px;bottom:4px;transform:scaleX(-1) rotate(4deg)" aria-hidden="true"><svg width="180" height="86" viewBox="0 0 190 86" fill="none"><path class="lintasan" d="M4 78 C 52 20, 118 92, 168 26"/><g transform="translate(168 26) rotate(38)"><path d="M8 0 L-6 6 L-2.5 0 L-6 -6 Z" fill="#c19a3f" opacity=".65"/></g><circle cx="4" cy="78" r="3" fill="none" stroke="#c19a3f" stroke-width="1.2" opacity=".55"/></svg></div>
+        <p class="kicker muncul">Jadwal Penerbangan</p>
+        <h2 class="judul muncul">Rangkaian Acara</h2>
+        <p class="pembuka muncul">Dengan segala kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i untuk hadir pada:</p>
+        <div style="height:28px"></div>
+
+        <article class="kartu-acara muncul">
+          <div class="kepala"><span class="jenis">Akad Nikah</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 15.5v-2l-8.5-5V3.2a1.2 1.2 0 0 0-2.4 0v5.3l-8.5 5v2l8.6-2.6v5l-2.2 1.6v1.5l3.3-1 3.3 1v-1.5L13 17.9v-5l8.5 2.6Z" fill="#e6c87a"/></svg><span class="kode-terbang">AL 2407 · LEG 1</span></div>
+          <div class="isi">
+            <div class="ikon-besar" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(-9 24 19)"><rect x="9" y="9" width="30" height="19" rx="3"/><path d="M30 9v19" stroke-dasharray="2.5 3"/><path d="M14.5 15h9M14.5 21h9"/></g><g transform="rotate(7 24 31)"><rect x="9" y="21" width="30" height="19" rx="3" fill="#fffdf7"/><path d="M30 21v19" stroke-dasharray="2.5 3"/><path d="M14.5 27h9M14.5 33h9"/></g></svg>
+            </div>
+            <p class="hari">Sabtu</p>
+            <p class="tgl-besar-x">24 Juli 2027</p>
+            <p class="jam">Pukul 08.00 – 10.00 WIB</p>
+            <div class="pemisah-terbang" aria-hidden="true"></div>
+            <p class="tempat">
+              <b>Balai Sarbini</b><br />Jl. Jend. Sudirman Kav. 50,<br />Jakarta Selatan
+            </p>
+            <a class="btn-peta" href="https://www.google.com/maps/search/?api=1&amp;query=Balai+Sarbini+Jakarta+Selatan" target="_blank" rel="noopener">
+              Lihat Lokasi
+            </a>
+          </div>
+          <div class="pemisah-terbang putus" aria-hidden="true"></div>
+          <div class="stub">
+            <div><div class="lab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21h16"/><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><circle cx="14.8" cy="12" r=".8" fill="currentColor" stroke="none"/></svg>Gate</div><div class="val">CINTA</div></div>
+            <div><div class="lab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 1.8"/></svg>Boarding</div><div class="val">07.30</div></div>
+            <div><div class="lab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11V6a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v5"/><path d="M5 13a2 2 0 0 1 4 0v1h6v-1a2 2 0 0 1 4 0v4a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-4Z"/><path d="M7 21v-2M17 21v-2"/></svg>Seat</div><div class="val">1A · 1B</div></div>
+          </div>
+        </article>
+
+        <div class="pemisah-terbang pemisah-antar muncul" aria-hidden="true"></div>
+
+        <article class="kartu-acara muncul">
+          <div class="kepala"><span class="jenis">Resepsi</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.5 15.5v-2l-8.5-5V3.2a1.2 1.2 0 0 0-2.4 0v5.3l-8.5 5v2l8.6-2.6v5l-2.2 1.6v1.5l3.3-1 3.3 1v-1.5L13 17.9v-5l8.5 2.6Z" fill="#e6c87a"/></svg><span class="kode-terbang">AL 2407 · LEG 2</span></div>
+          <div class="isi">
+            <div class="ikon-besar" aria-hidden="true">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4c5 1 10 4 14 8" stroke-dasharray="2.5 3.5"/><g transform="translate(1 -1) rotate(128 15 15)"><path d="M21.5 15.5v-2l-8.5-5V3.2a1.2 1.2 0 0 0-2.4 0v5.3l-8.5 5v2l8.6-2.6v5l-2.2 1.6v1.5l3.3-1 3.3 1v-1.5L13 17.9v-5l8.5 2.6Z" fill="currentColor" stroke="none" transform="translate(3 3) scale(.78)"/></g><path d="M31.5 43.5S23 37.6 23 32.1c0-2.7 2-4.9 4.6-4.9 1.6 0 3.1.9 3.9 2.2.8-1.3 2.3-2.2 3.9-2.2 2.6 0 4.6 2.2 4.6 4.9 0 5.5-8.5 11.4-8.5 11.4Z"/><circle cx="31.5" cy="32" r="1.4" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <p class="hari">Sabtu</p>
+            <p class="tgl-besar-x">24 Juli 2027</p>
+            <p class="jam">Pukul 11.00 – 13.00 WIB</p>
+            <div class="pemisah-terbang" aria-hidden="true"></div>
+            <p class="tempat">
+              <b>Balai Sarbini</b><br />Jl. Jend. Sudirman Kav. 50,<br />Jakarta Selatan
+            </p>
+            <a class="btn-peta" href="https://www.google.com/maps/search/?api=1&amp;query=Balai+Sarbini+Jakarta+Selatan" target="_blank" rel="noopener">
+              Lihat Lokasi
+            </a>
+          </div>
+          <div class="pemisah-terbang putus" aria-hidden="true"></div>
+          <div class="stub">
+            <div><div class="lab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21h16"/><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><circle cx="14.8" cy="12" r=".8" fill="currentColor" stroke="none"/></svg>Gate</div><div class="val">CINTA</div></div>
+            <div><div class="lab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 1.8"/></svg>Boarding</div><div class="val">10.30</div></div>
+            <div><div class="lab"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11V6a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v5"/><path d="M5 13a2 2 0 0 1 4 0v1h6v-1a2 2 0 0 1 4 0v4a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-4Z"/><path d="M7 21v-2M17 21v-2"/></svg>Seat</div><div class="val">1A · 1B</div></div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ============ KISAH ============ -->
+      <section id="kisah" class="ada-orn">
+        <div class="orn orn-perf" aria-hidden="true"></div>
+        <div class="orn orn-rute" style="right:-70px;bottom:120px;transform:rotate(-10deg)" aria-hidden="true"><svg width="180" height="90" viewBox="0 0 190 86" fill="none"><path class="lintasan" d="M4 78 C 52 20, 118 92, 168 26"/><g transform="translate(168 26) rotate(38)"><path d="M8 0 L-6 6 L-2.5 0 L-6 -6 Z" fill="#c19a3f" opacity=".65"/></g><circle cx="4" cy="78" r="3" fill="none" stroke="#c19a3f" stroke-width="1.2" opacity=".55"/></svg></div>
+        <div class="stempel" style="left:2px;top:20px" aria-hidden="true"><span>Transit</span><b>Bandung</b><span>2022</span></div>
+        <div class="orn orn-titik" style="right:-56px;top:230px" aria-hidden="true"></div>
+        <div class="orn orn-kertas" style="left:8px;bottom:70px;transform:rotate(10deg)" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 24 24" fill="none"><path d="M22 2 11 13" stroke="#c19a3f" stroke-width="1.3" stroke-linecap="round"/><path d="M22 2 15 22l-4-9-9-4 20-7Z" stroke="#c19a3f" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+        <p class="kicker muncul">Jurnal Perjalanan</p>
+        <h2 class="judul muncul">Kisah Kami</h2>
+        <p class="pembuka muncul">Setiap perjalanan punya pemberhentian yang mengubah arah. Inilah pemberhentian-pemberhentian kami.</p>
+        <div style="height:30px"></div>
+
+        <article class="bab muncul">
+          <div class="bingkai"><img src="assets/modern/tiket/kisah-1-ai.webp" alt="Arka dan Lintang pertama bertemu di peron stasiun" /></div>
+          <span class="cap-stempel">Stasiun Awal · 2019</span>
+          <h3>Babak Satu — Salah Peron, Tepat Orang</h3>
+          <p>Di sebuah peron stasiun yang sibuk, Lintang salah naik kereta dan Arka kebetulan memegang jadwal yang benar. Satu perjalanan pulang yang seharusnya biasa saja berubah jadi obrolan sepanjang rel — dan tak pernah benar-benar berhenti sejak hari itu.</p>
+        </article>
+
+        <article class="bab muncul">
+          <div class="bingkai"><img src="assets/modern/tiket/kisah-2-ai.webp" alt="Arka dan Lintang bersandar mesra di dalam kereta" /></div>
+          <span class="cap-stempel">Seperjalanan · 2022</span>
+          <h3>Babak Dua — Seperjalanan</h3>
+          <p>Tahun-tahun berikutnya adalah rangkaian perjalanan kecil: kereta pagi, penerbangan murah, dan kota-kota yang kami datangi berdua. Di setiap perjalanan kami belajar hal yang sama — rumah bukan tempat, melainkan orang yang duduk di sebelahmu.</p>
+        </article>
+
+        <article class="bab muncul">
+          <div class="bingkai"><img src="assets/modern/tiket/kisah-3-ai.webp" alt="Arka melamar Lintang di dek observasi bandara saat matahari terbenam" /></div>
+          <span class="cap-stempel">Tujuan Akhir · 2026</span>
+          <h3>Babak Tiga — Tiket Satu Arah</h3>
+          <p>Di dek observasi bandara, di hadapan langit senja dan pesawat yang lepas landas, Arka berlutut dan menyerahkan satu tiket terakhir: tujuan Selamanya, tanpa tanggal pulang. Lintang menjawab ya — dan perjalanan sesungguhnya pun dimulai.</p>
+        </article>
+      </section>
+
+      <!-- ============ GALERI ============ -->
+      <section id="galeri" class="ada-orn" style="padding-top:16px">
+        <div class="orn orn-titik" style="right:-60px;top:36px" aria-hidden="true"></div>
+        <div class="orn orn-rute" style="left:-62px;bottom:2px;transform:scaleX(-1)" aria-hidden="true"><svg width="180" height="86" viewBox="0 0 190 86" fill="none"><path class="lintasan" d="M4 78 C 52 20, 118 92, 168 26"/><g transform="translate(168 26) rotate(38)"><path d="M8 0 L-6 6 L-2.5 0 L-6 -6 Z" fill="#c19a3f" opacity=".65"/></g><circle cx="4" cy="78" r="3" fill="none" stroke="#c19a3f" stroke-width="1.2" opacity=".55"/></svg></div>
+        <p class="kicker muncul">Album Perjalanan</p>
+        <h2 class="judul muncul">Galeri Kami</h2>
+        <div class="galeri-grid">
+          <figure class="muncul"><img src="assets/modern/tiket/cover-ai.webp" alt="Arka dan Lintang memegang tiket di terminal bandara" /><figcaption>Check-In · 01</figcaption></figure>
+          <figure class="muncul"><img src="assets/modern/tiket/kisah-1-ai.webp" alt="Pertemuan pertama di peron stasiun" /><figcaption>Peron Pertama · 02</figcaption></figure>
+          <figure class="muncul"><img src="assets/modern/tiket/kisah-2-ai.webp" alt="Bersandar mesra di dalam kereta" /><figcaption>Seperjalanan · 03</figcaption></figure>
+          <figure class="muncul"><img src="assets/modern/tiket/galeri-jalan-ai.webp" alt="Berjalan bergandengan tangan membawa koper di terminal" /><figcaption>Keberangkatan · 04</figcaption></figure>
+          <figure class="muncul"><img src="assets/modern/tiket/kisah-3-ai.webp" alt="Lamaran di dek observasi bandara" /><figcaption>Lamaran · 05</figcaption></figure>
+          <figure class="muncul"><img src="assets/modern/tiket/bride-ai.webp" alt="Potret Lintang di lounge bandara" /><figcaption>Penumpang 1B · 06</figcaption></figure>
+        </div>
+      </section>
+
+      <!-- ============ TANDA KASIH ============ -->
+      <section id="kasih" class="ada-orn">
+        <div class="orn orn-perf" aria-hidden="true"></div>
+        <div class="orn orn-rute" style="right:-62px;top:26px;transform:scaleX(-1)" aria-hidden="true"><svg width="180" height="86" viewBox="0 0 190 86" fill="none"><path class="lintasan" d="M4 78 C 52 20, 118 92, 168 26"/><g transform="translate(168 26) rotate(38)"><path d="M8 0 L-6 6 L-2.5 0 L-6 -6 Z" fill="#c19a3f" opacity=".65"/></g><circle cx="4" cy="78" r="3" fill="none" stroke="#c19a3f" stroke-width="1.2" opacity=".55"/></svg></div>
+        <p class="kicker muncul">Bagasi Kebaikan</p>
+        <h2 class="judul muncul">Tanda Kasih</h2>
+        <p class="pembuka muncul">Doa restu Bapak/Ibu/Saudara/i adalah hadiah terindah bagi kami. Namun apabila berkenan memberikan tanda kasih, kami sediakan dengan penuh terima kasih:</p>
+        <div style="height:26px"></div>
+
+        <div class="kartu-bank muncul">
+          <p class="bank">Bank BCA</p>
+          <p class="norek">8210 4567 90</p>
+          <p class="an">a.n. Arka Pradana</p>
+          <button class="btn-salin" type="button" data-salin="8210456790" data-label="Nomor rekening BCA">Salin Nomor</button>
+        </div>
+
+        <div class="kartu-bank muncul">
+          <p class="bank">DANA</p>
+          <p class="norek">0812 3456 7890</p>
+          <p class="an">a.n. Lintang Maharani</p>
+          <button class="btn-salin" type="button" data-salin="081234567890" data-label="Nomor DANA">Salin Nomor</button>
+        </div>
+      </section>
+
+      <!-- ============ RSVP & UCAPAN ============ -->
+      <section id="rsvp" class="ada-orn">
+        <div class="orn orn-titik" style="left:-56px;top:14px" aria-hidden="true"></div>
+        <div class="orn orn-rute" style="right:-64px;top:210px;transform:rotate(6deg)" aria-hidden="true"><svg width="180" height="86" viewBox="0 0 190 86" fill="none"><path class="lintasan" d="M4 78 C 52 20, 118 92, 168 26"/><g transform="translate(168 26) rotate(38)"><path d="M8 0 L-6 6 L-2.5 0 L-6 -6 Z" fill="#c19a3f" opacity=".65"/></g><circle cx="4" cy="78" r="3" fill="none" stroke="#c19a3f" stroke-width="1.2" opacity=".55"/></svg></div>
+        <p class="kicker muncul">Konfirmasi Keberangkatan</p>
+        <h2 class="judul muncul">RSVP &amp; Ucapan</h2>
+        <p class="pembuka muncul">Mohon konfirmasi kehadiran agar kursi terbaik kami siapkan untuk Bapak/Ibu/Saudara/i.</p>
+
+        <form class="form-rsvp muncul" id="formRsvp">
+          <label for="fNama">Nama</label>
+          <input id="fNama" name="nama" type="text" placeholder="Nama Anda" required />
+          <label for="fHadir">Konfirmasi Kehadiran</label>
+          <select id="fHadir" name="kehadiran">
+            <option value="Hadir">Hadir, Insya Allah</option>
+            <option value="Ragu">Masih Ragu</option>
+            <option value="Berhalangan">Berhalangan Hadir</option>
+          </select>
+          <label for="fUcapan">Ucapan &amp; Doa</label>
+          <textarea id="fUcapan" name="ucapan" placeholder="Tulis ucapan &amp; doa terbaik untuk kedua mempelai…" required></textarea>
+          <button class="btn-kirim" type="submit">Kirim Ucapan</button>
+        </form>
+
+        <div class="daftar-ucapan" id="daftarUcapan">
+          <article class="ucapan muncul">
+            <span class="dari">Keluarga Besar Pradana</span><span class="status">Hadir</span>
+            <p class="isi-ucapan">Selamat menempuh perjalanan seumur hidup, Nak. Semoga jadi penerbangan paling tenang dan paling bahagia. Samawa sampai ke tujuan akhir.</p>
+          </article>
+          <article class="ucapan muncul">
+            <span class="dari">Rani &amp; Bimo</span><span class="status">Hadir</span>
+            <p class="isi-ucapan">Akhirnya berangkat juga! Dari salah peron sampai satu tujuan — kisah kalian bukti kalau jodoh memang nggak pernah salah alamat. Sampai jumpa di Balai Sarbini!</p>
+          </article>
+          <article class="ucapan muncul">
+            <span class="dari">Sinta Maharani</span><span class="status">Hadir</span>
+            <p class="isi-ucapan">Barakallahu lakuma wa baraka &lsquo;alaikuma wa jama&rsquo;a bainakuma fii khair. Selamat untuk Arka &amp; Lintang, lancar sampai hari H!</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ PENUTUP ============ -->
+      <section class="penutup ada-orn">
+        <div class="orn orn-perf terang" aria-hidden="true"></div>
+        <div class="orn orn-stempel terang" style="right:-38px;top:70px;transform:rotate(12deg)" aria-hidden="true"><span>Paspor</span><b>Selamanya</b><span>Tiba</span></div>
+        <div class="orn orn-rute gelap" style="left:-58px;bottom:16px" aria-hidden="true"><svg width="190" height="86" viewBox="0 0 190 86" fill="none"><path class="lintasan" d="M4 78 C 52 20, 118 92, 168 26"/><g transform="translate(168 26) rotate(38)"><path d="M8 0 L-6 6 L-2.5 0 L-6 -6 Z" fill="#e6c87a" opacity=".6"/></g><circle cx="4" cy="78" r="3" fill="none" stroke="#e6c87a" stroke-width="1.2" opacity=".5"/></svg></div>
+        <div class="orn orn-titik terang" style="left:-54px;top:26px" aria-hidden="true"></div>
+        <div class="orn orn-kertas terang" style="right:14px;top:130px;transform:rotate(14deg)" aria-hidden="true"><svg width="42" height="42" viewBox="0 0 24 24" fill="none"><path d="M22 2 11 13" stroke="#e6c87a" stroke-width="1.3" stroke-linecap="round"/><path d="M22 2 15 22l-4-9-9-4 20-7Z" stroke="#e6c87a" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+        <p class="kicker muncul">Pintu Keberangkatan Terakhir</p>
+        <h2 class="judul muncul">Sampai Jumpa<br />di Hari Bahagia</h2>
+        <p class="muncul">Merupakan suatu kehormatan dan kebahagiaan bagi kami beserta keluarga apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kedua mempelai.</p>
+        <p class="muncul">Atas kehadiran serta doa restu yang diberikan, kami mengucapkan terima kasih yang sebesar-besarnya.</p>
+        <p class="muncul" style="margin-top:22px">Wassalamu&rsquo;alaikum Warahmatullahi Wabarakatuh</p>
+        <p class="muncul" style="margin-bottom:2px">Kami yang berbahagia,</p>
+        <h3 class="nama-script muncul">Arka &amp; Lintang</h3>
+        <p class="turut muncul">Beserta keluarga besar Pradana &amp; Mahardika</p>
+        <div class="kredit muncul">Dibuat dengan ♥ oleh <b>SeikatJanji</b> · seikatjanji.my.id</div>
+      </section>
+    </div>
+
+    <button id="musicBtn" type="button" aria-label="Putar atau hentikan musik latar" aria-pressed="false">
+      <svg class="ikon-musik" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18.5a3 3 0 1 1-2-2.83V5.2c0-.4.26-.76.63-.9L19 1.6c.62-.19 1.25.28 1.25.94V16a3 3 0 1 1-2-2.83V6.1L9 8.6v9.9Z" fill="#e6c87a"/></svg>
+    </button>
+
+    <script>
+      (function(){
+        "use strict";
+        var audio = document.getElementById("bgm");
+        var sampul = document.getElementById("sampul");
+        var musicBtn = document.getElementById("musicBtn");
+        var ikonMusik = musicBtn.querySelector(".ikon-musik");
+
+        // Nama tamu dari parameter ?to=
+        var params = new URLSearchParams(window.location.search);
+        var tamu = params.get("to");
+        if (tamu) document.getElementById("namaTamu").textContent = tamu;
+
+        // Animasi muncul saat scroll
+        var io = new IntersectionObserver(function(entries){
+          entries.forEach(function(e, i){
+            if (e.isIntersecting){
+              e.target.style.transitionDelay = (Math.min(i,4)*70) + "ms";
+              e.target.classList.add("tampak");
+              io.unobserve(e.target);
+            }
+          });
+        }, {threshold:.12});
+        document.querySelectorAll(".muncul").forEach(function(el){ io.observe(el); });
+
+        // Buka undangan: pesawat naik lurus di tengah merobek sampul secara vertikal, musik "Perfect" mulai
+        var btnBuka = document.getElementById("btnBuka");
+        var sedangMembuka = false;
+        btnBuka.addEventListener("click", function(){
+          if (sedangMembuka) return;
+          sedangMembuka = true;
+          btnBuka.disabled = true;
+          musicBtn.classList.add("show");
+          startMusic();
+          window.scrollTo(0,0);
+
+          var gerakKurangi = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (gerakKurangi){
+            // Hormati prefers-reduced-motion: cukup fade sederhana
+            sampul.classList.add("pergi");
+            document.body.classList.remove("terkunci");
+            setTimeout(function(){ sampul.classList.add("hilang"); }, 420);
+            return;
+          }
+
+          var pass = sampul.querySelector(".pass");
+          var lapis = document.getElementById("lapisTerbang");
+          var pesawat = document.getElementById("pesawat");
+          var jejak = document.getElementById("jejakLurus");
+          var vw = window.innerWidth;
+          var btnR = btnBuka.getBoundingClientRect();
+          var cx = vw / 2; // pesawat terbang LURUS NAIK di tengah sampul
+          var sy = btnR.top + btnR.height / 2;
+
+          // Dua belahan statis: lapisan seukuran sampul dengan konteks layout yang
+          // sama persis dengan #sampul (flex center + padding 14px), jadi salinan
+          // tiket mendarat tepat di posisi tiket asli — tanpa hitung posisi manual,
+          // tanpa potongan bebas yang bisa bergeser tak sejajar. Klip kiri/kanan
+          // TETAP (bergerigi halus di garis tengah); yang bergerak hanya transform
+          // kedua belahan, digerakkan progresif mengikuti ketinggian pesawat.
+          function buatBelahan(kelas){
+            var lap = document.createElement("div");
+            lap.className = "belah " + kelas;
+            lap.setAttribute("aria-hidden", "true");
+            var klon = pass.cloneNode(true);
+            klon.removeAttribute("id");
+            klon.querySelectorAll("[id]").forEach(function(n){ n.removeAttribute("id"); });
+            klon.style.visibility = "visible";
+            klon.scrollTop = pass.scrollTop;
+            lap.appendChild(klon);
+            sampul.appendChild(lap);
+            return lap;
+          }
+          var belahKiri = buatBelahan("belah-kiri");
+          var belahKanan = buatBelahan("belah-kanan");
+          // Paksa reflow, lalu tiket asli disembunyikan: dua belahan mengambil alih tampilannya
+          void sampul.offsetWidth;
+          sampul.classList.add("membelah");
+
+          pesawat.style.transform = "translate(" + (cx - 17) + "px," + (sy - 17) + "px) scale(.85)";
+          jejak.style.left = cx + "px";
+          jejak.style.top = sy + "px";
+          jejak.style.height = "0px";
+          lapis.classList.add("aktif");
+
+          var terlepas = false, terbuka = false, selesaiJalan = false;
+          function lepas(){
+            if (terlepas) return;
+            terlepas = true;
+            belahKiri.style.transform = "";
+            belahKanan.style.transform = "";
+            belahKiri.classList.add("lepas");
+            belahKanan.classList.add("lepas");
+            lapis.classList.add("memudar");
+            setTimeout(selesai, 360);
+          }
+          function selesai(){
+            if (selesaiJalan) return;
+            selesaiJalan = true;
+            document.body.classList.remove("terkunci");
+            sampul.classList.add("hilang");
+            sampul.querySelectorAll(".belah").forEach(function(k){ k.remove(); });
+          }
+          // Pengaman: gerbang pasti hilang sempurna
+          setTimeout(selesai, 1900);
+
+          var DURASI = 1050, t0 = null;
+          function langkah(ts){
+            if (!t0) t0 = ts;
+            var mentah = Math.min(1, (ts - t0) / DURASI);
+            var p = mentah * mentah * (3 - 2 * mentah); // smoothstep: halus di awal & akhir
+            var y = sy + (-70 - sy) * p; // lurus naik sampai keluar tepi atas
+            pesawat.style.transform = "translate(" + (cx - 17) + "px," + (y - 17) + "px) scale(" + (.85 + .35 * p) + ")";
+            jejak.style.top = y + "px";
+            jejak.style.height = (sy - y) + "px";
+            // Robekan membuka menyamping sedikit demi sedikit seiring pesawat naik
+            var buka = Math.pow(p, 1.4) * vw * .07;
+            belahKiri.style.transform = "translateX(" + (-buka) + "px)";
+            belahKanan.style.transform = "translateX(" + buka + "px)";
+            if (!terbuka && p > .18){ terbuka = true; document.body.classList.remove("terkunci"); }
+            if (mentah < 1) requestAnimationFrame(langkah);
+            else lepas();
+          }
+          requestAnimationFrame(langkah);
+        });
+
+        // Musik: pola live standar (bgm "Perfect" + penjaga #kbAudio + listener kb-stop-music)
+        var musicOn = false;
+        function startMusic(){
+          /* lagu unggahan pengguna dari Generator (#kbAudio) selalu didahulukan */
+          if (document.getElementById("kbAudio")) return;
+          var p = null;
+          try { p = audio.play(); } catch(e){}
+          if (p && p.catch) p.catch(function(){});
+          musicOn = true;
+          ikonMusik.classList.add("berputar");
+          musicBtn.setAttribute("aria-pressed", "true");
+        }
+        function stopMusic(){
+          try { audio.pause(); } catch(e){}
+          musicOn = false;
+          ikonMusik.classList.remove("berputar");
+          musicBtn.setAttribute("aria-pressed", "false");
+        }
+        musicBtn.addEventListener("click", function(){ musicOn ? stopMusic() : startMusic(); });
+        window.addEventListener("message", function(e){ if (e.data === "kb-stop-music") stopMusic(); });
+
+        // Hitung mundur ke Sabtu, 24 Juli 2027 pukul 08.00 WIB
+        var target = new Date("2027-07-24T08:00:00+07:00").getTime();
+        var elH = document.getElementById("cd-hari"), elJ = document.getElementById("cd-jam"),
+            elM = document.getElementById("cd-menit"), elD = document.getElementById("cd-detik");
+        function dua(n){ return (n<10?"0":"")+n; }
+        function tik(){
+          var sisa = target - Date.now();
+          if (sisa < 0) sisa = 0;
+          var h = Math.floor(sisa/864e5), j = Math.floor(sisa%864e5/36e5),
+              m = Math.floor(sisa%36e5/6e4), d = Math.floor(sisa%6e4/1e3);
+          elH.textContent = h; elJ.textContent = dua(j); elM.textContent = dua(m); elD.textContent = dua(d);
+        }
+        tik(); setInterval(tik, 1000);
+
+        // Salin nomor rekening / e-wallet
+        document.querySelectorAll("[data-salin]").forEach(function(btn){
+          btn.addEventListener("click", function(){
+            var teks = btn.getAttribute("data-salin");
+            function selesai(){
+              var awal = btn.textContent;
+              btn.textContent = "Tersalin ✓"; btn.classList.add("tercopy");
+              setTimeout(function(){ btn.textContent = awal; btn.classList.remove("tercopy"); }, 2000);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText){
+              navigator.clipboard.writeText(teks).then(selesai).catch(selesai);
+            } else {
+              var ta = document.createElement("textarea");
+              ta.value = teks; document.body.appendChild(ta); ta.select();
+              try { document.execCommand("copy"); } catch(e){}
+              document.body.removeChild(ta); selesai();
+            }
+          });
+        });
+
+        // RSVP & Ucapan pola standar SeikatJanji: formulir di dalam halaman,
+        // ucapan langsung tampil di daftar pada halaman yang sama (tanpa WhatsApp)
+        var formRsvp = document.getElementById("formRsvp");
+        var btnKirim = formRsvp.querySelector(".btn-kirim");
+        formRsvp.addEventListener("submit", function(ev){
+          ev.preventDefault();
+          var nama = document.getElementById("fNama").value.trim();
+          var hadir = document.getElementById("fHadir").value;
+          var ucapan = document.getElementById("fUcapan").value.trim();
+          if (!nama || !ucapan) return;
+          var art = document.createElement("article");
+          art.className = "ucapan tampak";
+          var dari = document.createElement("span"); dari.className = "dari"; dari.textContent = nama;
+          var st = document.createElement("span"); st.className = "status"; st.textContent = hadir;
+          var isi = document.createElement("p"); isi.className = "isi-ucapan"; isi.textContent = ucapan;
+          art.appendChild(dari); art.appendChild(st); art.appendChild(isi);
+          var daftar = document.getElementById("daftarUcapan");
+          daftar.insertBefore(art, daftar.firstChild);
+          ev.target.reset();
+          btnKirim.textContent = "Terkirim ✓ Terima Kasih";
+          setTimeout(function(){ btnKirim.textContent = "Kirim Ucapan"; }, 2600);
+        });
+      })();
+    </script>
+  </body>
+</html>

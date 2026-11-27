@@ -483,6 +483,11 @@
               <button type="button" class="swatch" data-theme="duatinta" style="--dot:#31559f;--dot2:#b3402f"><span class="dot"></span>Dua Tinta</button>
               <button type="button" class="swatch" data-theme="monokrom" style="--dot:#111111;--dot2:#f5f0e6"><span class="dot"></span>Monokrom Editorial</button>
               <button type="button" class="swatch" data-theme="kertas" style="--dot:#e8a87c;--dot2:#a8c3a0"><span class="dot"></span>Kertas Lipat</button>
+              <button type="button" class="swatch" data-theme="tiket" style="--dot:#16294d;--dot2:#e6c87a"><span class="dot"></span>Tiket Berdua</button>
+              <button type="button" class="swatch" data-theme="bintang" style="--dot:#0d1530;--dot2:#e6c87a"><span class="dot"></span>Peta Bintang</button>
+              <button type="button" class="swatch" data-theme="polaroid" style="--dot:#7a5a38;--dot2:#fff8ec"><span class="dot"></span>Polaroid Kita</button>
+              <button type="button" class="swatch" data-theme="kabar" style="--dot:#2b2117;--dot2:#f2e8cf"><span class="dot"></span>Kabar Cinta</button>
+              <button type="button" class="swatch" data-theme="taman" style="--dot:#1e4d2e;--dot2:#dcebd0"><span class="dot"></span>Taman Kaca</button>
             </div></div>
             <p class="hint" id="themeOrnNote" style="display:block;margin:-4px 0 16px"></p><div class="field"><label>Musik latar <span class="hint">opsional</span></label>
               <div class="upload"><div class="upload-thumb" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M9 18V6l10-2v12M9 9l10-2M6.5 20A2.5 2.5 0 1 0 6.5 15a2.5 2.5 0 0 0 0 5ZM16.5 18A2.5 2.5 0 1 0 16.5 13a2.5 2.5 0 0 0 0 5Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="upload-text"><strong id="audioLabel">Pilih lagu</strong><span>MP3, M4A, atau OGG, maksimal 12 MB. Tamu menekan tombol untuk memutar.</span><input class="file-input" id="audioInput" type="file" accept="audio/mpeg,audio/mp4,audio/ogg" /></div></div>
@@ -571,7 +576,7 @@
         annisa1:{source:'QS. An-Nisa: 1',text:'Wahai manusia! Bertakwalah kepada Tuhanmu yang telah menciptakan kamu dari diri yang satu, dan menciptakan pasangannya dari dirinya; dan dari keduanya Allah memperkembangbiakkan laki-laki dan perempuan yang banyak.'},
         alfurqan74:{source:'QS. Al-Furqan: 74',text:'Ya Tuhan kami, anugerahkanlah kepada kami pasangan kami dan keturunan kami sebagai penyenang hati, dan jadikanlah kami pemimpin bagi orang-orang yang bertakwa.'}
       };
-      var themeOrnNotes={gold:'Tema ini memakai file demo Elegan Gold asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',terracotta:'Tema ini memakai file demo Rustic Scrapbook asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',midnight:'Tema ini memakai file demo Minimalis Modern asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',sage:'Tema ini memakai file demo Floral Sage asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',paper:'Tema ini memakai file demo Surat Cinta asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',heritage:'Tema ini memakai file demo Heritage asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',bali:'Tema ini memakai file demo Etnik Bali asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',sinema:'Tema ini memakai file demo Sinema Senja asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',samudra:'Tema modern ACC #1 — memakai file demo final Samudra Senja sebagai cetakan: laut senja HD di sampul/hero, langit yang berubah mengikuti guliran, dan data dari formulir mengisi nama, tanggal, acara, kisah, galeri, serta amplopnya.',lentera:'Tema modern ACC #2 — memakai file demo final Lentera Malam sebagai cetakan: malam pekat berlentera, kisah bergeser otomatis, amplop terbuka menjadi kartu ATM, dan data dari formulir mengisi seluruh isinya.',duatinta:'Tema modern ACC #3 — memakai file demo final Dua Tinta sebagai cetakan: jurnal kertas bergaris dengan goresan tinta biru–merah, dan data dari formulir mengisi seluruh isinya.',monokrom:'Tema modern ACC #4 — memakai file demo final Monokrom Editorial sebagai cetakan: majalah hitam-putih bertipografi besar tanpa ornamen hias, dan data dari formulir mengisi seluruh isinya.',kertas:'Tema modern ACC #5 — memakai file demo final Kertas Lipat sebagai cetakan: bangau origami ber-facet, panel lipatan pastel, gerbang yang disobek saat dibuka, dan data dari formulir mengisi seluruh isinya.'};
+      var themeOrnNotes={gold:'Tema ini memakai file demo Elegan Gold asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',terracotta:'Tema ini memakai file demo Rustic Scrapbook asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',midnight:'Tema ini memakai file demo Minimalis Modern asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',sage:'Tema ini memakai file demo Floral Sage asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',paper:'Tema ini memakai file demo Surat Cinta asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',heritage:'Tema ini memakai file demo Heritage asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',bali:'Tema ini memakai file demo Etnik Bali asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',sinema:'Tema ini memakai file demo Sinema Senja asli sebagai cetakan — hasil generate identik dengan demo di web jualan.',samudra:'Tema modern ACC #1 — memakai file demo final Samudra Senja sebagai cetakan: laut senja HD di sampul/hero, langit yang berubah mengikuti guliran, dan data dari formulir mengisi nama, tanggal, acara, kisah, galeri, serta amplopnya.',lentera:'Tema modern ACC #2 — memakai file demo final Lentera Malam sebagai cetakan: malam pekat berlentera, kisah bergeser otomatis, amplop terbuka menjadi kartu ATM, dan data dari formulir mengisi seluruh isinya.',duatinta:'Tema modern ACC #3 — memakai file demo final Dua Tinta sebagai cetakan: jurnal kertas bergaris dengan goresan tinta biru–merah, dan data dari formulir mengisi seluruh isinya.',monokrom:'Tema modern ACC #4 — memakai file demo final Monokrom Editorial sebagai cetakan: majalah hitam-putih bertipografi besar tanpa ornamen hias, dan data dari formulir mengisi seluruh isinya.',kertas:'Tema modern ACC #5 — memakai file demo final Kertas Lipat sebagai cetakan: bangau origami ber-facet, panel lipatan pastel, gerbang yang disobek saat dibuka, dan data dari formulir mengisi seluruh isinya.',tiket:'Tema modern batch ke-2 #1 — memakai file demo final Tiket Berdua sebagai cetakan: boarding pass rute Masa Lajang menuju Selamanya dengan transisi pesawat terbang merobek sampul, dan data dari formulir mengisi seluruh isinya.',bintang:'Tema modern batch ke-2 #2 — memakai file demo final Peta Bintang sebagai cetakan: langit malam berkonstelasi emas dengan transisi langit terbuka, dan data dari formulir mengisi seluruh isinya.',polaroid:'Tema modern batch ke-2 #3 — memakai file demo final Polaroid Kita sebagai cetakan: cetakan polaroid bertumpuk dan tali foto berjepit kayu, font tulisan tangan Caveat dan serif Fraunces, dan data dari formulir mengisi seluruh isinya.',kabar:'Tema modern batch ke-2 #4 — memakai file demo final Kabar Cinta sebagai cetakan: halaman depan koran lawas dengan rubrik berita, laporan kisah, dan iklan baris tanda kasih, dan data dari formulir mengisi seluruh isinya.',taman:'Tema modern batch ke-2 #5 — memakai file demo final Taman Kaca sebagai cetakan: rumah kaca botanical dengan pintu kaca bergeser terbuka dan foto berbingkai bayangan lembut, dan data dari formulir mengisi seluruh isinya.'};
 
       /* ============ CETAKAN DEMO: file demo asli web jualan ============ */
       var TPL={
@@ -847,6 +852,102 @@
           ],
           events:{date:'Sabtu, 20 November 2027',range1:'Pukul 08.00 — 10.00 WIB',range2:'Pukul 11.00 — 13.00 WIB',venue:'The Lodge Maribaya',addr:'Jl. Cibodas–Bukit Tunggul, Cibodas, Lembang, Kabupaten Bandung Barat 40791'},
           banks:[{name:'BCA',no:'234 567 8901'},{name:'Mandiri',no:'137 000 9876 543'}]
+        },
+        tiket:{file:'tiket-berdua.html',label:'Tiket Berdua',modern:true,assetKey:'tiket',tz:'+07:00',tzLabel:'WIB',iso:'2027-07-24T08:00:00+07:00',ics:'20270724T010000Z',icsNames:'Arka & Lintang',storyStyle:'full',
+          assets:['cover-ai.webp','galeri-jalan-ai.webp','groom-ai.webp','bride-ai.webp','kisah-1-ai.webp','kisah-2-ai.webp','kisah-3-ai.webp','musik-latar.mp3','fonts/madina.woff2','fonts/cormorant-garamond.woff2','fonts/cormorant-garamond-italic.woff2','fonts/plus-jakarta-sans.woff2'],
+          photoMap:{'cover-ai.webp':'cover','galeri-jalan-ai.webp':'cover','groom-ai.webp':'one','bride-ai.webp':'two'},
+          storySel:'#kisah .bab',storyDate:'.cap-stempel',storyText:':scope > p',eventSel:'.kartu-acara',bankSel:'.kartu-bank',gallerySel:'#galeri img',
+          pairs:[
+            ['Arka Pradana, S.T.','full1'],['Arka Pradana','full1'],
+            ['Lintang Maharani, S.E.','full2'],['Lintang Maharani','full2'],
+            ['Putra pertama dari','label1'],['Bapak H. Bambang Pradana','father1'],['& Ibu Hj. Sari Pradana','motherAmp1'],
+            ['Putri kedua dari','label2'],['Bapak Agus Mahardika','father2'],['& Ibu Dewi Mahardika','motherAmp2'],
+            ['Sabtu · 24 Juli 2027','dateLong'],['Sabtu, 24 Juli 2027','dateLong'],['24 Juli 2027','dateShort'],
+            ['Balai Sarbini · Jakarta Selatan','venueCity'],['Balai Sarbini','venue'],
+            ['Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.','verseText'],
+            ['QS. Ar-Rum : 21','verseSource'],
+            ['Dengan memohon rahmat dan ridha Allah SWT, kami bermaksud menyelenggarakan pernikahan kami. Seperti dua penumpang yang akhirnya duduk bersebelahan, kami percaya perjalanan terbaik adalah yang ditempuh berdua.','opening'],
+            ['Merupakan suatu kehormatan dan kebahagiaan bagi kami beserta keluarga apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kedua mempelai.','closing'],
+            ['Arka & Lintang','namesPair'],['Arka','short1'],['Lintang','short2']
+          ],
+          events:{date:'Sabtu, 24 Juli 2027',range1:'Pukul 08.00 – 10.00 WIB',range2:'Pukul 11.00 – 13.00 WIB',venue:'Balai Sarbini',addr:'Jl. Jend. Sudirman Kav. 50, Jakarta Selatan'},
+          banks:[{name:'BCA',no:'8210 4567 90'},{name:'DANA',no:'0812 3456 7890'}]
+        },
+        bintang:{file:'peta-bintang.html',label:'Peta Bintang',modern:true,assetKey:'bintang',tz:'+07:00',tzLabel:'WIB',iso:'2027-09-11T08:00:00+07:00',ics:'20270911T010000Z',icsNames:'Dimas & Sinta',storyStyle:'full',
+          assets:['cover-ai.webp','berdua-ai.webp','groom-ai.webp','bride-ai.webp','kisah-1-ai.webp','kisah-2-ai.webp','kisah-3-ai.webp','musik-latar.mp3','fonts/Madina.ttf','fonts/Madina.woff','fonts/madina.woff2','fonts/cormorant-garamond.woff2','fonts/cormorant-garamond-italic.woff2','fonts/plus-jakarta-sans.woff2'],
+          photoMap:{'cover-ai.webp':'cover','berdua-ai.webp':'cover','groom-ai.webp':'one','bride-ai.webp':'two'},
+          storySel:'#kisah .bab',storyDate:'.cap',storyText:':scope > p',eventSel:'.kartu-acara',bankSel:'.kartu-bank',gallerySel:'#galeri img',
+          pairs:[
+            ['Dimas Arya Nugraha','full1'],['Sinta Maharani','full2'],
+            ['Putra dari pasangan','labelPasangan1'],['Bapak H. Nugroho Santoso','father1'],['Ibu Hj. Ratna Sari','mother1'],
+            ['Putri dari pasangan','labelPasangan2'],['Bapak H. Mahardi Wijaya','father2'],['Ibu Hj. Laras Wulandari','mother2'],
+            ['SABTU · 11 SEPTEMBER 2027','dateLong'],['Sabtu, 11 September 2027','dateLong'],['11 September 2027','dateShort'],['11 · 09 · 2027','dots'],
+            ['Hotel Mulia Senayan · Jakarta','venueCity'],['Hotel Mulia Senayan','venue'],
+            ['Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.','verseText'],
+            ['QS. Ar-Rum : 21','verseSource'],
+            ['Dengan memohon rahmat dan ridha Allah SWT, kami mengundang Bapak, Ibu, dan Saudara/i untuk hadir di hari bahagia kami.','opening'],
+            ['Merupakan suatu kehormatan dan kebahagiaan bagi kami beserta keluarga apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kedua mempelai.','closing'],
+            ['Dimas & Sinta','namesPair'],['Dimas','short1'],['Sinta','short2']
+          ],
+          events:{date:'Sabtu, 11 September 2027',range1:'Pukul 08.00 – 10.00 WIB',range2:'Pukul 11.00 – 13.00 WIB',venue:'Hotel Mulia Senayan',addr:'Jl. Asia Afrika, Senayan, Jakarta Pusat'},
+          banks:[{name:'BCA',no:'8210 4567 90'},{name:'Mandiri',no:'1370 0111 0927'}]
+        },
+        polaroid:{file:'polaroid-kita.html',label:'Polaroid Kita',modern:true,assetKey:'polaroid',tz:'+07:00',tzLabel:'WIB',iso:'2027-11-06T08:00:00+07:00',ics:'20271106T010000Z',icsNames:'Rian & Tari',storyStyle:'full',
+          assets:['cover-ai.webp','berdua-ai.webp','groom-ai.webp','bride-ai.webp','kisah-1-ai.webp','kisah-2-ai.webp','kisah-3-ai.webp','musik-latar.mp3','fonts/caveat-latin.woff2','fonts/caveat-latin-ext.woff2','fonts/fraunces-latin.woff2','fonts/fraunces-latin-ext.woff2','fonts/fraunces-italic-latin.woff2','fonts/fraunces-italic-latin-ext.woff2','fonts/plus-jakarta-sans.woff2'],
+          photoMap:{'cover-ai.webp':'cover','berdua-ai.webp':'cover','groom-ai.webp':'one','bride-ai.webp':'two'},
+          storySel:'#kisah .bab',storyDate:'.cap',storyText:':scope > p',eventSel:'.kartu-acara',bankSel:'.kartu-bank',gallerySel:'#galeri img',
+          pairs:[
+            ['Rian Pramudya','full1'],['Tari Ayu Lestari','full2'],
+            ['Putra dari pasangan','labelPasangan1'],['Bapak H. Pramudya Hartawan','father1'],['Ibu Hj. Endang Lestari','mother1'],
+            ['Putri dari pasangan','labelPasangan2'],['Bapak H. Lestari Handoko','father2'],['Ibu Hj. Maya Kusuma','mother2'],
+            ['SABTU · 6 NOVEMBER 2027','dateLong'],['Sabtu, 6 November 2027','dateLong'],['6 November 2027','dateShort'],
+            ['Grand Savero Hotel · Bogor','venueCity'],['Grand Savero Hotel','venue'],
+            ['Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.','verseText'],
+            ['QS. Ar-Rum : 21','verseSource'],
+            ['Dengan memohon rahmat dan ridha Allah SWT, kami mengundang Bapak, Ibu, dan Saudara/i untuk hadir di hari bahagia kami.','opening'],
+            ['Merupakan suatu kehormatan dan kebahagiaan bagi kami beserta keluarga apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kedua mempelai.','closing'],
+            ['Rian & Tari','namesPair'],['Rian','short1'],['Tari','short2']
+          ],
+          events:{date:'Sabtu, 6 November 2027',range1:'Pukul 08.00 – 10.00 WIB',range2:'Pukul 11.00 – 13.00 WIB',venue:'Grand Savero Hotel',addr:'Bogor, Jawa Barat'},
+          banks:[{name:'BCA',no:'8720 1456 78'},{name:'Mandiri',no:'1370 0211 0627'}]
+        },
+        kabar:{file:'kabar-cinta.html',label:'Kabar Cinta',modern:true,assetKey:'kabar',tz:'+07:00',tzLabel:'WIB',iso:'2027-12-11T08:00:00+07:00',ics:'20271211T010000Z',icsNames:'Satria & Anya',storyStyle:'full',
+          assets:['cover-ai.webp','berdua-ai.webp','groom-ai.webp','bride-ai.webp','kisah-1-ai.webp','kisah-2-ai.webp','kisah-3-ai.webp','musik-latar.mp3','fonts/playfair-700-latin.woff2','fonts/playfair-700-latin-ext.woff2','fonts/playfair-700-italic-latin.woff2','fonts/playfair-700-italic-latin-ext.woff2','fonts/playfair-800-latin.woff2','fonts/playfair-800-latin-ext.woff2','fonts/playfair-900-latin.woff2','fonts/playfair-900-latin-ext.woff2','fonts/newsreader-400-latin.woff2','fonts/newsreader-400-latin-ext.woff2','fonts/newsreader-400-italic-latin.woff2','fonts/newsreader-400-italic-latin-ext.woff2','fonts/newsreader-500-latin.woff2','fonts/newsreader-500-latin-ext.woff2','fonts/newsreader-600-latin.woff2','fonts/newsreader-600-latin-ext.woff2','fonts/special-elite-400-latin.woff2','fonts/special-elite-400-latin-ext.woff2'],
+          photoMap:{'cover-ai.webp':'cover','berdua-ai.webp':'cover','groom-ai.webp':'one','bride-ai.webp':'two'},
+          storySel:'#kisah .laporan',storyDate:'.dateline',storyText:'.isi',eventSel:'.kartu-acara',bankSel:'.iklan-baris',gallerySel:'#galeri img',
+          pairs:[
+            ['Satria Nugraha','full1'],['Anya Larasati','full2'],
+            ['Putra dari pasangan','labelPasangan1'],['Bapak H. Nugraha Wijaya','father1'],['Ibu Hj. Sri Wahyuni','mother1'],
+            ['Putri dari pasangan','labelPasangan2'],['Bapak H. Laras Handoko','father2'],['Ibu Hj. Dewi Anggraini','mother2'],
+            ['Sabtu · 11 Desember 2027','dateLong'],['Sabtu, 11 Desember 2027','dateLong'],['11 Desember 2027','dateShort'],
+            ['Hotel Tugu Malang','venue'],
+            ['Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.','verseText'],
+            ['QS. Ar-Rum : 21','verseSource'],
+            ['Dengan memohon rahmat dan ridha Allah SWT, redaksi mengumumkan pernikahan:','opening'],
+            ['Merupakan suatu kehormatan dan kebahagiaan bagi kami beserta keluarga apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kedua mempelai.','closing'],
+            ['Satria & Anya','namesPair'],['Satria','short1'],['Anya','short2']
+          ],
+          events:{date:'Sabtu, 11 Desember 2027',range1:'Pukul 08.00 – 10.00 WIB',range2:'Pukul 11.00 – 13.00 WIB',venue:'Hotel Tugu Malang',addr:'Jl. Tugu No. 3, Klojen, Kota Malang, Jawa Timur'},
+          banks:[{name:'BCA',no:'5270 8891 34'},{name:'Mandiri',no:'1370 0088 1127'}]
+        },
+        taman:{file:'taman-kaca.html',label:'Taman Kaca',modern:true,assetKey:'taman',tz:'+07:00',tzLabel:'WIB',iso:'2028-01-15T08:00:00+07:00',ics:'20280115T010000Z',icsNames:'Angga & Mega',storyStyle:'full',
+          assets:['cover-ai.webp','berdua-ai.webp','groom-ai.webp','bride-ai.webp','kisah-1-ai.webp','kisah-2-ai.webp','kisah-3-ai.webp','musik-latar.mp3','fonts/Madina.ttf','fonts/Madina.woff','fonts/libre-baskerville-latin.woff2','fonts/libre-baskerville-latin-ext.woff2','fonts/libre-baskerville-italic-latin.woff2','fonts/libre-baskerville-italic-latin-ext.woff2','fonts/plus-jakarta-sans.woff2'],
+          photoMap:{'cover-ai.webp':'cover','berdua-ai.webp':'cover','groom-ai.webp':'one','bride-ai.webp':'two'},
+          storySel:'#kisah .bab',storyDate:'.cap',storyText:':scope > p',eventSel:'.kartu-acara',bankSel:'.kartu-bank',gallerySel:'#galeri img',
+          pairs:[
+            ['Erlangga Saputra','full1'],['Mega Wulandari','full2'],
+            ['Putra dari pasangan','labelPasangan1'],['Bapak H. Saputra Wijaya','father1'],['Ibu Hj. Ratna Sari','mother1'],
+            ['Putri dari pasangan','labelPasangan2'],['Bapak H. Bambang Sutrisno','father2'],['Ibu Hj. Wulan Sutrisno','mother2'],
+            ['Sabtu · 15 Januari 2028','dateLong'],['Sabtu, 15 Januari 2028','dateLong'],['15 Januari 2028','dateShort'],
+            ['Glasshouse Garden · Bogor','venueCity'],['Glasshouse Garden','venue'],
+            ['Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.','verseText'],
+            ['QS. Ar-Rum : 21','verseSource'],
+            ['Dengan memohon rahmat dan ridha Allah SWT, kami mengundang Bapak, Ibu, dan Saudara/i untuk hadir di hari bahagia kami.','opening'],
+            ['Merupakan suatu kehormatan dan kebahagiaan bagi kami beserta keluarga apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kedua mempelai.','closing'],
+            ['Angga & Mega','namesPair'],['Angga','short1'],['Mega','short2']
+          ],
+          events:{date:'Sabtu, 15 Januari 2028',range1:'Pukul 08.00 – 10.00 WIB',range2:'Pukul 11.00 – 13.00 WIB',venue:'Glasshouse Garden',addr:'Bogor, Jawa Barat'},
+          banks:[{name:'BCA',no:'8720 1546 89'},{name:'Mandiri',no:'1370 0215 0128'}]
         }
       };
       var MONTH_ID=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];

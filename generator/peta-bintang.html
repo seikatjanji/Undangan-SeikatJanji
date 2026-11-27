@@ -1,0 +1,946 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="data:," />
+    <title>Dimas &amp; Sinta, Undangan Pernikahan (Template Peta Bintang, SeikatJanji)</title>
+    <style>
+      /* Semua font ditanam lokal — tanpa Google Fonts */
+      @font-face{
+        font-family:"Madina";
+        src:url("assets/modern/bintang/fonts/Madina.woff") format("woff"), url("assets/modern/bintang/fonts/Madina.ttf") format("truetype");
+        font-weight:400; font-style:normal; font-display:swap;
+      }
+      @font-face{
+        font-family:"Cormorant Garamond";
+        src:url("assets/modern/bintang/fonts/cormorant-garamond.woff2") format("woff2");
+        font-weight:400 700; font-style:normal; font-display:swap;
+      }
+      @font-face{
+        font-family:"Cormorant Garamond";
+        src:url("assets/modern/bintang/fonts/cormorant-garamond-italic.woff2") format("woff2");
+        font-weight:400 700; font-style:italic; font-display:swap;
+      }
+      @font-face{
+        font-family:"Plus Jakarta Sans";
+        src:url("assets/modern/bintang/fonts/plus-jakarta-sans.woff2") format("woff2");
+        font-weight:300 800; font-style:normal; font-display:swap;
+      }
+      :root{
+        --langit:#0d1530;
+        --langit-dalam:#080e22;
+        --panel:#141f47;
+        --panel-2:#1a2757;
+        --emas:#c9a24d;
+        --emas-terang:#e6c87a;
+        --emas-pucat:#f2e2b6;
+        --krem:#f6efdd;
+        --redup:#a9b2d2;
+        --garis:rgba(230,200,122,.30);
+        --garis-tipis:rgba(230,200,122,.16);
+        color-scheme:dark;
+      }
+      *{box-sizing:border-box}
+      html{scroll-behavior:smooth}
+      body{
+        margin:0; color:var(--krem);
+        font-family:"Plus Jakarta Sans",system-ui,sans-serif;
+        font-size:16.5px; line-height:1.7; font-weight:400;
+        background:
+          radial-gradient(1100px 520px at 85% -80px, rgba(64,84,160,.35), transparent 60%),
+          radial-gradient(900px 480px at -10% 30%, rgba(38,52,110,.30), transparent 60%),
+          linear-gradient(180deg, var(--langit) 0%, var(--langit-dalam) 55%, var(--langit) 100%);
+        background-color:var(--langit);
+        overflow-x:hidden;
+      }
+      body.terkunci{overflow:hidden}
+      img{display:block; max-width:100%}
+      button, a, select, input, textarea{cursor:pointer}
+      input, textarea, select{cursor:text}
+      select{cursor:pointer}
+      button, [role="button"], select, input:not([type="checkbox"],[type="radio"]), textarea{font:inherit}
+      button, select, input, textarea{min-height:44px}
+      :focus-visible{outline:2px solid var(--emas-terang); outline-offset:3px}
+
+      /* ---------- lapisan bintang berkelip (dibuat via JS) ---------- */
+      .lapis-bintang{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+      .lapis-bintang i{
+        position:absolute; border-radius:50%; background:#fdf6dd;
+        animation:kelip 3.6s ease-in-out infinite;
+      }
+      /* konstelasi latar tetap: garis rasi samar yang menyertai tamu sepanjang guliran */
+      .lapis-bintang .rasi{position:absolute; pointer-events:none}
+      @keyframes kelip{0%,100%{opacity:.18}50%{opacity:.95}}
+      @media (prefers-reduced-motion: reduce){
+        .lapis-bintang i{animation:none; opacity:.55}
+        html{scroll-behavior:auto}
+      }
+      .bungkus{position:relative; z-index:1; max-width:720px; margin:0 auto}
+      section{padding:78px 24px; position:relative}
+      section.gelap{background:linear-gradient(180deg, rgba(8,14,34,.55), rgba(8,14,34,.25))}
+      .pusat{text-align:center}
+
+      /* ---------- ornamen konstelasi ---------- */
+      .orn{position:absolute; z-index:0; pointer-events:none}
+      section > *:not(.orn){position:relative; z-index:1}
+
+      /* ---------- tipografi ---------- */
+      .kicker{
+        display:flex; align-items:center; justify-content:center; gap:.7rem;
+        font-size:.74rem; font-weight:700; letter-spacing:.34em; text-transform:uppercase;
+        color:var(--emas-terang); margin:0 0 .9rem;
+      }
+      .kicker::before, .kicker::after{
+        content:""; width:34px; height:1px;
+        background:linear-gradient(90deg, transparent, var(--emas));
+      }
+      .kicker::after{background:linear-gradient(90deg, var(--emas), transparent)}
+      .judul{
+        font-family:"Cormorant Garamond",serif; font-weight:600;
+        font-size:clamp(2.05rem, 7vw, 2.75rem); line-height:1.16; margin:.1rem 0 .9rem;
+        text-align:center; color:var(--krem);
+      }
+      .judul em{font-style:italic; color:var(--emas-pucat)}
+      .pembuka{color:var(--redup); max-width:33rem; margin:0 auto; text-align:center}
+      .nama-script{
+        font-family:"Madina",cursive; font-weight:400; color:var(--emas-terang);
+        font-size:clamp(3.1rem, 13vw, 4.4rem); line-height:1.15; margin:0; text-align:center;
+      }
+
+      /* ---------- tombol ---------- */
+      .btn{
+        display:inline-flex; align-items:center; justify-content:center; gap:.55rem;
+        min-height:48px; padding:.72rem 1.7rem; border-radius:999px;
+        background:linear-gradient(180deg, var(--emas-terang), var(--emas));
+        border:1px solid var(--emas-pucat); color:#231a05;
+        font-weight:700; font-size:.97rem; text-decoration:none;
+        box-shadow:0 10px 26px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.45);
+        transition:transform .18s ease, box-shadow .18s ease;
+      }
+      .btn:hover{transform:translateY(-2px); box-shadow:0 14px 30px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.45)}
+      .btn.garis{
+        background:transparent; color:var(--emas-terang); border:1px solid var(--emas);
+        box-shadow:none;
+      }
+      .btn.garis:hover{background:rgba(230,200,122,.08)}
+
+      /* ---------- bingkai foto emas ---------- */
+      .bingkai{
+        border:1px solid var(--garis); border-radius:16px; padding:9px;
+        background:linear-gradient(180deg, rgba(26,39,87,.85), rgba(16,25,58,.9));
+        box-shadow:0 18px 40px rgba(0,0,0,.38), inset 0 0 0 1px rgba(246,239,221,.05);
+      }
+      .bingkai img{width:100%; height:100%; object-fit:cover; border-radius:9px}
+      .bingkai.lengkung{border-radius:190px 190px 16px 16px}
+      .bingkai.lengkung img{border-radius:182px 182px 9px 9px}
+
+      /* bintang penanda tunggal di puncak bingkai foto mempelai:
+         tepat satu bintang kecil emas di tengah atas lengkung tiap frame solo */
+      #mempelai .bingkai{position:relative}
+      #mempelai .bingkai::before{
+        content:""; position:absolute; z-index:2; width:15px; height:15px; pointer-events:none;
+        top:-8px; left:50%; transform:translateX(-50%);
+        background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z' fill='%23e6c87a'/%3E%3C/svg%3E") center/contain no-repeat;
+        filter:drop-shadow(0 0 5px rgba(230,200,122,.75));
+      }
+
+      /* ---------- animasi muncul saat scroll (standar tema modern) ---------- */
+      .muncul{opacity:0; transform:translateY(26px) scale(.97); transition:opacity .8s ease, transform .8s cubic-bezier(.22,.8,.3,1)}
+      .muncul.tampak{opacity:1; transform:none}
+      @media (prefers-reduced-motion: reduce){
+        .muncul{opacity:1; transform:none; transition:none}
+      }
+
+      /* ---------- 1 · SAMPUL / PETA BINTANG ---------- */
+      /* TEPAT satu frame (100svh): semua elemen diskalakan proporsional, tombol terlihat tanpa scroll */
+      #sampul{
+        position:fixed; inset:0; z-index:100; height:100svh; overflow:hidden;
+        display:flex; justify-content:center;
+        background:
+          radial-gradient(800px 420px at 80% -60px, rgba(64,84,160,.4), transparent 60%),
+          linear-gradient(180deg, #101a3e 0%, var(--langit-dalam) 100%);
+        transition:transform 1.45s ease, opacity 1.45s ease;
+      }
+      /* transisi "langit terbuka": gerbang larut + zoom sangat halus, menyatu ke langit halaman */
+      #sampul.larut{transform:scale(1.05); opacity:0; pointer-events:none}
+      /* lingkaran peta bintang berdenyut lembut sekali, glow emas naik */
+      #sampul.transisi .peta-bintang{animation:denyutPeta 1.7s ease-out}
+      @keyframes denyutPeta{
+        0%{transform:scale(1); filter:drop-shadow(0 0 0 rgba(230,200,122,0))}
+        38%{transform:scale(1.03); filter:drop-shadow(0 0 22px rgba(230,200,122,.55))}
+        100%{transform:scale(1.045); filter:drop-shadow(0 0 26px rgba(230,200,122,.3))}
+      }
+      /* bintang sampul berpendar lebih terang sesaat */
+      .sampul-bintang{transition:filter .45s ease}
+      #sampul.transisi .sampul-bintang{filter:brightness(1.45)}
+      .cahaya{
+        position:absolute; inset:0; pointer-events:none; opacity:0;
+        background:radial-gradient(430px 430px at 50% 42%, rgba(230,200,122,.34), rgba(230,200,122,.1) 45%, transparent 70%);
+      }
+      #sampul.transisi .cahaya{animation:cahayaNaik 1.8s ease-out forwards}
+      @keyframes cahayaNaik{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+      /* bintang jatuh: garis cahaya emas melesat diagonal, ekor memudar */
+      .meteor{
+        position:absolute; width:120px; height:2px; border-radius:2px; opacity:0; pointer-events:none;
+        background:linear-gradient(90deg, #fdf6dd 6%, rgba(230,200,122,.55) 45%, transparent 96%);
+        box-shadow:0 0 9px rgba(230,200,122,.55);
+        animation:meteorJatuh 1.05s ease-out forwards;
+      }
+      @keyframes meteorJatuh{
+        0%{opacity:0; transform:rotate(-32deg) translateX(36px)}
+        15%{opacity:1}
+        72%{opacity:1}
+        100%{opacity:0; transform:rotate(-32deg) translateX(-300px)}
+      }
+      @media (prefers-reduced-motion: reduce){
+        #sampul.transisi .peta-bintang{animation:none}
+        #sampul.transisi .cahaya{animation:none}
+        .meteor{display:none}
+      }
+      #sampul.hilang{display:none}
+      .sampul-bintang{position:absolute; inset:0; overflow:hidden; pointer-events:none}
+      .sampul-bintang i{position:absolute; border-radius:50%; background:#fdf6dd; animation:kelip 3.6s ease-in-out infinite}
+      .sampul-in{
+        position:relative; z-index:1; width:100%; max-width:520px; height:100%;
+        margin:0 auto; text-align:center;
+        padding:max(10px, 1.6svh) 20px calc(12px + env(safe-area-inset-bottom));
+        display:flex; flex-direction:column; align-items:center; justify-content:center;
+        gap:clamp(4px, 1svh, 10px);
+      }
+      .sampul-label{
+        font-size:.72rem; font-weight:700; letter-spacing:.38em; text-transform:uppercase;
+        color:var(--emas-terang); margin:0;
+      }
+      .sampul-sub{font-family:"Cormorant Garamond",serif; font-style:italic; font-size:1.02rem; color:var(--redup); margin:0}
+      /* lingkaran peta bintang besar bergaris emas */
+      .peta-bintang{
+        position:relative; flex:none;
+        width:min(302px, 76vw, 37svh); aspect-ratio:1/1; margin:.15rem 0;
+      }
+      .peta-bintang .foto-bulat{
+        position:absolute; inset:4.2%; border-radius:50%; overflow:hidden;
+        border:1px solid var(--garis);
+        box-shadow:0 0 0 4px rgba(13,21,48,.55), 0 0 42px rgba(230,200,122,.22);
+      }
+      /* permukaan foto sampul SENGAJA bersih: tanpa rasi/bintang menimpa foto pasangan;
+         rasi hanya hidup di ring lingkaran & langit sekelilingnya */
+      .peta-bintang .foto-bulat img{width:100%; height:100%; object-fit:cover; object-position:center 30%}
+      .peta-bintang svg.rangka{position:absolute; inset:0; width:100%; height:100%}
+      .peta-bintang .koord{
+        position:absolute; font-size:.6rem; font-weight:700; letter-spacing:.22em;
+        color:var(--emas-terang); opacity:.9; white-space:nowrap;
+        text-shadow:0 1px 6px rgba(8,14,34,.95), 0 0 3px rgba(8,14,34,.9);
+      }
+      .koord-atas{top:-4px; left:50%; transform:translateX(-50%)}
+      .koord-kiri{left:-8px; top:50%; transform:translateY(-50%) rotate(180deg); writing-mode:vertical-rl}
+      .koord-kanan{right:-8px; top:50%; transform:translateY(-50%); writing-mode:vertical-rl}
+      .sampul-nama{
+        font-family:"Madina",cursive; font-weight:400; color:var(--emas-pucat);
+        font-size:min(15.5vw, 4.35rem); line-height:1.08; margin:0;
+        text-shadow:0 4px 30px rgba(0,0,0,.45);
+      }
+      .sampul-tanggal{
+        font-family:"Cormorant Garamond",serif; font-size:1.18rem; font-weight:600;
+        letter-spacing:.14em; color:var(--krem); margin:0;
+      }
+      .kepada{
+        width:min(340px, 88vw); margin-top:.15rem; padding:.65rem 1rem .7rem;
+        border-top:1px dashed var(--garis);
+        font-size:.92rem; color:var(--redup);
+      }
+      .kepada p{margin:0}
+      .kepada .nama-tamu{display:block; font-weight:800; color:var(--krem); font-size:1.05rem; margin-top:.15rem}
+      .kepada .catatan{font-size:.74rem; opacity:.75; margin-top:.3rem}
+      .btn-buka{
+        display:inline-flex; align-items:center; gap:.55rem;
+        min-height:50px; padding:.75rem 1.9rem; border-radius:999px; margin-top:.35rem;
+        background:linear-gradient(180deg, var(--emas-terang), var(--emas));
+        border:1px solid var(--emas-pucat); color:#231a05;
+        font-weight:800; font-size:1rem;
+        box-shadow:0 12px 30px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.5);
+        transition:transform .18s ease;
+      }
+      .btn-buka:hover{transform:translateY(-2px)}
+      @media (max-height:700px){
+        .peta-bintang{width:min(252px, 68vw, 33svh)}
+        .sampul-nama{font-size:min(13.5vw, 3.7rem)}
+      }
+
+      /* ---------- 2 · PEMBUKA / HERO ---------- */
+      .foto-hero{width:min(330px, 82vw); margin:1.4rem auto 0; aspect-ratio:4/5}
+      .hero-nama{margin-top:1.1rem}
+      .tanggal-hero{
+        font-family:"Cormorant Garamond",serif; font-size:1.3rem; font-weight:600;
+        letter-spacing:.1em; margin:.4rem 0 0; text-align:center;
+      }
+      .tempat-hero{color:var(--redup); margin:.15rem 0 0; text-align:center}
+
+      /* ---------- 3 · AYAT SUCI ---------- */
+      .ayat{
+        max-width:560px; margin:1.6rem auto 0; padding:1.7rem 1.5rem 1.5rem;
+        border:1px solid var(--garis-tipis); border-radius:16px;
+        background:linear-gradient(180deg, rgba(26,39,87,.55), rgba(13,21,48,.35));
+        text-align:center;
+      }
+      .ayat .arab{
+        font-size:1.42rem; line-height:2.1; direction:rtl; margin:0 0 1rem; color:var(--emas-pucat);
+        font-family:"Cormorant Garamond",serif;
+      }
+      .ayat .arti{color:var(--krem); font-style:italic; margin:0 0 .8rem}
+      .ayat .sumber{font-weight:800; letter-spacing:.18em; font-size:.8rem; color:var(--emas-terang); margin:0; text-transform:uppercase}
+
+      /* ---------- 4 · MEMPELAI ---------- */
+      .kartu-mempelai{
+        max-width:400px; margin:0 auto; padding:20px 20px 26px; text-align:center;
+        border:1px solid var(--garis-tipis); border-radius:20px;
+        background:linear-gradient(180deg, rgba(26,39,87,.6), rgba(13,21,48,.4));
+        box-shadow:0 18px 40px rgba(0,0,0,.3);
+      }
+      .kartu-mempelai .bingkai{width:min(240px, 68vw); margin:0 auto; aspect-ratio:3/3.8}
+      .kartu-mempelai .peran{
+        font-size:.72rem; font-weight:700; letter-spacing:.3em; text-transform:uppercase;
+        color:var(--emas-terang); margin:0 0 1rem;
+      }
+      .kartu-mempelai h3{margin:1.1rem 0 0}
+      .nama-lengkap{
+        font-family:"Cormorant Garamond",serif; font-size:1.45rem; font-weight:700; margin:.35rem 0 .2rem;
+      }
+      .ortu{color:var(--redup); margin:.3rem 0 0; font-size:.96rem}
+      .ortu b{color:var(--krem); font-weight:700}
+      .pemisah-dan{
+        font-family:"Cormorant Garamond",serif; font-style:italic; font-size:2.2rem;
+        color:var(--emas-terang); text-align:center; margin:1.6rem 0;
+      }
+
+      /* ---------- 5 · COUNTDOWN ---------- */
+      .hitung-grid{display:flex; justify-content:center; gap:.6rem; flex-wrap:wrap; margin:1.7rem 0 .6rem}
+      .hitung-grid .sel{
+        min-width:74px; padding:.85rem .4rem .7rem; text-align:center;
+        border:1px solid var(--garis); border-radius:14px;
+        background:linear-gradient(180deg, rgba(26,39,87,.75), rgba(13,21,48,.55));
+      }
+      .hitung-grid .angka{font-family:"Cormorant Garamond",serif; font-size:2rem; font-weight:700; line-height:1; color:var(--emas-pucat)}
+      .hitung-grid .satuan{font-size:.7rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--redup); margin-top:.35rem}
+
+      /* ---------- 6 · ACARA ---------- */
+      .kartu-acara{
+        max-width:440px; margin:0 auto; padding:26px 22px 24px; text-align:center;
+        border:1px solid var(--garis); border-radius:20px;
+        background:linear-gradient(180deg, rgba(26,39,87,.72), rgba(13,21,48,.5));
+        box-shadow:0 18px 40px rgba(0,0,0,.32);
+      }
+      .kartu-acara .jenis{
+        font-family:"Cormorant Garamond",serif; font-style:italic; font-size:1.5rem;
+        color:var(--emas-pucat); margin:0;
+      }
+      .kartu-acara .ikon-besar{color:var(--emas-terang); margin:.9rem 0 .2rem; display:flex; justify-content:center}
+      .kartu-acara .hari{letter-spacing:.3em; text-transform:uppercase; font-size:.78rem; font-weight:700; color:var(--redup); margin:.4rem 0 0}
+      .kartu-acara .tgl-besar-x{font-family:"Cormorant Garamond",serif; font-size:2rem; font-weight:700; margin:.1rem 0}
+      .kartu-acara .jam{margin:0; color:var(--krem)}
+      .garis-orn{width:120px; height:1px; margin:1.1rem auto; background:linear-gradient(90deg, transparent, var(--emas), transparent); position:relative}
+      .garis-orn::after{content:""; position:absolute; left:50%; top:50%; width:6px; height:6px; border-radius:50%; background:var(--emas-terang); transform:translate(-50%,-50%)}
+      .kartu-acara .tempat{margin:0 0 1.1rem; color:var(--redup)}
+      .kartu-acara .tempat b{color:var(--krem); font-size:1.05rem}
+      /* placeholder peta statis bertema gelap */
+      .peta{
+        max-width:440px; margin:22px auto 0; border:1px solid var(--garis-tipis);
+        border-radius:16px; overflow:hidden; background:#0a1128;
+      }
+      .peta svg{display:block; width:100%; height:auto}
+      .peta .kaki{
+        display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+        padding:.8rem 1rem; background:rgba(20,31,71,.85); font-size:.88rem; color:var(--redup);
+      }
+      .peta .kaki b{color:var(--krem)}
+
+      /* ---------- 7 · KISAH ---------- */
+      .bab{max-width:520px; margin:0 auto 3rem; text-align:center}
+      .bab:last-child{margin-bottom:0}
+      .bab .bingkai{width:min(300px, 76vw); margin:0 auto; aspect-ratio:4/5}
+      .bab .cap{
+        display:inline-block; margin-top:1.05rem; padding:.28rem .95rem; border-radius:999px;
+        border:1px solid var(--garis); color:var(--emas-terang);
+        font-size:.72rem; font-weight:700; letter-spacing:.26em; text-transform:uppercase;
+      }
+      .bab h3{font-family:"Cormorant Garamond",serif; font-size:1.6rem; font-weight:700; margin:.7rem 0 .45rem}
+      .bab p{color:var(--redup); margin:0}
+
+      /* ---------- 8 · GALERI ---------- */
+      .galeri-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; max-width:560px; margin:1.6rem auto 0}
+      .galeri-grid figure{margin:0}
+      .galeri-grid .bingkai{aspect-ratio:3/4}
+      .galeri-grid figcaption{
+        text-align:center; font-size:.74rem; font-weight:700; letter-spacing:.24em;
+        text-transform:uppercase; color:var(--redup); margin-top:.55rem;
+      }
+      @media (min-width:640px){ .galeri-grid{grid-template-columns:repeat(3, 1fr)} }
+
+      /* ---------- 9 · TANDA KASIH ---------- */
+      .kartu-bank{
+        max-width:400px; margin:0 auto 16px; padding:20px 22px; text-align:center;
+        border:1px solid var(--garis); border-radius:18px;
+        background:linear-gradient(135deg, rgba(32,48,102,.85), rgba(16,25,58,.9));
+        box-shadow:0 16px 34px rgba(0,0,0,.3);
+      }
+      .kartu-bank .bank{font-family:"Cormorant Garamond",serif; font-size:1.3rem; font-weight:700; color:var(--emas-pucat); margin:0}
+      .kartu-bank .norek{font-size:1.42rem; font-weight:800; letter-spacing:.12em; margin:.45rem 0 .1rem}
+      .kartu-bank .an{color:var(--redup); margin:0 0 1rem; font-size:.94rem}
+      .btn-salin{
+        min-height:44px; padding:.55rem 1.3rem; border-radius:999px;
+        background:transparent; border:1px solid var(--emas); color:var(--emas-terang);
+        font-weight:700; font-size:.92rem; transition:background .18s ease, color .18s ease;
+      }
+      .btn-salin:hover{background:rgba(230,200,122,.1)}
+      .btn-salin.tercopy{background:var(--emas); color:#231a05}
+
+      /* ---------- 10 · RSVP & UCAPAN ---------- */
+      .form-rsvp{
+        max-width:440px; margin:1.7rem auto 0; padding:22px; text-align:left;
+        border:1px solid var(--garis-tipis); border-radius:18px;
+        background:linear-gradient(180deg, rgba(26,39,87,.6), rgba(13,21,48,.45));
+      }
+      .form-rsvp label{display:block; font-size:.8rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--emas-terang); margin:0 0 .4rem}
+      .form-rsvp input, .form-rsvp select, .form-rsvp textarea{
+        width:100%; margin:0 0 1.05rem; padding:.65rem .85rem;
+        background:rgba(8,14,34,.65); color:var(--krem);
+        border:1px solid var(--garis-tipis); border-radius:10px;
+      }
+      .form-rsvp textarea{min-height:96px; resize:vertical}
+      .form-rsvp input::placeholder, .form-rsvp textarea::placeholder{color:rgba(169,178,210,.55)}
+      .btn-kirim{
+        width:100%; min-height:50px; border-radius:999px; border:1px solid var(--emas-pucat);
+        background:linear-gradient(180deg, var(--emas-terang), var(--emas)); color:#231a05;
+        font-weight:800; font-size:1rem;
+      }
+      .daftar-ucapan{max-width:440px; margin:1.6rem auto 0; display:flex; flex-direction:column; gap:12px; text-align:left}
+      .ucapan{
+        padding:15px 17px; border:1px solid var(--garis-tipis); border-radius:14px;
+        background:rgba(20,31,71,.55);
+      }
+      .ucapan .dari{font-weight:800; color:var(--emas-pucat)}
+      .ucapan .status{
+        float:right; font-size:.7rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+        color:var(--emas-terang); border:1px solid var(--garis); border-radius:999px; padding:.14rem .6rem;
+      }
+      .ucapan .isi-ucapan{margin:.45rem 0 0; color:var(--krem); clear:both}
+
+      /* ---------- 11 · PENUTUP ---------- */
+      .foto-penutup{width:min(250px, 64vw); margin:0 auto 1.4rem; aspect-ratio:4/5}
+      .kredit{margin-top:2.6rem; font-size:.82rem; color:var(--redup); text-align:center}
+      .kredit b{color:var(--emas-terang)}
+
+      /* ---------- 12 · TOMBOL MUSIK ---------- */
+      #musicBtn{
+        position:fixed; right:16px; bottom:calc(16px + env(safe-area-inset-bottom)); z-index:60;
+        width:52px; height:52px; min-height:52px; border-radius:50%;
+        border:1.5px solid var(--emas); background:rgba(13,21,48,.92); color:var(--emas-terang);
+        display:none; align-items:center; justify-content:center;
+        box-shadow:0 10px 26px rgba(0,0,0,.45);
+      }
+      #musicBtn.show{display:flex}
+      #musicBtn .disc{
+        width:30px; height:30px; border-radius:50%; flex:none; position:relative;
+        border:1.5px solid var(--emas-terang);
+        background:radial-gradient(circle, var(--emas) 0 3px, transparent 3.5px), conic-gradient(from 20deg, rgba(230,200,122,.25), transparent 30%, rgba(230,200,122,.25) 55%, transparent 80%);
+      }
+      #musicBtn.playing .disc{animation:putar 5s linear infinite}
+      @keyframes putar{to{transform:rotate(360deg)}}
+      @media (prefers-reduced-motion: reduce){ #musicBtn.playing .disc{animation:none} }
+    </style>
+  </head>
+  <body class="terkunci">
+    <audio id="bgm" src="assets/modern/bintang/musik-latar.mp3" loop preload="auto"></audio>
+    <div class="lapis-bintang" id="lapisBintang" aria-hidden="true">
+      <svg class="rasi" style="left:1.5%;top:8%" width="132" height="97" viewBox="0 0 150 110" fill="none" opacity=".34" aria-hidden="true"><path d="M14 84 L48 52 L82 66 L112 30 L134 44" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="14" cy="84" r="2.6"/><circle cx="48" cy="52" r="2"/><circle cx="82" cy="66" r="2.4"/><circle cx="112" cy="30" r="2"/><circle cx="134" cy="44" r="3" fill="#e6c87a"/></g></svg>
+      <svg class="rasi" style="right:1%;top:35%" width="120" height="88" viewBox="0 0 150 110" fill="none" opacity=".3" aria-hidden="true"><path d="M14 30 L52 58 L84 40 L118 76" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="14" cy="30" r="2.4"/><circle cx="52" cy="58" r="2"/><circle cx="84" cy="40" r="2.6"/><circle cx="118" cy="76" r="3" fill="#e6c87a"/></g></svg>
+      <svg class="rasi" style="left:1%;top:62%" width="124" height="91" viewBox="0 0 150 110" fill="none" opacity=".3" aria-hidden="true"><path d="M20 92 L58 60 L92 74 L126 22" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="20" cy="92" r="2.4"/><circle cx="58" cy="60" r="2"/><circle cx="92" cy="74" r="2.4"/><circle cx="126" cy="22" r="3" fill="#e6c87a"/></g></svg>
+      <svg class="rasi" style="right:2%;top:86%" width="128" height="94" viewBox="0 0 150 110" fill="none" opacity=".34" aria-hidden="true"><path d="M16 76 L50 44 L86 60 L120 26" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="16" cy="76" r="2.4"/><circle cx="50" cy="44" r="2"/><circle cx="86" cy="60" r="2.4"/><circle cx="120" cy="26" r="3" fill="#e6c87a"/></g></svg>
+    </div>
+
+    <!-- ============ 1 · SAMPUL: PETA BINTANG ============ -->
+    <div id="sampul" role="dialog" aria-label="Sampul undangan">
+      <div class="sampul-bintang" id="sampulBintang" aria-hidden="true"></div>
+      <div class="cahaya" aria-hidden="true"></div>
+      <div class="orn" style="left:4px;top:6.5%" aria-hidden="true"><svg width="118" height="86" viewBox="0 0 150 110" fill="none" opacity=".55"><path d="M14 84 L48 52 L82 66 L112 30 L134 44" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="14" cy="84" r="2.6"/><circle cx="48" cy="52" r="2"/><circle cx="82" cy="66" r="2.4"/><circle cx="112" cy="30" r="2"/><circle cx="134" cy="44" r="3" fill="#e6c87a"/></g></svg></div>
+      <div class="orn" style="right:4px;top:11%" aria-hidden="true"><svg width="104" height="80" viewBox="0 0 150 110" fill="none" opacity=".5"><path d="M14 30 L52 58 L84 40 L118 76" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="14" cy="30" r="2.4"/><circle cx="52" cy="58" r="2"/><circle cx="84" cy="40" r="2.6"/><circle cx="118" cy="76" r="3" fill="#e6c87a"/></g></svg></div>
+      <div class="sampul-in">
+        <p class="sampul-label">Undangan Pernikahan</p>
+        <p class="sampul-sub">tertulis di peta bintang malam itu</p>
+
+        <div class="peta-bintang" aria-hidden="true">
+          <svg class="rangka" viewBox="0 0 300 300" fill="none">
+            <circle cx="150" cy="150" r="147" stroke="#c9a24d" stroke-width="1.4"/>
+            <circle cx="150" cy="150" r="138" stroke="#e6c87a" stroke-width=".7" opacity=".65"/>
+            <circle cx="150" cy="150" r="112" stroke="#e6c87a" stroke-width=".8" stroke-dasharray="2 5" opacity=".8"/>
+            <circle cx="150" cy="150" r="104" stroke="#c9a24d" stroke-width="1"/>
+            <g stroke="#e6c87a" stroke-width="1.4">
+              <path d="M150 3v12M150 285v12M3 150h12M285 150h12"/>
+              <path d="M46 46l8 8M254 246l-8-8M254 46l-8 8M46 254l8-8" opacity=".7"/>
+            </g>
+            <g stroke="#e6c87a" stroke-width=".8" opacity=".55">
+              <path d="M150 38v224M38 150h224"/>
+              <path d="M71 71l158 158M229 71L71 229" stroke-dasharray="1 6"/>
+            </g>
+            <!-- konstelasi: dua bintang utama dihubungkan garis emas -->
+            <path d="M96 84 L138 118 L172 104 L206 142 L188 190 L226 214" stroke="#e6c87a" stroke-width="1" opacity=".9"/>
+            <g fill="#f6efdd">
+              <circle cx="96" cy="84" r="3.2"/><circle cx="138" cy="118" r="2.4"/>
+              <circle cx="172" cy="104" r="2.8"/><circle cx="206" cy="142" r="2.2"/>
+              <circle cx="188" cy="190" r="2.6"/><circle cx="226" cy="214" r="3.4" fill="#e6c87a"/>
+            </g>
+            <g fill="#f6efdd" opacity=".75">
+              <circle cx="70" cy="150" r="1.6"/><circle cx="120" cy="226" r="1.5"/>
+              <circle cx="238" cy="96" r="1.6"/><circle cx="88" cy="238" r="1.3"/>
+              <circle cx="150" cy="66" r="1.4"/><circle cx="246" cy="176" r="1.3"/>
+            </g>
+            <path d="M226 206v16M218 214h16" stroke="#e6c87a" stroke-width="1.2"/>
+          </svg>
+          <div class="foto-bulat"><img src="assets/modern/bintang/cover-ai.webp" alt="" /></div>
+          <span class="koord koord-atas">11 · 09 · 2027</span>
+          <span class="koord koord-kiri">RA 11j 09m</span>
+          <span class="koord koord-kanan">DEK −09° 11′</span>
+        </div>
+
+        <h1 class="sampul-nama">Dimas &amp; Sinta</h1>
+        <p class="sampul-tanggal">SABTU · 11 SEPTEMBER 2027</p>
+
+        <div class="kepada">
+          <p>Kepada Yth.<br />Bapak/Ibu/Saudara/i<br /><span class="nama-tamu" id="namaTamu">Tamu Undangan</span></p>
+          <p class="catatan">*Mohon maaf apabila terdapat kesalahan penulisan nama &amp; gelar</p>
+        </div>
+        <button class="btn-buka" id="btnBuka" type="button">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l1.7 4.6L18 9.2l-4.3 1.6L12 15.4l-1.7-4.6L6 9.2l4.3-1.6L12 3Z" fill="#231a05"/><path d="M18.6 15.5l.8 2.1 2.1.8-2.1.8-.8 2.1-.8-2.1-2.1-.8 2.1-.8.8-2.1Z" fill="#231a05"/></svg>
+          Buka Undangan
+        </button>
+      </div>
+    </div>
+
+    <div class="bungkus">
+      <!-- ============ 2 · PEMBUKA ============ -->
+      <section class="hero" id="beranda">
+        <div class="orn" style="right:-30px;top:26px;opacity:.5" aria-hidden="true"><svg width="150" height="110" viewBox="0 0 150 110" fill="none"><path d="M14 84 L48 52 L82 66 L112 30 L134 44" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="14" cy="84" r="2.6"/><circle cx="48" cy="52" r="2"/><circle cx="82" cy="66" r="2.4"/><circle cx="112" cy="30" r="2"/><circle cx="134" cy="44" r="3" fill="#e6c87a"/></g></svg></div>
+        <p class="kicker muncul">Di Bawah Langit yang Sama</p>
+        <h2 class="judul muncul">Dua Bintang,<br /><em>Satu Peta</em></h2>
+        <div class="bingkai foto-hero muncul"><img src="assets/modern/bintang/berdua-ai.webp" alt="Dimas dan Sinta bergandengan tangan di teras hotel saat senja berbintang" /></div>
+        <p class="pembuka muncul" style="margin-top:20px">The Wedding of</p>
+        <h2 class="nama-script hero-nama muncul">Dimas &amp; Sinta</h2>
+        <p class="tanggal-hero muncul">Sabtu, 11 September 2027</p>
+        <p class="tempat-hero muncul">Hotel Mulia Senayan · Jakarta</p>
+      </section>
+
+      <!-- ============ 3 · AYAT SUCI ============ -->
+      <section id="ayat" class="gelap">
+        <div class="orn" style="left:-24px;bottom:30px;opacity:.45" aria-hidden="true"><svg width="130" height="100" viewBox="0 0 150 110" fill="none"><path d="M14 30 L52 58 L84 40 L118 76" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="14" cy="30" r="2.4"/><circle cx="52" cy="58" r="2"/><circle cx="84" cy="40" r="2.6"/><circle cx="118" cy="76" r="3" fill="#e6c87a"/></g></svg></div>
+        <p class="kicker muncul">Ayat Suci</p>
+        <h2 class="judul muncul">Ditulis oleh<br /><em>Sang Pencipta</em></h2>
+        <p class="pembuka muncul">Dengan memohon rahmat dan ridha Allah SWT, kami mengundang Bapak, Ibu, dan Saudara/i untuk hadir di hari bahagia kami.</p>
+        <div class="ayat muncul">
+          <p class="arab">وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً</p>
+          <p class="arti">&ldquo;Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.&rdquo;</p>
+          <p class="sumber">QS. Ar-Rum : 21</p>
+        </div>
+      </section>
+
+      <!-- ============ 4 · MEMPELAI ============ -->
+      <section id="mempelai">
+        <div class="orn" style="right:-34px;top:120px;opacity:.4" aria-hidden="true"><svg width="140" height="120" viewBox="0 0 150 110" fill="none"><path d="M20 92 L58 60 L92 74 L126 22" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="20" cy="92" r="2.4"/><circle cx="58" cy="60" r="2"/><circle cx="92" cy="74" r="2.4"/><circle cx="126" cy="22" r="3" fill="#e6c87a"/></g></svg></div>
+        <p class="kicker muncul">Dua Bintang Utama</p>
+        <h2 class="judul muncul">Mempelai</h2>
+        <p class="pembuka muncul">Maha Suci Allah yang telah menciptakan makhluk-Nya berpasang-pasangan. Ya Allah, perkenankanlah kami merangkaikan kasih sayang yang Kau ciptakan di antara kami.</p>
+        <div style="height:30px"></div>
+
+        <article class="kartu-mempelai muncul">
+          <p class="peran">Mempelai Pria</p>
+          <div class="bingkai lengkung"><img src="assets/modern/bintang/groom-ai.webp" alt="Potret Dimas, mempelai pria, berjas navy dengan latar malam berbintang" /></div>
+          <h3 class="nama-script">Dimas</h3>
+          <p class="nama-lengkap">Dimas Arya Nugraha</p>
+          <p class="ortu">Putra dari pasangan<br /><b>Bapak H. Nugroho Santoso</b><br />dan <b>Ibu Hj. Ratna Sari</b></p>
+        </article>
+
+        <div class="pemisah-dan muncul">&amp;</div>
+
+        <article class="kartu-mempelai muncul">
+          <p class="peran">Mempelai Wanita</p>
+          <div class="bingkai lengkung"><img src="assets/modern/bintang/bride-ai.webp" alt="Potret Sinta, mempelai wanita, bergaun ivory memegang buket mawar putih" /></div>
+          <h3 class="nama-script">Sinta</h3>
+          <p class="nama-lengkap">Sinta Maharani</p>
+          <p class="ortu">Putri dari pasangan<br /><b>Bapak H. Mahardi Wijaya</b><br />dan <b>Ibu Hj. Laras Wulandari</b></p>
+        </article>
+      </section>
+
+      <!-- ============ 5 · COUNTDOWN ============ -->
+      <section id="hitung" class="gelap">
+        <div class="orn" style="left:-28px;top:24px;opacity:.45" aria-hidden="true"><svg width="140" height="100" viewBox="0 0 150 110" fill="none"><path d="M16 76 L50 44 L86 60 L120 26" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="16" cy="76" r="2.4"/><circle cx="50" cy="44" r="2"/><circle cx="86" cy="60" r="2.4"/><circle cx="120" cy="26" r="3" fill="#e6c87a"/></g></svg></div>
+        <p class="kicker muncul">Menghitung Hari</p>
+        <h2 class="judul muncul">Hitung Mundur</h2>
+        <p class="pembuka muncul">Sampai malam di mana dua bintang ini resmi berbagi satu langit:</p>
+        <div class="hitung-grid muncul" role="timer" aria-label="Hitung mundur menuju 11 September 2027">
+          <div class="sel"><div class="angka" id="cd-hari">–</div><div class="satuan">Hari</div></div>
+          <div class="sel"><div class="angka" id="cd-jam">–</div><div class="satuan">Jam</div></div>
+          <div class="sel"><div class="angka" id="cd-menit">–</div><div class="satuan">Menit</div></div>
+          <div class="sel"><div class="angka" id="cd-detik">–</div><div class="satuan">Detik</div></div>
+        </div>
+        <div class="pusat muncul" style="margin-top:14px">
+          <a class="btn garis" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Pernikahan%20Dimas%20%26%20Sinta&amp;dates=20270911T010000Z/20270911T030000Z&amp;details=Akad%20Nikah%20Dimas%20Arya%20Nugraha%20%26%20Sinta%20Maharani&amp;location=Hotel%20Mulia%20Senayan%2C%20Jakarta" target="_blank" rel="noopener">Simpan ke Kalender</a>
+        </div>
+      </section>
+
+      <!-- ============ 6 · ACARA ============ -->
+      <section id="acara">
+        <div class="orn" style="right:-30px;bottom:40px;opacity:.4" aria-hidden="true"><svg width="140" height="100" viewBox="0 0 150 110" fill="none"><path d="M14 84 L48 52 L82 66 L112 30 L134 44" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="14" cy="84" r="2.6"/><circle cx="48" cy="52" r="2"/><circle cx="82" cy="66" r="2.4"/><circle cx="112" cy="30" r="2"/><circle cx="134" cy="44" r="3" fill="#e6c87a"/></g></svg></div>
+        <p class="kicker muncul">Koordinat Hari Bahagia</p>
+        <h2 class="judul muncul">Rangkaian Acara</h2>
+        <p class="pembuka muncul">Dengan segala kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i untuk hadir pada:</p>
+        <div style="height:28px"></div>
+
+        <article class="kartu-acara muncul">
+          <p class="jenis">Akad Nikah</p>
+          <div class="ikon-besar" aria-hidden="true">
+            <svg width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="19" cy="27" r="11"/><circle cx="30" cy="27" r="11"/><path d="M24 4l1.5 3.6L29 9l-3.5 1.4L24 14l-1.5-3.6L19 9l3.5-1.4L24 4Z" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <p class="hari">Sabtu</p>
+          <p class="tgl-besar-x">11 September 2027</p>
+          <p class="jam">Pukul 08.00 – 10.00 WIB</p>
+          <div class="garis-orn" aria-hidden="true"></div>
+          <p class="tempat"><b>Hotel Mulia Senayan</b><br />Jl. Asia Afrika, Senayan,<br />Jakarta Pusat</p>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Hotel+Mulia+Senayan+Jakarta" target="_blank" rel="noopener">Lihat Lokasi</a>
+        </article>
+
+        <div style="height:22px"></div>
+
+        <article class="kartu-acara muncul">
+          <p class="jenis">Resepsi</p>
+          <div class="ikon-besar" aria-hidden="true">
+            <svg width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 5l2.2 5.3 5.7.5-4.3 3.8 1.3 5.6L24 17.3l-4.9 2.9 1.3-5.6-4.3-3.8 5.7-.5L24 5Z"/><path d="M10 33c2 5 7.5 9 14 9s12-4 14-9"/><circle cx="10" cy="30" r="1.6" fill="currentColor" stroke="none"/><circle cx="38" cy="30" r="1.6" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <p class="hari">Sabtu</p>
+          <p class="tgl-besar-x">11 September 2027</p>
+          <p class="jam">Pukul 11.00 – 13.00 WIB</p>
+          <div class="garis-orn" aria-hidden="true"></div>
+          <p class="tempat"><b>Hotel Mulia Senayan</b><br />Jl. Asia Afrika, Senayan,<br />Jakarta Pusat</p>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Hotel+Mulia+Senayan+Jakarta" target="_blank" rel="noopener">Lihat Lokasi</a>
+        </article>
+
+        <div class="peta muncul" aria-label="Peta lokasi Hotel Mulia Senayan, Jakarta">
+          <svg viewBox="0 0 440 190" role="img" aria-label="Ilustrasi peta kawasan Senayan dengan penanda Hotel Mulia Senayan">
+            <rect width="440" height="190" fill="#0a1128"/>
+            <g stroke="#22315f" stroke-width="10" fill="none">
+              <path d="M-10 150 C 90 130, 200 160, 300 128 S 420 96, 452 104"/>
+              <path d="M60 -10 C 80 60, 60 130, 84 200"/>
+              <path d="M210 -10 C 200 70, 226 140, 214 200"/>
+              <path d="M340 -10 C 330 60, 356 130, 344 200"/>
+            </g>
+            <g stroke="#2c3d75" stroke-width="4" fill="none">
+              <path d="M-10 62 C 120 50, 300 74, 452 44"/>
+              <path d="M120 -10 C 140 70, 120 140, 140 200"/>
+              <path d="M-10 108 C 140 100, 300 116, 452 150"/>
+            </g>
+            <path d="M28 168 C 120 140, 190 128, 246 96" stroke="#e6c87a" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+            <circle cx="28" cy="168" r="3.4" fill="#f6efdd"/>
+            <g transform="translate(252 88)">
+              <path d="M0 12 C -11 -2, -13 -8, -13 -14 a13 13 0 1 1 26 0 C 13 -8, 11 -2, 0 12Z" fill="#e6c87a" stroke="#0d1530" stroke-width="1.4"/>
+              <circle cy="-14" r="5" fill="#0d1530"/>
+              <path d="M0 -18.4l1.1 2.5 2.5.3-1.9 1.7.6 2.5-2.3-1.4-2.3 1.4.6-2.5-1.9-1.7 2.5-.3L0 -18.4Z" fill="#e6c87a"/>
+            </g>
+            <g fill="#f6efdd" opacity=".8">
+              <circle cx="70" cy="34" r="1.5"/><circle cx="392" cy="58" r="1.5"/><circle cx="160" cy="160" r="1.3"/><circle cx="410" cy="160" r="1.4"/><circle cx="318" cy="24" r="1.2"/>
+            </g>
+            <text x="252" y="122" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="700" fill="#f2e2b6">Hotel Mulia Senayan</text>
+            <text x="16" y="26" font-family="Plus Jakarta Sans, sans-serif" font-size="9" letter-spacing="2" fill="#a9b2d2">SENAYAN · JAKARTA</text>
+          </svg>
+          <div class="kaki">
+            <span><b>Hotel Mulia Senayan</b> — Jl. Asia Afrika, Jakarta Pusat</span>
+            <a class="btn garis" style="min-height:44px;padding:.5rem 1.1rem" href="https://www.google.com/maps/search/?api=1&amp;query=Hotel+Mulia+Senayan+Jakarta" target="_blank" rel="noopener">Buka di Google Maps</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 7 · KISAH CINTA ============ -->
+      <section id="kisah" class="gelap">
+        <div class="orn" style="right:-26px;top:30px;opacity:.4" aria-hidden="true"><svg width="140" height="100" viewBox="0 0 150 110" fill="none"><path d="M14 30 L52 58 L84 40 L118 76" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="14" cy="30" r="2.4"/><circle cx="52" cy="58" r="2"/><circle cx="84" cy="40" r="2.6"/><circle cx="118" cy="76" r="3" fill="#e6c87a"/></g></svg></div>
+        <p class="kicker muncul">Garis Rasi Kami</p>
+        <h2 class="judul muncul">Kisah Cinta</h2>
+        <p class="pembuka muncul">Setiap rasi bintang tersusun dari titik-titik yang tampak jauh, sampai ada garis yang menghubungkannya. Inilah titik-titik kami.</p>
+        <div style="height:32px"></div>
+
+        <article class="bab muncul">
+          <div class="bingkai"><img src="assets/modern/bintang/kisah-1-ai.webp" alt="Dimas dan Sinta tertawa di samping teleskop pada acara komunitas astronomi kampus" /></div>
+          <span class="cap">Bintang 01 · 2019</span>
+          <h3>Babak Satu — Bertemu di Bawah Bintang</h3>
+          <p>Di sebuah malam pengamatan bintang komunitas astronomi kampus, Sinta mengantre di teleskop yang dijaga Dimas. Langit malam itu biasa saja — tapi antrean yang seharusnya lima menit berubah jadi obrolan sampai acara bubar, dan nomor telepon yang bertukar di bawah langit yang sama.</p>
+        </article>
+
+        <article class="bab muncul">
+          <div class="bingkai"><img src="assets/modern/bintang/kisah-2-ai.webp" alt="Dimas dan Sinta bergandengan tangan menatap kubah bintang di planetarium" /></div>
+          <span class="cap">Bintang 02 · 2023</span>
+          <h3>Babak Dua — Menghafal Langit Berdua</h3>
+          <p>Tahun-tahun berikutnya diisi kencan yang tidak biasa: pertunjukan planetarium, berburu langit cerah ke pinggir kota, dan menghafal nama rasi bintang satu per satu. Di setiap perjalanan pulang, kami belajar hal yang sama — sejauh apa pun bintang terlihat, yang membuat perjalanan berarti adalah siapa yang duduk di sebelahmu.</p>
+        </article>
+
+        <article class="bab muncul">
+          <div class="bingkai"><img src="assets/modern/bintang/kisah-3-ai.webp" alt="Dimas melamar Sinta di taman kota di bawah langit malam berbintang" /></div>
+          <span class="cap">Bintang 03 · 2026</span>
+          <h3>Babak Tiga — Garis Terakhir Terhubung</h3>
+          <p>Di taman kota tempat kami pertama kali menatap langit berdua, di bawah bintang yang sama seperti malam perkenalan, Dimas berlutut dan membuka kotak cincin. Sinta menjawab ya — dan peta bintang kami pun lengkap: dua bintang, satu garis, selamanya.</p>
+        </article>
+      </section>
+
+      <!-- ============ 8 · GALERI ============ -->
+      <section id="galeri">
+        <div class="orn" style="left:-26px;top:36px;opacity:.38" aria-hidden="true"><svg width="140" height="100" viewBox="0 0 150 110" fill="none"><path d="M20 92 L58 60 L92 74 L126 22" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="20" cy="92" r="2.4"/><circle cx="58" cy="60" r="2"/><circle cx="92" cy="74" r="2.4"/><circle cx="126" cy="22" r="3" fill="#e6c87a"/></g></svg></div>
+        <p class="kicker muncul">Album Langit Kami</p>
+        <h2 class="judul muncul">Galeri</h2>
+        <div class="galeri-grid">
+          <figure class="muncul"><div class="bingkai"><img src="assets/modern/bintang/cover-ai.webp" alt="Dimas dan Sinta menatap Bima Sakti bergandengan tangan" /></div><figcaption>Di Bawah Bima Sakti · 01</figcaption></figure>
+          <figure class="muncul"><div class="bingkai"><img src="assets/modern/bintang/kisah-1-ai.webp" alt="Pertemuan pertama di acara komunitas astronomi" /></div><figcaption>Teleskop Pertama · 02</figcaption></figure>
+          <figure class="muncul"><div class="bingkai"><img src="assets/modern/bintang/kisah-2-ai.webp" alt="Menatap kubah bintang di planetarium" /></div><figcaption>Planetarium · 03</figcaption></figure>
+          <figure class="muncul"><div class="bingkai"><img src="assets/modern/bintang/berdua-ai.webp" alt="Bergandengan tangan di teras hotel saat senja" /></div><figcaption>Senja di Teras · 04</figcaption></figure>
+          <figure class="muncul"><div class="bingkai"><img src="assets/modern/bintang/kisah-3-ai.webp" alt="Lamaran di taman kota di bawah bintang" /></div><figcaption>Lamaran · 05</figcaption></figure>
+          <figure class="muncul"><div class="bingkai"><img src="assets/modern/bintang/bride-ai.webp" alt="Potret Sinta memegang buket mawar putih" /></div><figcaption>Bintang Utama · 06</figcaption></figure>
+        </div>
+      </section>
+
+      <!-- ============ 9 · TANDA KASIH ============ -->
+      <section id="kasih" class="gelap">
+        <div class="orn" style="right:-28px;bottom:34px;opacity:.4" aria-hidden="true"><svg width="140" height="100" viewBox="0 0 150 110" fill="none"><path d="M16 76 L50 44 L86 60 L120 26" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="16" cy="76" r="2.4"/><circle cx="50" cy="44" r="2"/><circle cx="86" cy="60" r="2.4"/><circle cx="120" cy="26" r="3" fill="#e6c87a"/></g></svg></div>
+        <p class="kicker muncul">Amplop Digital</p>
+        <h2 class="judul muncul">Tanda Kasih</h2>
+        <p class="pembuka muncul">Doa restu Bapak/Ibu/Saudara/i adalah hadiah terindah bagi kami. Namun apabila berkenan memberikan tanda kasih, kami sediakan dengan penuh terima kasih:</p>
+        <div style="height:26px"></div>
+
+        <div class="kartu-bank muncul">
+          <p class="bank">Bank BCA</p>
+          <p class="norek">8210 4567 90</p>
+          <p class="an">a.n. Dimas Arya Nugraha</p>
+          <button class="btn-salin" type="button" data-salin="8210456790">Salin Nomor</button>
+        </div>
+
+        <div class="kartu-bank muncul">
+          <p class="bank">Bank Mandiri</p>
+          <p class="norek">1370 0111 0927</p>
+          <p class="an">a.n. Sinta Maharani</p>
+          <button class="btn-salin" type="button" data-salin="137001110927">Salin Nomor</button>
+        </div>
+      </section>
+
+      <!-- ============ 10 · RSVP & UCAPAN ============ -->
+      <section id="rsvp">
+        <div class="orn" style="left:-24px;bottom:40px;opacity:.38" aria-hidden="true"><svg width="140" height="100" viewBox="0 0 150 110" fill="none"><path d="M14 84 L48 52 L82 66 L112 30 L134 44" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="14" cy="84" r="2.6"/><circle cx="48" cy="52" r="2"/><circle cx="82" cy="66" r="2.4"/><circle cx="112" cy="30" r="2"/><circle cx="134" cy="44" r="3" fill="#e6c87a"/></g></svg></div>
+        <p class="kicker muncul">Konfirmasi &amp; Doa</p>
+        <h2 class="judul muncul">RSVP &amp; Ucapan</h2>
+        <p class="pembuka muncul">Mohon konfirmasi kehadiran dan titipkan doa terbaik agar malam bahagia kami semakin terang.</p>
+
+        <form class="form-rsvp muncul" id="formRsvp">
+          <label for="fNama">Nama</label>
+          <input id="fNama" name="nama" type="text" placeholder="Nama Anda" required />
+          <label for="fHadir">Konfirmasi Kehadiran</label>
+          <select id="fHadir" name="kehadiran">
+            <option value="Hadir">Hadir, Insya Allah</option>
+            <option value="Ragu">Masih Ragu</option>
+            <option value="Berhalangan">Berhalangan Hadir</option>
+          </select>
+          <label for="fUcapan">Ucapan &amp; Doa</label>
+          <textarea id="fUcapan" name="ucapan" placeholder="Tulis ucapan &amp; doa terbaik untuk kedua mempelai…" required></textarea>
+          <button class="btn-kirim" type="submit">Kirim Ucapan</button>
+        </form>
+
+        <div class="daftar-ucapan" id="daftarUcapan">
+          <article class="ucapan muncul">
+            <span class="dari">Keluarga Besar Nugraha</span><span class="status">Hadir</span>
+            <p class="isi-ucapan">Selamat, Nak. Semoga pernikahan kalian seterang langit malam itu — tenang, luas, dan selalu saling menemukan. Samawa sampai akhir.</p>
+          </article>
+          <article class="ucapan muncul">
+            <span class="dari">Nadia &amp; Fajar</span><span class="status">Hadir</span>
+            <p class="isi-ucapan">Dari antre teleskop sampai pelaminan! Bukti nyata kalau jodoh memang sudah tertulis di bintang-bintang. Sampai jumpa di Hotel Mulia!</p>
+          </article>
+          <article class="ucapan muncul">
+            <span class="dari">Pakde Bambang &amp; Bude Rini</span><span class="status">Hadir</span>
+            <p class="isi-ucapan">Barakallahu lakuma wa baraka &lsquo;alaikuma wa jama&rsquo;a bainakuma fii khair. Selamat untuk Dimas &amp; Sinta, lancar sampai hari H!</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ 11 · PENUTUP ============ -->
+      <section class="penutup gelap">
+        <div class="orn" style="right:-24px;top:28px;opacity:.4" aria-hidden="true"><svg width="140" height="100" viewBox="0 0 150 110" fill="none"><path d="M14 30 L52 58 L84 40 L118 76" stroke="#e6c87a" stroke-width="1"/><g fill="#f6efdd"><circle cx="14" cy="30" r="2.4"/><circle cx="52" cy="58" r="2"/><circle cx="84" cy="40" r="2.6"/><circle cx="118" cy="76" r="3" fill="#e6c87a"/></g></svg></div>
+        <p class="kicker muncul">Sampai Jumpa di Bawah Bintang</p>
+        <h2 class="judul muncul">Terima Kasih</h2>
+        <div class="bingkai foto-penutup muncul"><img src="assets/modern/bintang/berdua-ai.webp" alt="Dimas dan Sinta bergandengan tangan di teras hotel saat senja berbintang" /></div>
+        <p class="pembuka muncul">Merupakan suatu kehormatan dan kebahagiaan bagi kami beserta keluarga apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kedua mempelai.</p>
+        <p class="pembuka muncul" style="margin-top:14px">Atas kehadiran serta doa restu yang diberikan, kami mengucapkan terima kasih yang sebesar-besarnya.</p>
+        <p class="muncul" style="text-align:center;margin-top:22px">Wassalamu&rsquo;alaikum Warahmatullahi Wabarakatuh</p>
+        <p class="muncul" style="text-align:center;margin-bottom:2px">Kami yang berbahagia,</p>
+        <h3 class="nama-script muncul">Dimas &amp; Sinta</h3>
+        <p class="muncul" style="text-align:center;color:var(--redup)">Beserta keluarga besar Nugraha &amp; Wijaya</p>
+        <div class="kredit muncul">Dibuat dengan ♥ oleh <b>SeikatJanji</b> · seikatjanji.my.id</div>
+      </section>
+    </div>
+
+    <!-- ============ 12 · TOMBOL MUSIK ============ -->
+    <button id="musicBtn" type="button" aria-label="Putar atau hentikan musik latar" aria-pressed="false"><span class="disc" aria-hidden="true"></span></button>
+
+    <script>
+      (function(){
+        "use strict";
+        var $ = function(s){ return document.querySelector(s); };
+
+        /* ----- lapisan bintang berkelip ----- */
+        function taburBintang(wadah, jumlah){
+          if (!wadah) return;
+          for (var i = 0; i < jumlah; i++){
+            var b = document.createElement("i");
+            var uk = (Math.random() * 1.8 + 0.7).toFixed(1);
+            b.style.width = uk + "px"; b.style.height = uk + "px";
+            b.style.left = (Math.random() * 100).toFixed(2) + "%";
+            b.style.top = (Math.random() * 100).toFixed(2) + "%";
+            b.style.animationDelay = (Math.random() * 3.6).toFixed(2) + "s";
+            b.style.animationDuration = (2.6 + Math.random() * 2.6).toFixed(2) + "s";
+            wadah.appendChild(b);
+          }
+        }
+        taburBintang($("#lapisBintang"), 185);
+        taburBintang($("#sampulBintang"), 140);
+
+        /* ----- nama tamu dari parameter ?to= ----- */
+        var tamu = new URLSearchParams(window.location.search).get("to");
+        if (tamu) $("#namaTamu").textContent = tamu;
+
+        /* ----- animasi muncul saat scroll ----- */
+        var io = new IntersectionObserver(function(entries){
+          entries.forEach(function(e, i){
+            if (e.isIntersecting){
+              e.target.style.transitionDelay = (Math.min(i, 4) * 70) + "ms";
+              e.target.classList.add("tampak");
+              io.unobserve(e.target);
+            }
+          });
+        }, {threshold: .12});
+        document.querySelectorAll(".muncul").forEach(function(el){ io.observe(el); });
+
+        /* ----- musik: pola standar (bgm "Perfect" + penjaga kbAudio) -----
+           Bila generator menyuntikkan lagu unggahan pengguna sebagai #kbAudio,
+           lagu itulah yang diputar dan bgm bawaan tidak ikut berbunyi. */
+        var bgm = document.getElementById("bgm");
+        var kbAudio = document.getElementById("kbAudio");
+        var aktif = kbAudio || bgm;
+        if (kbAudio && bgm) { bgm.pause(); bgm.removeAttribute("autoplay"); }
+        var musicBtn = $("#musicBtn");
+        var musicOn = false;
+        function setMusicUI(){
+          musicBtn.classList.toggle("playing", musicOn);
+          musicBtn.setAttribute("aria-pressed", musicOn ? "true" : "false");
+        }
+        function startMusic(){
+          /* lagu unggahan pengguna dari Generator (#kbAudio) selalu didahulukan */
+          if (document.getElementById("kbAudio")) return;
+          var p = aktif.play();
+          if (p && p.catch) p.catch(function(){});
+          musicOn = true; setMusicUI();
+        }
+        function stopMusic(){ aktif.pause(); musicOn = false; setMusicUI(); }
+        musicBtn.addEventListener("click", function(){ musicOn ? stopMusic() : startMusic(); });
+        window.addEventListener("message", function(e){ if (e.data === "kb-stop-music") stopMusic(); });
+
+        /* ----- buka undangan: transisi "langit terbuka" -----
+           Klik: musik mulai + bintang berpendar + 3 meteor melesat + lingkaran
+           peta berdenyut, lalu gerbang larut (fade + zoom halus) ke langit
+           halaman. Total ±2 dtk. Reduced-motion: fade cepat saja. */
+        var sampul = $("#sampul");
+        var sudahBuka = false;
+        $("#btnBuka").addEventListener("click", function(){
+          if (sudahBuka) return;
+          sudahBuka = true;
+          musicBtn.classList.add("show");
+          startMusic();
+          window.scrollTo(0, 0);
+          document.body.classList.remove("terkunci");
+          var kurangi = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (kurangi){
+            sampul.style.transition = "opacity .25s ease";
+            sampul.style.opacity = "0";
+            sampul.style.pointerEvents = "none";
+            setTimeout(function(){ sampul.classList.add("hilang"); }, 280);
+            return;
+          }
+          sampul.classList.add("transisi");
+          var lapis = $("#sampulBintang");
+          var posisiMeteor = [
+            { top: "5%",  left: "56%" },
+            { top: "15%", left: "78%" },
+            { top: "1%",  left: "30%" }
+          ];
+          posisiMeteor.forEach(function(pos, i){
+            var m = document.createElement("span");
+            m.className = "meteor";
+            m.style.top = pos.top; m.style.left = pos.left;
+            m.style.animationDelay = (i * 0.3) + "s";
+            lapis.appendChild(m);
+            setTimeout(function(){ m.remove(); }, 2400);
+          });
+          setTimeout(function(){ sampul.classList.add("larut"); }, 600);
+          setTimeout(function(){
+            sampul.classList.add("hilang");
+            sampul.classList.remove("transisi", "larut");
+          }, 2100);
+        });
+
+        /* ----- hitung mundur ke Sabtu, 11 September 2027 pukul 08.00 WIB ----- */
+        var target = new Date("2027-09-11T08:00:00+07:00").getTime();
+        var elH = $("#cd-hari"), elJ = $("#cd-jam"), elM = $("#cd-menit"), elD = $("#cd-detik");
+        function dua(n){ return (n < 10 ? "0" : "") + n; }
+        function tik(){
+          var sisa = target - Date.now();
+          if (sisa < 0) sisa = 0;
+          elH.textContent = Math.floor(sisa / 864e5);
+          elJ.textContent = dua(Math.floor(sisa % 864e5 / 36e5));
+          elM.textContent = dua(Math.floor(sisa % 36e5 / 6e4));
+          elD.textContent = dua(Math.floor(sisa % 6e4 / 1e3));
+        }
+        tik(); setInterval(tik, 1000);
+
+        /* ----- salin nomor rekening ----- */
+        document.querySelectorAll("[data-salin]").forEach(function(btn){
+          btn.addEventListener("click", function(){
+            var teks = btn.getAttribute("data-salin");
+            function selesai(){
+              btn.textContent = "Tersalin ✓"; btn.classList.add("tercopy");
+              setTimeout(function(){ btn.textContent = "Salin Nomor"; btn.classList.remove("tercopy"); }, 2000);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText){
+              navigator.clipboard.writeText(teks).then(selesai).catch(selesai);
+            } else {
+              var ta = document.createElement("textarea");
+              ta.value = teks; document.body.appendChild(ta); ta.select();
+              try { document.execCommand("copy"); } catch(e){}
+              document.body.removeChild(ta); selesai();
+            }
+          });
+        });
+
+        /* ----- RSVP & Ucapan: pola standar dalam halaman (bukan wa.me) ----- */
+        var formRsvp = $("#formRsvp");
+        var btnKirim = formRsvp.querySelector(".btn-kirim");
+        formRsvp.addEventListener("submit", function(ev){
+          ev.preventDefault();
+          var nama = $("#fNama").value.trim();
+          var hadir = $("#fHadir").value;
+          var ucapan = $("#fUcapan").value.trim();
+          if (!nama || !ucapan) return;
+          var art = document.createElement("article");
+          art.className = "ucapan tampak";
+          var dari = document.createElement("span"); dari.className = "dari"; dari.textContent = nama;
+          var st = document.createElement("span"); st.className = "status"; st.textContent = hadir;
+          var isi = document.createElement("p"); isi.className = "isi-ucapan"; isi.textContent = ucapan;
+          art.appendChild(dari); art.appendChild(st); art.appendChild(isi);
+          var daftar = $("#daftarUcapan");
+          daftar.insertBefore(art, daftar.firstChild);
+          ev.target.reset();
+          btnKirim.textContent = "Terkirim ✓ Terima Kasih";
+          setTimeout(function(){ btnKirim.textContent = "Kirim Ucapan"; }, 2600);
+        });
+      })();
+    </script>
+  </body>
+</html>
