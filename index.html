@@ -2169,5 +2169,72 @@
       }
     }());
   </script>
+  <script>
+    (function () {
+      /* Tombol Kembali (HP) untuk dialog demo & lightbox pratinjau katalog.
+         Setiap dialog yang dibuka menandai SATU entri history {sjDemo:true}.
+         - Back saat dialog terbuka: popstate menutup dialog itu saja, tetap di katalog.
+         - Tutup via X / klik di luar / ESC: entri penanda dikonsumsi dengan satu
+           history.back() yang popstate-nya diabaikan (flag expectPop), jadi tidak
+           ada loop dan tidak ada entri hantu — jumlah langkah back untuk keluar
+           halaman sesudah demo ditutup sama seperti sebelum demo dibuka. */
+      if (!window.history || !history.pushState || !window.HTMLDialogElement) return;
+      var stack = [];
+      var expectPop = false;
+      var expectTimer = null;
+      function isMarker() {
+        try { return !!(history.state && history.state.sjDemo); } catch (e) { return false; }
+      }
+      function track(dlg) { if (stack.indexOf(dlg) === -1) stack.push(dlg); }
+      function untrack(dlg) { var i = stack.indexOf(dlg); if (i > -1) stack.splice(i, 1); }
+      var origShowModal = HTMLDialogElement.prototype.showModal;
+      HTMLDialogElement.prototype.showModal = function () {
+        var wasOpen = this.open;
+        var result = origShowModal.apply(this, arguments);
+        if (!wasOpen && this.open) {
+          track(this);
+          if (!isMarker()) {
+            try { history.pushState({ sjDemo: true }, ''); } catch (e) {}
+          }
+        }
+        return result;
+      };
+      document.querySelectorAll('dialog').forEach(function (dlg) {
+        dlg.addEventListener('close', function () {
+          var viaPop = !!dlg.__sjViaPop;
+          dlg.__sjViaPop = false;
+          untrack(dlg);
+          if (viaPop) return;
+          /* Tunda konsumsi: alur Preview/Coba Demo menutup dialog ini lalu langsung
+             membuka dialog lain — penanda yang sama dipakai dialog penggantinya. */
+          setTimeout(function () {
+            if (!stack.length && isMarker() && !expectPop) {
+              expectPop = true;
+              clearTimeout(expectTimer);
+              expectTimer = setTimeout(function () { expectPop = false; }, 1000);
+              history.back();
+            }
+          }, 0);
+        });
+      });
+      window.addEventListener('popstate', function () {
+        if (expectPop) {
+          expectPop = false;
+          clearTimeout(expectTimer);
+          return;
+        }
+        while (stack.length) {
+          var dlg = stack[stack.length - 1];
+          if (dlg.open) {
+            dlg.__sjViaPop = true;
+            untrack(dlg);
+            try { dlg.close(); } catch (e) {}
+            break;
+          }
+          stack.pop();
+        }
+      });
+    }());
+  </script>
 </body>
 </html>
